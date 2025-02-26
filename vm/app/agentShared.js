@@ -41,7 +41,7 @@ export function createAgent({openRouterAPIKey, mode=MODE_NORMAL}) {
     if (!messages) {
       messages = [systemPrompt()]
     }
-  
+
     messages.push({ role: 'user', content: msg })
     const { text: svg } = await _generateText({ model, messages, })
     messages.push({ role: 'assistant', content: svg })

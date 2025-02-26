@@ -10,7 +10,6 @@ function mockSVG(screenWidth=800, screenHeight=600) {
   return `<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><rect x="${x}" y="${y}" width="${size}" height="${size}" fill="red" />`
 }
 
-
 export async function mockGenerateText({messages, ...args}) {
   messages = [...messages]
   messages[0] = mockSystemPrompt()
