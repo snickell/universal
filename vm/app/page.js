@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { renderNextFrame } from './agent'
+import debounce from 'debounce'
 
 export default function Home() {
   const [svg, setSvg] = useState('')
@@ -12,6 +13,7 @@ export default function Home() {
 
   const sendMessage = useCallback(async (msg) => {
     setLoading(true)
+    console.log("sendMessage", msg)
     const { svg } = await renderNextFrame({ msg })
     console.log("renderNextFrame =>\n", svg)
     setSvg(svg)
@@ -21,17 +23,21 @@ export default function Home() {
   useEffect(() => {
     if (!svgContainerRef.current) return
 
+    let lastWidth = null
+    let lastHeight = null
     const sendDimensions = () => {
-      const width = svgContainerRef.current.clientWidth
-      const height = svgContainerRef.current.clientHeight
-      console.log(`RONDER all future SVGs with width=${width} and height=${height}`)
+      const { clientWidth: width, clientHeight: height } = svgContainerRef.current
+      if (lastWidth === width && lastHeight === height) return
+      lastWidth = width
+      lastHeight = height
       sendMessage(`render all future SVGs with width=${width} and height=${height}`)
     }
+    sendDimensions()
 
-    const observer = new ResizeObserver(sendDimensions)
-
+    const observer = new ResizeObserver(
+      debounce(() => sendDimensions(), 1000)
+    )
     observer.observe(svgContainerRef.current)
-
     return () => observer.disconnect()
   }, [sendMessage, svgContainerRef])
 
