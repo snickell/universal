@@ -6,14 +6,15 @@ turing complete, and contrary to popular opinion, code is a brittle medium with 
 
 What if we cut out the middlemen, code and computers, and let the AI/LLM do the execution itself? Why
 make them "write the code to do the thing" when they could just... do the thing? Let them draw
-directly to the screen, and update it in response to events like mouse clicks.
+directly to the screen, and update it in response to events like mouse clicks. I get why we don't
+in 2025, my question is about 2035.
 
 Describe what you want, it'll draw that interface. Click a button, it'll draw the next frame. Add
 a feature by talking about it.
 
-I'm calling such direct-to-screen LLMs "the universal program", because they are authored inside themselves
-and can adapt to be whatever program you need. Another way of viewing universal programs is as the personal
-interface layer to a network of layered agentic systems 🤢.
+I've been thinking of such direct-to-screen LLMs as "the universal program", because they are authored
+inside themselves and can adapt to be whatever program you need. Another way of viewing universal
+programs is as the personal interface layer to a network of layered agentic systems 🤢.
 
 Where programming language authored code is brittle, the universal program will be fluid. They will be
 personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
@@ -29,8 +30,8 @@ What would it be like on a 2030 model?
 
 Code is dead.
 
-Or, more specifically: programming languages as we know them for application development are dead. **AI will NOT replace us at writing
-in programming languages, they will replace programming languages altogether.**
+Or, more specifically: I believe programming languages as we know them for application development are long-term dead.
+I suspect **AI will NOT replace us at writing in programming languages, they will replace programming languages altogether.**
 
 The universal program you experienced today runs on 2025's Claude 3.7 Sonnet.
 
@@ -71,14 +72,14 @@ In contrast, the universal program can change fluidly, and they can change thems
 
 ## Precedent for the universal program: Smalltalk
 
-The closest equivalent I know of is 1972's Smalltalk, another sort of universal program.
+Smalltalk is another sort of universal program.
 
 Similarities:
 - Smalltalk is simultaneously a programming environment and the program being written just like our universal program.
-- A Smalltalk "program" has its real state is not in code, but in a smalltalk image (which contains code!). The LLM's context is very similar to a smalltalk image in this regard. It contains the instructions you gave it to describe how it works, but also the state of all the objects in its world.
+- A Smalltalk "program" has its real state is not in code, but in a smalltalk image (which contains code!). The LLM's contextis very similar to a smalltalk image in this regard. It contains the instructions you gave it to describe how it works, but also the state of all the objects in its world.
 - Smalltalk programs are built using message-passing between objects as the primary mediator of computation. The universal program also operates on message passing, between the LLM and the user, and between the objects we call agents.
 
-## Personal Computers, at last
+## Personal Computers, at last?
 
 Smalltalk already had a massive impact on computers as we know them, but many of
 its aspirations were also lost. Computing today is impersonal, and inflexible.
@@ -94,6 +95,6 @@ Desktop and application-wise, we all pretty much live in either a Sears Robuck
 Craftsman Argyle bungalow, a Montgomery Ward Wardway Florence colonial, or there's 
 a few hippies that built their hosues from one of several prefab modular vendors.
 
-In contrast, I expect to get very personal really wild.
+In contrast, I expect these to get very personal very fast.
 
 Maybe, finally, we'll have personal computers.
