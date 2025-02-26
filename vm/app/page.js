@@ -84,7 +84,7 @@ export default function Home() {
           value={msgFromUser}
           onChange={(e) => setMsgFromUser(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && onMsgFromUser()}
-          placeholder="Yes?"
+          placeholder="Thy command?"
           disabled={loading}
           style={{
             flex: "1",
