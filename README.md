@@ -19,7 +19,7 @@ Where programming language authored code is brittle, the universal program will 
 personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
 where diversity is highest, to some extent, every Linux desktop is kinda the same.
 
-[TRY THE DEMO NOW](https://youtu.be/yJDv-zdhzMY?si=mCd7gbKsjn4VKlLH&t=97) (TODO: link live demo here)
+[TRY THE DEMO NOW](https://youtu.be/yJDv-zdhzMY?si=D1McSZsSVJWYSg2x&t=102) (TODO: link live demo here)
 
 You just experienced the universal program running on a 2025 LLM: a shitty demo, at best.
 
