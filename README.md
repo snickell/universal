@@ -6,8 +6,9 @@ turing complete, and contrary to popular opinion, code is a brittle medium with 
 
 What if we cut out the middlemen, code and computers, and let the AI/LLM do the execution itself? Why
 make them "write the code to do the thing" when they could just... do the thing? Let them draw
-directly to the screen, and update it in response to events like mouse clicks. I get why we don't
-in 2025, my question is about 2035.
+directly to the screen, and update it in response to events like mouse clicks.
+
+I'm betting the very real "why nots" list will be a lot shorter in 2035.
 
 Describe what you want, it'll draw that interface. Click a button, it'll draw the next frame. Add
 a feature by talking about it.
@@ -33,7 +34,7 @@ Code is dead.
 Or, more specifically: I believe programming languages as we know them for application development are long-term dead.
 I suspect **AI will NOT replace us at writing in programming languages, they will replace programming languages altogether.**
 
-The universal program you experienced today runs on 2025's Claude 3.7 Sonnet.
+The universal program you experienced today runs on 2025's Claude 3.7 Sonnet, and it sucks:
 
 It forgets state after ~200 clicks, its logic is inconsistent, its UI designs stink,
 it costs 5 cent per frame, and it runs at 1/30 FPS (=2 frames per minute) on a [$500k GPU](https://www.nvidia.com/en-us/data-center/dgx-b200/) 🤣.
@@ -42,7 +43,7 @@ What will happen if models become 100x faster ([cerebras](https://cerebras.ai/) 
 get 100x longer contexts ([gemini 1.5](https://cloud.google.com/vertex-ai/generative-ai/docs/long-context) is already 10x bigger),
 and cost 100x less ([deepseek chat v3](https://api-docs.deepseek.com/quick_start/pricing) is already 10x cheaper)?
 
-I predict the universal program will:
+I predict, given enough time, the universal program will:
 1. Replace programming languages in executing the "business logic" layer of most apps
 2. On-the-fly generate+run machine code (WASM?) to optimize reactivity, power consumption and cost
 3. Collapse the idea of their being separate "applications" in the first place.
@@ -95,6 +96,6 @@ Desktop and application-wise, we all pretty much live in either a Sears Robuck
 Craftsman Argyle bungalow, a Montgomery Ward Wardway Florence colonial, or there's 
 a few hippies that built their hosues from one of several prefab modular vendors.
 
-In contrast, I expect these to get very personal very fast.
+In contrast, once they are viable, I expect these to get very personal very fast.
 
-Maybe, finally, we'll have personal computers.
+Maybe, finally, eventually, we'll have personal computers.
