@@ -37,7 +37,7 @@ The universal program you experienced today runs on 2025's Claude 3.7 Sonnet.
 It forgets state after ~200 clicks, its logic is inconsistent, its UI designs stink,
 it costs 5 cent per frame, and it runs at 1/30 FPS (=2 frames per minute) on a [$500k GPU](https://www.nvidia.com/en-us/data-center/dgx-b200/) 🤣.
 
-What will happen if models become 100x faster ([cerebras](https://cerebras.ai/) is already 10x faster, 3 FPS woot),
+What will happen if models become 100x faster ([cerebras](https://cerebras.ai/) is already 10x faster),
 get 100x longer contexts ([gemini 1.5](https://cloud.google.com/vertex-ai/generative-ai/docs/long-context) is already 10x bigger),
 and cost 100x less ([deepseek chat v3](https://api-docs.deepseek.com/quick_start/pricing) is already 10x cheaper)?
 
