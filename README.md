@@ -11,11 +11,11 @@ directly to the screen, and update it in response to events like mouse clicks.
 Describe what you want, it'll draw that interface. Click a button, it'll draw the next frame. Add
 a feature by talking about it.
 
-I'm calling such direct-to-screen LLMs "The Universal Program", because they are authored inside themselves
+I'm calling such direct-to-screen LLMs "the universal program", because they are authored inside themselves
 and can adapt to be whatever program you need. Another way of viewing universal programs is as the personal
 interface layer to a network of layered agentic systems 🤢.
 
-Where programming language authored code is brittle, universal programs will be fluid. They will be
+Where programming language authored code is brittle, the universal program will be fluid. They will be
 personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
 where diversity is highest, to some extent, every Linux desktop is kinda the same.
 
@@ -49,9 +49,9 @@ I predict the universal program will:
 
 Draw a straight line and follow it.
 
-## What is a Universal Program?
+## What is the universal program?
 
-The Universal Program is an AI agent able to draw (bitmap or vector) to a window
+The universal program is an AI agent able to draw (bitmap or vector) to a window
 or even the whole screen and receive [typical events](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 like where you clicked on it, what you types, timers, messages from other agents, etc. In response to events,
 it can [use tools](https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview),
@@ -63,11 +63,11 @@ application, you can program it just by talking to it. Tell it how you'd like it
 What elements should the "application" have? What buttons? What features? Talk to it.
 
 Unlike "LLMs writing code", there's no "hidden rats nest of code" for the LLM or human to get twisted up in.
-In a universal program the LLM will act and draw directly. Programs today are rigid because
+In the universal program the LLM will act and draw directly. Programs today are rigid because
 program code is logic, and therefore is also rigid. "Move that button over here" might require significant
 technical re-work (for a human OR LLM) due to the strong grain of programming langauges.
 
-In contrast, universal programs can change fluidly, and they can change themselves too.
+In contrast, the universal program can change fluidly, and they can change themselves too.
 
 ## Precedent for the universal program: Smalltalk
 
@@ -76,7 +76,7 @@ The closest equivalent I know of is 1972's Smalltalk, another sort of universal 
 Similarities:
 - Smalltalk is simultaneously a programming environment and the program being written just like our universal program.
 - A Smalltalk "program" has its real state is not in code, but in a smalltalk image (which contains code!). The LLM's context is very similar to a smalltalk image in this regard. It contains the instructions you gave it to describe how it works, but also the state of all the objects in its world.
-- Smalltalk programs are built using message-passing between objects as the primary mediator of computation. Universal programs also operate on message passing, between the user and between objects we call agents.
+- Smalltalk programs are built using message-passing between objects as the primary mediator of computation. The universal program also operates on message passing, between the LLM and the user, and between the objects we call agents.
 
 ## Personal Computers, at last
 
@@ -87,12 +87,13 @@ large disempowered users who don't modify the code of their "kit-home".
 
 At best, maybe you have a custom patch here or there, a long list of custom settings,
 and use flexible programs like neovim or vscode where you've assembled a long list
-of (prefab) extensions and modules you layer into the program. But, still...
+of (prefab) extensions and modules you layer into the program. But, still, cmon: cybperunk
+we ain't.
 
 Desktop and application-wise, we all pretty much live in either a Sears Robuck
 Craftsman Argyle bungalow, a Montgomery Ward Wardway Florence colonial, or there's 
 a few hippies that built their hosues from one of several prefab modular vendors.
 
-In contrast, I expect universal programs to be very personal and get wild, really wild.
+In contrast, I expect to get very personal really wild.
 
 Maybe, finally, we'll have personal computers.
