@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { renderNextFrame } from './agent'
 import debounce from 'debounce'
+import { useHoldPlease } from './holdPlease'
 
 export default function Home() {
   const [svg, setSvg] = useState('')
@@ -10,6 +11,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const controlRef = useRef(null)
   const svgContainerRef = useRef(null)
+  useHoldPlease(loading)
 
   const sendMessage = useCallback(async (msg) => {
     setLoading(true)
