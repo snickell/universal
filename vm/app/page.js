@@ -43,7 +43,7 @@ export default function Home() {
 
   const onMsgFromUser = async () => {
     setMsgFromUser('')
-    _renderNextFrame(msgFromUser)
+    sendMessage(msgFromUser)
   }
 
   const handleSvgClick = async (event) => {
