@@ -8,33 +8,23 @@ const svg = ref('')
 const msgFromUser = ref('')
 const loading = ref(false)
 const svgContainer = ref(null)
+
 let audio = null
-
-// Initialize audio on mount (holdPlease functionality)
-onMounted(() => {
-  audio = new Audio()
-  audio.src = 'https://universal-static.pages.dev/holdplease.mp3'
-  audio.loop = true
-})
-
-// React to loading state changes - match Next.js behavior
-watch(loading, (isLoading) => {
-  if (!audio) return
-  
+watch(loading, (isLoading) => {  
   if (isLoading) {
+    audio = new Audio()
+    audio.src = 'https://universal-static.pages.dev/holdplease.mp3'
+    audio.loop = true
     audio.play().catch(error => console.log(error))
   } else {
-    audio.pause()
-  }
-})
-
-// Clean up audio when component is unmounted
-onUnmounted(() => {
-  if (audio) {
     audio.pause()
     audio.src = ''
     audio = null
   }
+})
+
+onUnmounted(() => {
+  loading.value = false
 })
 
 async function sendMessage(msg) {
