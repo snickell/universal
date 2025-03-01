@@ -4,7 +4,14 @@ import Universal from '~/components/Universal.vue'
 </script>
 
 <template>
-  <Universal />
+  <Html>
+    <Head>
+      <Title>The Universal Program</Title>
+    </Head>
+    <Body>
+      <Universal />
+    </Body>
+  </Html>
 </template>
 
 <style>
