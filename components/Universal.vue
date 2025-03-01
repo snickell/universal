@@ -1,34 +1,3 @@
-<template>
-  <div style="height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;">
-    <!-- SVG Container -->
-    <div 
-      ref="svgContainer"
-      @click="handleSvgClick"
-      style="flex-grow: 1; overflow: hidden; background-color: green;"
-      v-html="svg"
-    ></div>
-    
-    <!-- Control Bar -->
-    <div style="position: relative; display: flex; padding: 0px; align-items: center; background-color: black; border-bottom: 1px solid #333;">
-      <input
-        type="text"
-        v-model="msgFromUser"
-        @keypress="(e) => e.key === 'Enter' && onMsgFromUser()"
-        placeholder="Thy command?"
-        :disabled="loading"
-        style="flex: 1; padding: 8px; font-size: 16px;"
-      />
-      
-      <button
-        @click="onMsgFromUser"
-        :disabled="loading"
-        style="white-space: nowrap; padding: 8px 12px; font-size: 16px; background-color: #0070f3; color: white; cursor: default;"
-      >
-        {{ loading ? "Rendering SVG..." : "Send" }}
-      </button>
-    </div>
-  </div>
-</template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
@@ -124,3 +93,35 @@ function handleSvgClick(event) {
   if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
 }
 </script>
+
+<template>
+  <div style="height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;">
+    <!-- SVG Container -->
+    <div 
+      ref="svgContainer"
+      @click="handleSvgClick"
+      style="flex-grow: 1; overflow: hidden; background-color: linear-gradient(to bottom, #d8b4fe, #f9a8d4);"
+      v-html="svg"
+    ></div>
+    
+    <!-- Control Bar -->
+    <div style="position: relative; display: flex; padding: 0px; align-items: center; background-color: black; border-bottom: 1px solid #333;">
+      <input
+        type="text"
+        v-model="msgFromUser"
+        @keypress="(e) => e.key === 'Enter' && onMsgFromUser()"
+        placeholder="Thy command?"
+        :disabled="loading"
+        style="flex: 1; padding: 8px; font-size: 16px;"
+      />
+      
+      <button
+        @click="onMsgFromUser"
+        :disabled="loading"
+        style="white-space: nowrap; padding: 8px 12px; font-size: 16px; background-color: #0070f3; color: white; cursor: default;"
+      >
+        {{ loading ? "Rendering SVG..." : "Send" }}
+      </button>
+    </div>
+  </div>
+</template>

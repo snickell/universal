@@ -1,10 +1,11 @@
-<template>
-  <Universal />
-</template>
 
 <script setup>
 import Universal from '~/components/Universal.vue'
 </script>
+
+<template>
+  <Universal />
+</template>
 
 <style>
 body {
