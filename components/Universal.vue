@@ -1,13 +1,12 @@
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { sendMessage as agentSendMessage } from '~/lib/agent'
-import debounce from 'debounce'
+import SVGContainer from './SVGContainer.vue'
 
 const svg = ref('')
 const msgFromUser = ref('')
 const loading = ref(false)
-const svgContainer = ref(null)
 
 let audio = null
 watch(loading, (isLoading) => {  
@@ -36,64 +35,22 @@ async function sendMessage(msg) {
   loading.value = false
 }
 
-// Handle resize and send dimensions
-let lastWidth = null
-let lastHeight = null
-let observer = null
-
-async function sendDimensions() {
-  if (!svgContainer.value) return
-  
-  const { clientWidth: width, clientHeight: height } = svgContainer.value
-  if (lastWidth === width && lastHeight === height) return
-  
-  lastWidth = width
-  lastHeight = height
-  await sendMessage()
-  await sendMessage(`render all future SVGs with width=${width} and height=${height}`)
-}
-
-onMounted(() => {
-  if (!svgContainer.value) return
-  
-  sendDimensions()
-  
-  observer = new ResizeObserver(
-    debounce(() => sendDimensions(), 1000)
-  )
-  observer.observe(svgContainer.value)
-})
-
-onUnmounted(() => {
-  if (observer) {
-    observer.disconnect()
-    observer = null
-  }
-})
-
 function onMsgFromUser() {
-  // Clear input before sending message, matching Next.js behavior
+  // Clear input before sending message
   const msg = msgFromUser.value
   msgFromUser.value = ''
   sendMessage(msg)
-}
-
-function handleSvgClick(event) {
-  let el = event.target
-  while (el && !el.id) el = el.parentElement
-  if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
 }
 </script>
 
 <template>
   <div style="height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;">
-    <!-- SVG Container -->
-    <div 
-      ref="svgContainer"
-      @click="handleSvgClick"
-      style="flex-grow: 1; overflow: hidden; background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%)"
-      v-html="svg"
-    ></div>
+    <!-- SVG Container Component -->
+    <SVGContainer 
+      :svg="svg" 
+      :loading="loading"
+      @send-message="sendMessage"
+    />
     
     <!-- Control Bar -->
     <div style="position: relative; display: flex; padding: 0px; align-items: center; background-color: black; border-bottom: 1px solid #333;">
