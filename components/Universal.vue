@@ -20,7 +20,7 @@ async function sendMessage(msg) {
 </script>
 
 <template>
-  <div style="height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;">
+  <div class="universal">
     <HoldPlease :loading="loading" />
     
     <SVGContainer 
@@ -35,3 +35,13 @@ async function sendMessage(msg) {
     />
   </div>
 </template>
+
+<style scoped>
+.universal {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+</style>

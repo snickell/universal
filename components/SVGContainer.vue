@@ -62,10 +62,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div 
+  <div class="svg-container"
     ref="svgContainer"
     @click="handleSvgClick"
-    style="flex-grow: 1; overflow: hidden; background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%)"
     v-html="svg"
   ></div>
 </template>
+
+<style scoped>
+.svg-container {
+  flex-grow: 1;
+  overflow: hidden;
+  background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
+}
+</style>
