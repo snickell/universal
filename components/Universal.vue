@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '~/lib/agent'
 import SVGContainer from './SVGContainer.vue'
 import HoldPlease from './HoldPlease.vue'
-import UserMessageBar from './UserMessageBar.vue'
+import SendMessageBar from './SendMessageBar.vue'
 
 const svg = ref('')
 const loading = ref(false)
@@ -29,7 +29,7 @@ async function sendMessage(msg) {
       @send-message="sendMessage"
     />
     
-    <UserMessageBar 
+    <SendMessageBar 
       :loading="loading"
       @send-message="sendMessage"
     />

@@ -19,7 +19,7 @@ function onMsgFromUser() {
 </script>
 
 <template>
-  <div class="user-message-bar">
+  <div class="message-bar">
     <input
       type="text"
       v-model="msgFromUser"
@@ -38,7 +38,7 @@ function onMsgFromUser() {
 </template>
 
 <style scoped>
-.user-message-bar {
+.message-bar {
   position: relative;
   display: flex;
   padding: 0px;
