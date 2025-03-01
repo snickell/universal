@@ -20,5 +20,17 @@ export default defineNuxtConfig({
     // NuxtHub (https://hub.nuxt.com/) options for cloudflare deployment
   },
 
-  modules: ['@nuxthub/core']
+  runtimeConfig: {
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      }
+    }
+  },
+
+  modules: [
+    '@nuxthub/core',
+    'nuxt-auth-utils'
+  ],
 })
