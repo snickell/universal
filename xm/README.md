@@ -1,75 +1,47 @@
-# Nuxt Minimal Starter
+# Universal Program - Nuxt 3 Version
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a Nuxt 3 implementation of the Universal Program, an AI-powered direct interface that renders SVG-based UI.
 
 ## Setup
 
-Make sure to install dependencies:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root directory with your OpenRouter API key:
+   ```
+   NUXT_OPENROUTER_API_KEY=your_openrouter_api_key_here
+   ```
+
+## Development
+
+Start the development server:
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-## Production
+## Building
 
-Build the application for production:
+To create a production version of the app:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+You can preview the production build with `npm run preview`.
 
-```bash
-# npm
-npm run preview
+## Features
 
-# pnpm
-pnpm preview
+- AI-powered SVG rendering using OpenRouter API
+- Interactive SVG elements with click handling
+- Responsive design that adapts to window size
+- Hold music during loading states
 
-# yarn
-yarn preview
+## Implementation Details
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+This Nuxt 3 app replicates the functionality of the original Next.js version while leveraging Vue 3 and Nuxt 3's features for a cleaner implementation.
