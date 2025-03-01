@@ -51,7 +51,7 @@ let lastWidth = null
 let lastHeight = null
 let observer = null
 
-function sendDimensions() {
+async function sendDimensions() {
   if (!svgContainer.value) return
   
   const { clientWidth: width, clientHeight: height } = svgContainer.value
@@ -59,7 +59,8 @@ function sendDimensions() {
   
   lastWidth = width
   lastHeight = height
-  sendMessage(`render all future SVGs with width=${width} and height=${height}`)
+  await sendMessage()
+  await sendMessage(`render all future SVGs with width=${width} and height=${height}`)
 }
 
 onMounted(() => {
