@@ -2,32 +2,27 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import debounce from 'debounce'
 
-const props = defineProps({
+const {sendMessage} = defineProps({
   svg: {
     type: String,
     required: true
   },
-  loading: {
-    type: Boolean,
-    default: false
+  sendMessage: {
+    type: Function,
+    required: true
   }
 })
-
-// Define the events this component can emit
-const emit = defineEmits(['send-message'])
-
 const svgContainer = ref(null)
-let lastWidth = null
-let lastHeight = null
-let observer = null
 
 function handleSvgClick(event) {
   let el = event.target
   while (el && !el.id) el = el.parentElement
-  if (el && el.id) emit('send-message', `click on element with id="${el.id}"`)
+  if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
 }
 
-// Handle resize and send dimensions
+let lastWidth = null
+let lastHeight = null
+// call sendMessage with dimensions to render SVGs at 
 async function sendDimensions() {
   if (!svgContainer.value) return
   
@@ -37,26 +32,28 @@ async function sendDimensions() {
   lastWidth = width
   lastHeight = height
   
-  // Emit events for dimension changes
-  emit('send-message') // Initial empty message
-  emit('send-message', `render all future SVGs with width=${width} and height=${height}`)
+  sendMessage(`render all future SVGs with width=${width} and height=${height}`)
 }
 
-onMounted(() => {
-  if (!svgContainer.value) return
-  
+let resizeObserver = null
+onMounted(async () => {
+  // render initial frame, should be cached and therefore 'instant'
+  await sendMessage()
+
+  // send initial dimensions, this will render a second frame, which will be slow
   sendDimensions()
   
-  observer = new ResizeObserver(
+  // Watch SVGContainer for resize events, transmit them to agent
+  resizeObserver = new ResizeObserver(
     debounce(() => sendDimensions(), 1000)
   )
-  observer.observe(svgContainer.value)
+  resizeObserver.observe(svgContainer.value)
 })
 
 onUnmounted(() => {
-  if (observer) {
-    observer.disconnect()
-    observer = null
+  if (resizeObserver) {
+    resizeObserver.disconnect()
+    resizeObserver = null
   }
 })
 </script>

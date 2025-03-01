@@ -1,20 +1,22 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps({
+const {sendMessage} = defineProps({
   loading: {
     type: Boolean,
-    default: false
+    required: true
+  },
+  sendMessage: {
+    type: Function,
+    required: true
   }
 })
-
-const emit = defineEmits(['send-message'])
 const msgFromUser = ref('')
 
 function onMsgFromUser() {
   const msg = msgFromUser.value
   msgFromUser.value = ''
-  emit('send-message', msg)
+  sendMessage(msg)
 }
 </script>
 
