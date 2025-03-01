@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { renderNextFrame } from '~/lib/agent'
+import { sendMessage as agentSendMessage } from '~/lib/agent'
 import debounce from 'debounce'
 
 const svg = ref('')
@@ -71,8 +71,8 @@ onUnmounted(() => {
 async function sendMessage(msg) {
   loading.value = true
   console.log("sendMessage", msg)
-  const { svg: newSvg } = await renderNextFrame({ msg })
-  console.log("renderNextFrame =>\n", newSvg)
+  const { svg: newSvg } = await agentSendMessage({ msg })
+  console.log("sendMessage =>\n", newSvg)
   svg.value = newSvg
   loading.value = false
 }
