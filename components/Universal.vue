@@ -100,7 +100,7 @@ function handleSvgClick(event) {
     <div 
       ref="svgContainer"
       @click="handleSvgClick"
-      style="flex-grow: 1; overflow: hidden; background-color: linear-gradient(to bottom, #d8b4fe, #f9a8d4);"
+      style="flex-grow: 1; overflow: hidden; background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%)"
       v-html="svg"
     ></div>
     
