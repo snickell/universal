@@ -20,13 +20,5 @@ export default defineNuxtConfig({
     // NuxtHub (https://hub.nuxt.com/) options for cloudflare deployment
   },
 
-  modules: ['@nuxthub/core', '@sidebase/nuxt-auth'],
-
-  auth: {
-    provider: {
-      type: 'authjs',
-      defaultProvider: 'google',
-    },
-    globalAppMiddleware: true,
-  }
+  modules: ['@nuxthub/core']
 })

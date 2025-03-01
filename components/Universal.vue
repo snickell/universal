@@ -1,6 +1,10 @@
 
 <script setup>
+import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '@/lib/agent'
+import SVGContainer from './SVGContainer.vue'
+import HoldPlease from './HoldPlease.vue'
+import SendMessageBar from './SendMessageBar.vue'
 
 const svg = ref('')
 const loading = ref(false)
@@ -17,10 +21,6 @@ async function sendMessage(msg) {
 
 <template>
   <div class="universal">
-    <Head>
-      <Title>The Universal Program</Title>
-    </Head>
-
     <HoldPlease :loading="loading" />
     
     <SVGContainer
