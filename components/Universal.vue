@@ -1,30 +1,13 @@
 
 <script setup>
-import { ref, watch, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '~/lib/agent'
 import SVGContainer from './SVGContainer.vue'
+import HoldPlease from './HoldPlease.vue'
 
 const svg = ref('')
 const msgFromUser = ref('')
 const loading = ref(false)
-
-let audio = null
-watch(loading, (isLoading) => {  
-  if (isLoading) {
-    audio = new Audio()
-    audio.src = 'https://universal-static.pages.dev/holdplease.mp3'
-    audio.loop = true
-    audio.play().catch(error => console.log(error))
-  } else {
-    audio.pause()
-    audio.src = ''
-    audio = null
-  }
-})
-
-onUnmounted(() => {
-  loading.value = false
-})
 
 async function sendMessage(msg) {
   loading.value = true
@@ -36,7 +19,7 @@ async function sendMessage(msg) {
 }
 
 function onMsgFromUser() {
-  // Clear input before sending message
+  // Clear input before sending message so you can see the command "took"
   const msg = msgFromUser.value
   msgFromUser.value = ''
   sendMessage(msg)
@@ -45,7 +28,9 @@ function onMsgFromUser() {
 
 <template>
   <div style="height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;">
-    <!-- SVG Container Component -->
+    <!-- Play hold music while waiting for next frame to render -->
+    <HoldPlease :loading="loading" />
+    
     <SVGContainer 
       :svg="svg" 
       :loading="loading"
