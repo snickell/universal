@@ -1,5 +1,14 @@
 <template>
-  <NuxtPage />
+  <Html>
+    <Head>
+      <Title>The Universal Program</Title>
+    </Head>
+    <Body>
+      <div>
+      </div>
+      <Universal />
+    </Body>
+  </Html>
 </template>
 
 <style>
