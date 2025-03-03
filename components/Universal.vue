@@ -1,26 +1,36 @@
 
 <script setup>
+import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '@/lib/agent'
+import SVGContainer from './SVGContainer.vue'
+import HoldPlease from './HoldPlease.vue'
+import SendMessageBar from './SendMessageBar.vue'
+import AuthPopover from './AuthPopover.vue'
 
 const svg = ref('')
 const loading = ref(false)
+const needAuth = ref(false)
 
 async function sendMessage(msg) {
   loading.value = true
   console.log("sendMessage", msg)
-  const { svg: newSvg } = await agentSendMessage({ msg })
-  console.log("sendMessage =>\n", newSvg)
-  svg.value = newSvg
+  try {
+    const { svg: newSvg } = await agentSendMessage({ msg })
+    console.log("sendMessage =>\n", newSvg)
+    svg.value = newSvg
+  } catch (e) {
+    console.error(e)
+    if (e.status === 401) {
+      needAuth.value = true
+    }
+  }
+  
   loading.value = false
 }
 </script>
 
 <template>
   <div class="universal">
-    <Head>
-      <Title>The Universal Program</Title>
-    </Head>
-
     <HoldPlease :loading="loading" />
     
     <SVGContainer
@@ -32,6 +42,8 @@ async function sendMessage(msg) {
       :loading="loading"
       :sendMessage="sendMessage"
     />
+
+    <AuthPopover :needAuth="needAuth" />
   </div>
 </template>
 

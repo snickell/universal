@@ -5,5 +5,6 @@ const agent = createAgent({
 })
 
 export default defineEventHandler(async (event) => {
+  await requireUserSession(event)
   return agent.sendMessage(await readBody(event))
 })
