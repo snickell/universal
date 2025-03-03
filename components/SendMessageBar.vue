@@ -22,6 +22,8 @@ function onMsgFromUser() {
 
 <template>
   <div class="message-bar">
+    <Settings />
+
     <input
       type="text"
       v-model="msgFromUser"
