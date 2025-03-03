@@ -51,6 +51,9 @@ const props = defineProps({
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
+  max-width: 100vw;
+  max-height: 100vw;
+  overflow: scroll;
   background-color: white;
   border: 1px solid black;
   padding: 40px;
