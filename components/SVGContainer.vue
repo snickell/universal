@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import debounce from 'debounce'
+import { SEND_RESIZE_MESSAGES } from '~/lib/constants'
 
 const {sendMessage} = defineProps({
   svg: {
@@ -25,6 +26,7 @@ let lastHeight = null
 // call sendMessage with dimensions to render SVGs at 
 async function sendDimensions() {
   if (!svgContainer.value) return
+  if (!SEND_RESIZE_MESSAGES) return
   
   const { clientWidth: width, clientHeight: height } = svgContainer.value
   if (lastWidth === width && lastHeight === height) return
@@ -69,7 +71,10 @@ onUnmounted(() => {
 <style scoped>
 .svg-container {
   flex-grow: 1;
+  display: flex;
   overflow: hidden;
   background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
 }
+
+:deep(#screen) { flex: 1; font-family: Roboto, sans-serif; display: flex; flex-direction: column;}
 </style>

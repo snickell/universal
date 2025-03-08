@@ -6,7 +6,7 @@ import SVGContainer from './SVGContainer.vue'
 import HoldPlease from './HoldPlease.vue'
 import SendMessageBar from './SendMessageBar.vue'
 import AuthPopover from './AuthPopover.vue'
-import { USE_HTML } from '@/lib/settings'
+import { USE_HTML } from '~/lib/constants'
 
 const svg = ref('')
 const loading = ref(false)
