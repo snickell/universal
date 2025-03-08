@@ -75,6 +75,17 @@ onUnmounted(() => {
   overflow: hidden;
   background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
 }
+</style>
 
-:deep(#screen) { flex: 1; font-family: Roboto, sans-serif; display: flex; flex-direction: column;}
+<!-- we must use an unscoped <style> to style the contents of the v-html -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* #screen is defined in the prompt to be the top-level container */
+#screen {
+  flex: 1;
+  font-family: Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
 </style>
