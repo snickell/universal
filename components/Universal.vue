@@ -6,6 +6,7 @@ import SVGContainer from './SVGContainer.vue'
 import HoldPlease from './HoldPlease.vue'
 import SendMessageBar from './SendMessageBar.vue'
 import AuthPopover from './AuthPopover.vue'
+import { USE_HTML } from '@/lib/settings'
 
 const svg = ref('')
 const loading = ref(false)
@@ -17,7 +18,14 @@ async function sendMessage(msg) {
   try {
     const { svg: newSvg } = await agentSendMessage({ msg })
     console.log("sendMessage =>\n", newSvg)
-    svg.value = newSvg
+    if (USE_HTML) {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(newSvg, 'text/html')
+      svg.value = doc.body.innerHTML
+    } else {
+      svg.value = newSvg
+    }
+    
   } catch (e) {
     console.error(e)
     if (e.status === 401) {
