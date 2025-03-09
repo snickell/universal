@@ -39,7 +39,9 @@ watch(() => props.loading, (isLoading, wasLoading) => {
   <div class="control-popup">
     <HoldPleaseMusic :loading="loading" :mute="mute" />
 
-    <div v-if="showPopup" class="fullscreen-blur-mask" @click="showPopup = false"></div>
+    <transition name="fullscreen-blur-mask">
+      <div v-if="showPopup" class="fullscreen-blur-mask" @click="showPopup = false"></div>
+    </transition>
     
     <div v-if="showPopup" class="popup">
       <div class="titlebar" :style="{ width: showPopupButtonWidth + 'px' }">
@@ -104,14 +106,24 @@ watch(() => props.loading, (isLoading, wasLoading) => {
   left: 0;
   background-color: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(3px);
-  opacity: 0;
-  animation: fadeInFullscreenBlurMask 0.8s forwards;
   z-index: 10001;
+}
+
+.fullscreen-blur-mask-enter-active {
+  animation: fadeInFullscreenBlurMask 0.8s forwards;
+}
+.fullscreen-blur-mask-leave-active {
+  animation: fadeOutFullscreenBlurMask 0.8s forwards;
 }
 
 @keyframes fadeInFullscreenBlurMask {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes fadeOutFullscreenBlurMask {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 /* There's two copies of almost the same element, one is a button that shows the popup,
