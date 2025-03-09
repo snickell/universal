@@ -11,15 +11,12 @@ directly to the screen, and update it in response to events like mouse clicks.
 I'm betting the very real "why nots" list will be a lot shorter in 2035.
 
 Describe what you want, it'll draw that interface. Click a button, it'll draw the next frame. Add
-a feature by talking about it.
+a feature by talking about it. I've been thinking of such direct-to-screen LLMs as "the universal program",
+because they are authored inside themselves and can adapt to be whatever program you need.
 
-I've been thinking of such direct-to-screen LLMs as "the universal program", because they are authored
-inside themselves and can adapt to be whatever program you need. Another way of viewing universal
-programs is as the personal interface layer to a network of layered agentic systems 🤢.
-
-Where programming language authored code is brittle, the universal program is fluid. They will be
-personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
-where diversity is highest, to some extent, every Linux desktop is kinda the same.
+Where code is brittle, the universal program is fluid. Where code is one-size-fits-all the universal program
+is trivial to customize. I predict universal programs will have much higher diversity of features and interface as a result.
+Even in Linux, where diversity is highest, to some extent, every Linux desktop is kinda the same `¯\_(ツ)_/¯`.
 
 <p>
   <a href="https://universal.nuxt.dev">
@@ -28,7 +25,7 @@ where diversity is highest, to some extent, every Linux desktop is kinda the sam
   </a>
 </p>
 
-You just experienced the universal program running on a 2025 LLM: a curious albeit shitty demo, at best.
+You just experienced the universal program running on a 2025 LLM: at best, a curious albeit shitty demo.
 
 What would it be like on a 2030 model?
 
