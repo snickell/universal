@@ -17,7 +17,7 @@ I've been thinking of such direct-to-screen LLMs as "the universal program", bec
 inside themselves and can adapt to be whatever program you need. Another way of viewing universal
 programs is as the personal interface layer to a network of layered agentic systems 🤢.
 
-Where programming language authored code is brittle, the universal program will be fluid. They will be
+Where programming language authored code is brittle, the universal program is fluid. They will be
 personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
 where diversity is highest, to some extent, every Linux desktop is kinda the same.
 
