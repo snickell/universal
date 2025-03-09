@@ -6,9 +6,8 @@ turing complete, and contrary to popular opinion, code is a brittle medium with 
 
 What if we cut out the middlemen, code and computers, and let the AI/LLM do the execution itself? Why
 make them "write the code to do the thing" when they could just... do the thing? Let them draw
-directly to the screen, and update it in response to events like mouse clicks.
-
-I'm betting the very real "why nots" list will be a lot shorter in 2035.
+directly to the screen, and update it in response to events like mouse clicks. I'm betting the (very real)
+"why nots" list will be a lot shorter in 2035.
 
 Describe what you want, it'll draw that interface. Click a button, it'll draw the next frame. Add
 a feature by talking about it. I've been thinking of such direct-to-screen LLMs as "the universal program",
