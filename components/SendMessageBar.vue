@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import Control from './Control.vue'
 
 const {sendMessage} = defineProps({
   loading: {
@@ -22,7 +23,7 @@ function onMsgFromUser() {
 
 <template>
   <div class="message-bar">
-    <Settings />
+    <Control :loading="loading" />
 
     <input
       type="text"
