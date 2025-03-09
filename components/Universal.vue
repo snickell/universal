@@ -2,13 +2,13 @@
 <script setup>
 import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '@/lib/agent'
-import SVGContainer from './SVGContainer.vue'
+import ScreenContainer from './ScreenContainer.vue'
 import HoldPlease from './HoldPlease.vue'
 import SendMessageBar from './SendMessageBar.vue'
 import AuthPopover from './AuthPopover.vue'
 import { USE_HTML } from '~/lib/constants'
 
-const svg = ref('')
+const screenHTML = ref('')
 const loading = ref(false)
 const needAuth = ref(false)
 
@@ -16,14 +16,14 @@ async function sendMessage(msg) {
   loading.value = true
   console.log("sendMessage", msg)
   try {
-    const { svg: newSvg } = await agentSendMessage({ msg })
-    console.log("sendMessage =>\n", newSvg)
+    const { svg: newContent } = await agentSendMessage({ msg })
+    console.log("sendMessage =>\n", newContent)
     if (USE_HTML) {
       const parser = new DOMParser()
-      const doc = parser.parseFromString(newSvg, 'text/html')
-      svg.value = doc.body.innerHTML
+      const doc = parser.parseFromString(newContent, 'text/html')
+      screenHTML.value = doc.body.innerHTML
     } else {
-      svg.value = newSvg
+      screenHTML.value = newContent
     }
     
   } catch (e) {
@@ -41,8 +41,8 @@ async function sendMessage(msg) {
   <div class="universal">
     <HoldPlease :loading="loading" />
     
-    <SVGContainer
-      :svg="svg"
+    <ScreenContainer
+      :screenHTML="screenHTML"
       :sendMessage="sendMessage"
     />
     

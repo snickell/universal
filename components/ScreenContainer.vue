@@ -4,7 +4,7 @@ import debounce from 'debounce'
 import { SEND_RESIZE_MESSAGES } from '~/lib/constants'
 
 const {sendMessage} = defineProps({
-  svg: {
+  screenHTML: {
     type: String,
     required: true
   },
@@ -13,9 +13,9 @@ const {sendMessage} = defineProps({
     required: true
   }
 })
-const svgContainer = ref(null)
+const screenContainer = ref(null)
 
-function handleSvgClick(event) {
+function handleScreenClick(event) {
   let el = event.target
   while (el && !el.id) el = el.parentElement
   if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
@@ -23,18 +23,18 @@ function handleSvgClick(event) {
 
 let lastWidth = null
 let lastHeight = null
-// call sendMessage with dimensions to render SVGs at 
+// call sendMessage with dimensions to render HTML at 
 async function sendDimensions() {
-  if (!svgContainer.value) return
+  if (!screenContainer.value) return
   if (!SEND_RESIZE_MESSAGES) return
   
-  const { clientWidth: width, clientHeight: height } = svgContainer.value
+  const { clientWidth: width, clientHeight: height } = screenContainer.value
   if (lastWidth === width && lastHeight === height) return
   
   lastWidth = width
   lastHeight = height
   
-  sendMessage(`render all future SVGs with width=${width} and height=${height}`)
+  sendMessage(`render all future screens with width=${width} and height=${height}`)
 }
 
 let resizeObserver = null
@@ -45,11 +45,11 @@ onMounted(async () => {
   // send initial dimensions, this will render a second frame, which will be slow
   sendDimensions()
   
-  // Watch SVGContainer for resize events, transmit them to agent
+  // Watch ScreenContainer for resize events, transmit them to agent
   resizeObserver = new ResizeObserver(
     debounce(() => sendDimensions(), 1000)
   )
-  resizeObserver.observe(svgContainer.value)
+  resizeObserver.observe(screenContainer.value)
 })
 
 onUnmounted(() => {
@@ -61,15 +61,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="svg-container"
-    ref="svgContainer"
-    @click="handleSvgClick"
-    v-html="svg"
+  <div class="screen-container"
+    ref="screenContainer"
+    @click="handleScreenClick"
+    v-html="screenHTML"
   ></div>
 </template>
 
 <style scoped>
-.svg-container {
+.screen-container {
   flex-grow: 1;
   display: flex;
   overflow: hidden;
@@ -85,6 +85,7 @@ onUnmounted(() => {
 #screen {
   flex: 1;
   font-family: Roboto, sans-serif;
+  font-size: 14px;
   display: flex;
   flex-direction: column;
 }
