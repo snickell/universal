@@ -21,9 +21,9 @@ Where programming language authored code is brittle, the universal program will 
 personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
 where diversity is highest, to some extent, every Linux desktop is kinda the same.
 
-[TRY VERY VERY EARLYSTAGE/BROKEN DEMO NOW](https://universal.nuxt.dev)
+[GO TRY THE DEMO NOW](https://universal.nuxt.dev) (~5-10 minutes)
 
-You just experienced the universal program running on a 2025 LLM: a shitty demo, at best.
+You just experienced the universal program running on a 2025 LLM: a curious albeit shitty demo, at best.
 
 What would it be like on a 2030 model?
 
