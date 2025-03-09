@@ -24,9 +24,16 @@ watch(() => showPopup.value, () =>
 )
 
 // Whenever loading changes, set showPopup to be the same (but user can override)
-watch(() => props.loading, _loading => 
-  showPopup.value = _loading
-)
+watch(() => props.loading, (isLoading, wasLoading) => {
+  if (!isLoading && wasLoading) {
+    // wait 5s before hiding the popup when we're done loading, otherwise you're reading
+    // and its like whiplash when the LLM finishes. TODO: something better
+    setTimeout(() => showPopup.value = false, 5000)
+  } else {
+    showPopup.value = isLoading
+  }
+  
+}, { immediate: true })
 </script>
 
 <template>
