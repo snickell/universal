@@ -12,27 +12,21 @@ const props = defineProps({
 })
 
 const showPopup = ref(false)
-const mute = ref(false)
 const showPopupButtonWidth = ref(null)
 const showPopupButtonRef = ref(null)
 
-function measurePopupButtonWidth() {
-  if (showPopupButtonRef.value) {
-    showPopupButtonWidth.value = showPopupButtonRef.value.offsetWidth
-  }
-}
+const mute = ref(false)
 
-watch(() => showPopup, (_showPopup) => _showPopup && measurePopupButtonWidth())
+// Before we show the popup, we have to measure the width of the popup button
+// because we morph the button into the titlebar of the popup in a CSS animation
+watch(() => showPopup.value, () => 
+  showPopupButtonWidth.value = showPopupButtonRef.value?.offsetWidth
+)
 
-
-watch(() => props.loading, (isLoading) => {
-  if (isLoading) {
-    showPopup.value = true
-    measurePopupButtonWidth()
-  } else {
-    showPopup.value = false
-  }
-})
+// Whenever loading changes, set showPopup to be the same (but user can override)
+watch(() => props.loading, _loading => 
+  showPopup.value = _loading
+)
 </script>
 
 <template>
@@ -82,6 +76,20 @@ watch(() => props.loading, (isLoading) => {
   display: flex;
 }
 
+.popup {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  background-color: #e6edf5;
+  overflow: hidden;
+  z-index: 10002;
+}
+
 .fullscreen-blur-mask {
   position: fixed;
   top: 0;
@@ -117,12 +125,14 @@ button.show-popup-button,
   border: none;
 }
 
-button.show-popup-button {
-  gap: 4px;
-}
-
 .popup .titlebar {
   animation: expandTitlebarWidth 0.4s forwards;
+}
+
+@keyframes expandTitlebarWidth {
+  to {
+    width: 800px;
+  }
 }
 
 button.show-popup-button:hover {
@@ -138,27 +148,7 @@ button.show-popup-button .material-symbols-outlined {
   font-size: 1.5em;
 }
 
-.popup {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  max-width: 100vw;
-  max-height: 100vh;
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  background-color: #e6edf5;
-  overflow: hidden;
-  z-index: 10002;
-}
-
-@keyframes expandTitlebarWidth {
-  to {
-    width: 800px;
-  }
-}
-
-.titlebar-buttons {
+.popup .titlebar .titlebar-buttons {
   opacity: 0;
   margin-left: auto;
   display: flex;
@@ -171,7 +161,24 @@ button.show-popup-button .material-symbols-outlined {
   to { opacity: 1; }
 }
 
-.content-area {
+.popup .titlebar .icon-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.popup .titlebar .icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.popup .content-area {
   overflow: hidden;
   padding: 0 24px;
 
@@ -191,28 +198,12 @@ button.show-popup-button .material-symbols-outlined {
   }
 }
 
-.spacer {
+button.show-popup-button .spacer {
   flex-grow: 1;
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   height: 50%;
   margin: 0 12px;
-}
-
-.icon-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-}
-
-.icon-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  padding-left: 20px;
 }
 
 .auth-section {
