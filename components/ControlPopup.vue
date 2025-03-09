@@ -43,9 +43,10 @@ watch(() => props.loading, (isLoading, wasLoading) => {
       <div v-if="showPopup" class="fullscreen-blur-mask" @click="showPopup = false"></div>
     </transition>
     
-    <div v-if="showPopup" class="popup">
+    <transition name="popup" duration="800">
+      <div v-if="showPopup" class="popup">
       <div class="titlebar" :style="{ '--show-popup-button-width': showPopupButtonWidth + 'px' }">
-        <span class="title-text">The Universal Program</span>
+        <span class="cursive-text-lower-baseline">The Universal Program</span>
         
         <div class="titlebar-buttons">
           <button class="icon-button" @click="mute = !mute">
@@ -67,9 +68,10 @@ watch(() => props.loading, (isLoading, wasLoading) => {
         </div>
       </div>
     </div>
+    </transition>
     
     <button class="show-popup-button" ref="showPopupButtonRef" @click="showPopup = true">
-      <span class="title-text">The Universal Program</span>
+      <span class="cursive-text-lower-baseline">The Universal Program</span>
       <span class="spacer"></span>
       <span class="material-symbols-outlined">arrow_drop_down</span>
     </button>
@@ -96,6 +98,11 @@ watch(() => props.loading, (isLoading, wasLoading) => {
   background-color: #e6edf5;
   overflow: hidden;
   z-index: 10002;
+}
+
+.popup-enter-active,
+.popup-leave-active {
+  transition: 5s ease;
 }
 
 .fullscreen-blur-mask {
@@ -143,18 +150,14 @@ button.show-popup-button,
   border: none;
 }
 
-.popup .titlebar {
-  width: var(--show-popup-button-width);
-  animation: expandTitlebarWidth 0.4s forwards;
+.titlebar {
+  transition: all 0.4s ease;
+  width: 800px;
 }
 
-@keyframes expandTitlebarWidth {
-  from {
-    width: var(--show-popup-button-width);
-  }
-  to {
-    width: 800px;
-  }
+.popup-enter-from .titlebar,
+.popup-leave-to .titlebar {
+  width: var(--show-popup-button-width);
 }
 
 button.show-popup-button:hover {
@@ -162,7 +165,7 @@ button.show-popup-button:hover {
 }
 
 /* The cursive font looks nice with a slightly lower baseline */
-button.show-popup-button .title-text {
+.cursive-text-lower-baseline {
   transform: translateY(0.2rem);
 }
 
@@ -175,12 +178,14 @@ button.show-popup-button .material-symbols-outlined {
   margin-left: auto;
   display: flex;
   gap: 8px;
-  opacity: 0;
-  animation: fadeInButtons 0.3s forwards;
+
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes fadeInButtons {
-  to { opacity: 1; }
+.popup-enter-from .titlebar .titlebar-buttons,
+.popup-leave-to .titlebar .titlebar-buttons {
+  opacity: 0;
 }
 
 .popup .titlebar .icon-button {
@@ -204,20 +209,24 @@ button.show-popup-button .material-symbols-outlined {
   overflow: hidden;
   padding: 0 24px;
 
+  max-height: 100vh;
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  transition: all 0.4s ease;
+}
+
+.popup-enter-from .content-area,
+.popup-leave-to .content-area {
   max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
-
-  animation: expandContentAreaHeight 0.4s forwards;
-  animation-delay: 0.4s;
 }
 
-@keyframes expandContentAreaHeight {
-  to {
-    max-height: 100vh;
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
+.popup-enter-active .content-area,
+.popup-leave-active .titlebar,
+.popup-leave-active .titlebar .titlebar-buttons {
+  transition-delay: 0.4s;
 }
 
 button.show-popup-button .spacer {
