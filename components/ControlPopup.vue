@@ -44,7 +44,7 @@ watch(() => props.loading, (isLoading, wasLoading) => {
     </transition>
     
     <div v-if="showPopup" class="popup">
-      <div class="titlebar" :style="{ width: showPopupButtonWidth + 'px' }">
+      <div class="titlebar" :style="{ '--show-popup-button-width': showPopupButtonWidth + 'px' }">
         <span class="title-text">The Universal Program</span>
         
         <div class="titlebar-buttons">
@@ -144,10 +144,14 @@ button.show-popup-button,
 }
 
 .popup .titlebar {
+  width: var(--show-popup-button-width);
   animation: expandTitlebarWidth 0.4s forwards;
 }
 
 @keyframes expandTitlebarWidth {
+  from {
+    width: var(--show-popup-button-width);
+  }
   to {
     width: 800px;
   }
