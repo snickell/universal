@@ -23,7 +23,7 @@ function onMsgFromUser() {
       type="text"
       v-model="msgFromUser"
       @keypress="(e) => e.key === 'Enter' && onMsgFromUser()"
-      placeholder="Thy command?"
+      placeholder="To render a new frame, click somewhere OR modify & control apps by describing what you want here."
     />
     
     <button @click="onMsgFromUser">
