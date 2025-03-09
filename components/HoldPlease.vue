@@ -84,13 +84,13 @@ onUnmounted(() => {
   padding: 20px 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .idle-content {
   padding: 20px 0;
-  text-align: center;
+  text-align: left;
 }
 
 .idle-title {
@@ -106,7 +106,7 @@ onUnmounted(() => {
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   margin-bottom: 20px;

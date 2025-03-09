@@ -71,6 +71,7 @@ button {
   border: none;
 }
 
+/* The cursive font looks nice with a slightly lower baseline */
 button > span {
   transform: translateY(0.2rem);
 }

@@ -11,54 +11,47 @@ const props = defineProps({
   }
 })
 
-const showControl = ref(false)
+const showPopup = ref(false)
 const mute = ref(false)
-const toggleButtonWidth = ref(null)
-const toggleButtonRef = ref(null)
+const showPopupButtonWidth = ref(null)
+const showPopupButtonRef = ref(null)
 
-function measureToggleWidth() {
-  if (toggleButtonRef.value) {
-    toggleButtonWidth.value = toggleButtonRef.value.offsetWidth
+function measurePopupButtonWidth() {
+  if (showPopupButtonRef.value) {
+    showPopupButtonWidth.value = showPopupButtonRef.value.offsetWidth
   }
 }
 
-function toggleControl() {
-  showControl.value = !showControl.value
-  if (showControl.value) {
-    measureToggleWidth()
-  }
-}
+watch(() => showPopup, (_showPopup) => _showPopup && measurePopupButtonWidth())
 
-function toggleMute() {
-  mute.value = !mute.value
-}
 
 watch(() => props.loading, (isLoading) => {
   if (isLoading) {
-    showControl.value = true
-    measureToggleWidth()
+    showPopup.value = true
+    measurePopupButtonWidth()
   } else {
-    showControl.value = false
+    showPopup.value = false
   }
-}, { immediate: true })
+})
 </script>
 
 <template>
   <div class="control-popup">
     <HoldPleaseMusic :loading="loading" :mute="mute" />
-    <div v-if="showControl" class="fullscreen-blur-mask" @click="showControl = false"></div>
+
+    <div v-if="showPopup" class="fullscreen-blur-mask" @click="showPopup = false"></div>
     
-    <div v-if="showControl" class="popup">
-      <div class="titlebar" :style="{ width: toggleButtonWidth + 'px' }">
+    <div v-if="showPopup" class="popup">
+      <div class="titlebar" :style="{ width: showPopupButtonWidth + 'px' }">
         <span class="title-text">The Universal Program</span>
         
-        <div class="header-buttons">
-          <button class="icon-button" @click="toggleMute">
+        <div class="titlebar-buttons">
+          <button class="icon-button" @click="mute = !mute">
             <span class="material-symbols-outlined">
               {{ mute ? 'volume_off' : 'volume_up' }}
             </span>
           </button>
-          <button class="icon-button" @click="showControl = false">
+          <button class="icon-button" @click="showPopup = false">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
@@ -73,7 +66,7 @@ watch(() => props.loading, (isLoading) => {
       </div>
     </div>
     
-    <button class="toggle" ref="toggleButtonRef" @click="toggleControl">
+    <button class="show-popup-button" ref="showPopupButtonRef" @click="showPopup = true">
       <span class="title-text">The Universal Program</span>
       <span class="spacer"></span>
       <span class="material-symbols-outlined">arrow_drop_down</span>
@@ -107,10 +100,10 @@ watch(() => props.loading, (isLoading) => {
   to { opacity: 1; }
 }
 
-/* There's two copies of almost the same element, one is a button that toggles the popup on/off,
+/* There's two copies of almost the same element, one is a button that shows the popup,
   the other is the titlebar of the popup. The former morphs into the latter, so they share most style
 */
-button.toggle,
+button.show-popup-button,
 .popup .titlebar 
 {
   white-space: nowrap;
@@ -124,7 +117,7 @@ button.toggle,
   border: none;
 }
 
-button.toggle {
+button.show-popup-button {
   gap: 4px;
 }
 
@@ -132,15 +125,16 @@ button.toggle {
   animation: expandTitlebarWidth 0.4s forwards;
 }
 
-button.toggle:hover {
+button.show-popup-button:hover {
   background-color: #0060df;
 }
 
-button.toggle .title-text {
+/* The cursive font looks nice with a slightly lower baseline */
+button.show-popup-button .title-text {
   transform: translateY(0.2rem);
 }
 
-button.toggle .material-symbols-outlined {
+button.show-popup-button .material-symbols-outlined {
   font-size: 1.5em;
 }
 
@@ -148,6 +142,9 @@ button.toggle .material-symbols-outlined {
   position: absolute;
   bottom: 0;
   left: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   background-color: #e6edf5;
@@ -155,15 +152,13 @@ button.toggle .material-symbols-outlined {
   z-index: 10002;
 }
 
-
-
 @keyframes expandTitlebarWidth {
   to {
     width: 800px;
   }
 }
 
-.header-buttons {
+.titlebar-buttons {
   opacity: 0;
   margin-left: auto;
   display: flex;
@@ -224,20 +219,6 @@ button.toggle .material-symbols-outlined {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  text-align: left;
-}
-
-:deep(.content),
-:deep(.idle-content) {
-  text-align: left;
-  align-items: flex-start;
-}
-
-:deep(.header) {
-  justify-content: flex-start;
-}
-
-:deep(.info) {
   text-align: left;
 }
 </style>
