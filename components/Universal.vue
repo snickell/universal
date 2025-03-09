@@ -20,7 +20,7 @@ function replaceDataUseCachedElements({doc, prevDoc}) {
     const id = node.id
     const nodeFromPrevDocWithSameID = prevDoc.getElementById(id)
     if (nodeFromPrevDocWithSameID) {
-      console.log(`data-use-cached(node=${node}), replacing with ${lastNode.id}`)
+      console.log(`data-use-cached(node=${node}), replacing with ${nodeFromPrevDocWithSameID.id}`)
       node.innerHTML = nodeFromPrevDocWithSameID.innerHTML
     } else {
       console.error(`data-use-cached(node=${node}) ERROR, no matching node in lastDoc`)
