@@ -6,7 +6,7 @@ import ScreenContainer from './ScreenContainer.vue'
 import HoldPlease from './HoldPlease.vue'
 import SendMessageBar from './SendMessageBar.vue'
 import AuthPopover from './AuthPopover.vue'
-import { USE_HTML, ENABLE_DATA_USE_CACHED } from '~/lib/constants'
+import { ENABLE_DATA_USE_CACHED } from '~/lib/constants'
 
 const screenHTML = ref('')
 const loading = ref(false)
@@ -32,22 +32,20 @@ async function sendMessage(msg) {
   loading.value = true
   console.log("sendMessage", msg)
   try {
-    const { svg: newContent } = await agentSendMessage({ msg })
+    const { screenHTML: newContent } = await agentSendMessage({ msg })
     console.log("sendMessage =>\n", newContent)
-    if (USE_HTML) {
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(newContent, 'text/html')
-      if (ENABLE_DATA_USE_CACHED && lastDocRef.value) {
-        replaceDataUseCachedElements({doc, prevDoc: lastDocRef.value})
-      } else {
-        console.warn("data-use-cached is disabled")
-      }
-      lastDocRef.value = doc
-      screenHTML.value = doc.body.innerHTML
+
+    const doc = new DOMParser().parseFromString(newContent, 'text/html')
+
+    // implement data-use-cached html attribute in responses
+    if (ENABLE_DATA_USE_CACHED && lastDocRef.value) {
+      replaceDataUseCachedElements({doc, prevDoc: lastDocRef.value})
     } else {
-      screenHTML.value = newContent
+      console.warn("data-use-cached is disabled")
     }
-    
+    lastDocRef.value = doc
+
+    screenHTML.value = doc.body.innerHTML
   } catch (e) {
     console.error(e)
     if (e.status === 401) {

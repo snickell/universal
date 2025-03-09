@@ -36,7 +36,7 @@ function onMsgFromUser() {
       @click="onMsgFromUser"
       :disabled="loading"
     >
-      {{ loading ? "Rendering SVG..." : "Send" }}
+      {{ loading ? "Rendering next frame using an LLM (this might take ~1 minute or more)..." : "Send" }}
     </button>
   </div>
 </template>
