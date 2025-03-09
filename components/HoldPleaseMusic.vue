@@ -10,14 +10,14 @@ const props = defineProps({
 
 let audio = null
 
-function startHoldPlease() {
+function startHoldPleaseMusic() {
   audio = new Audio()
   audio.src = 'https://universal-static.pages.dev/holdplease.mp3'
   audio.loop = true
   audio.play().catch(error => console.log(error))
 }
 
-function stopHoldPlease() {
+function stopHoldPleaseMusic() {
   if (audio) {
     audio.pause()
     audio.src = ''
@@ -27,13 +27,13 @@ function stopHoldPlease() {
 
 watch(() => props.loading, (isLoading) => {  
   if (isLoading) {
-    startHoldPlease()
+    startHoldPleaseMusic()
   } else {
-    stopHoldPlease()
+    stopHoldPleaseMusic()
   }
 }, { immediate: true })
 
-onUnmounted(stopHoldPlease)
+onUnmounted(stopHoldPleaseMusic)
 </script>
 
 <template>
