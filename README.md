@@ -21,10 +21,12 @@ Where programming language authored code is brittle, the universal program is fl
 personal, and they will have much higher diversity of features and interface as a result. Even in Linux,
 where diversity is highest, to some extent, every Linux desktop is kinda the same.
 
-<a href="https://universal.nuxt.dev">
-  <p><strong>GO TRY THE DEMO NOW</strong></p>
-  <img src="https://universal-static.pages.dev/universal-mar-9-2025.png" alt="screenshot of the universal program from mar 9, 2025" height="340">
-</a>
+<p>
+  <a href="https://universal.nuxt.dev">
+    <strong>GO TRY THE DEMO NOW: </strong><br/>
+    <img src="https://universal-static.pages.dev/universal-mar-9-2025.png" alt="screenshot of the universal program from mar 9, 2025" height="340">
+  </a>
+</p>
 
 You just experienced the universal program running on a 2025 LLM: a curious albeit shitty demo, at best.
 
