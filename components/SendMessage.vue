@@ -1,55 +1,41 @@
 <script setup>
 import { ref } from 'vue'
-import Control from './Control.vue'
 
-const {sendMessage} = defineProps({
-  loading: {
-    type: Boolean,
-    required: true
-  },
+const props = defineProps({
   sendMessage: {
     type: Function,
     required: true
   }
 })
+
 const msgFromUser = ref('')
 
 function onMsgFromUser() {
   const msg = msgFromUser.value
   msgFromUser.value = ''
-  sendMessage(msg)
+  props.sendMessage(msg)
 }
 </script>
 
 <template>
-  <div class="message-bar">
-    <Control :loading="loading" />
-
+  <div class="send-message">
     <input
       type="text"
       v-model="msgFromUser"
       @keypress="(e) => e.key === 'Enter' && onMsgFromUser()"
       placeholder="Thy command?"
-      :disabled="loading"
     />
     
-    <button
-      @click="onMsgFromUser"
-      :disabled="loading"
-    >
-      {{ loading ? "Rendering next frame using an LLM (this might take ~1 minute or more)..." : "Send" }}
+    <button @click="onMsgFromUser">
+      Send
     </button>
   </div>
 </template>
 
 <style scoped>
-.message-bar {
-  position: relative;
+.send-message {
   display: flex;
-  padding: 0px;
-  align-items: center;
-  background-color: black;
-  border-bottom: 1px solid #333;
+  flex: 1;
 }
 
 input {

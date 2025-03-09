@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
-import HoldPleaseMusic from './HoldPleaseMusic.vue'
 
 const props = defineProps({
   loading: {
@@ -9,13 +8,8 @@ const props = defineProps({
   }
 })
 
-const isMuted = ref(false)
 const elapsedSeconds = ref(0)
 const timerInterval = ref(null)
-
-function toggleMute() {
-  isMuted.value = !isMuted.value
-}
 
 function startTimer() {
   elapsedSeconds.value = 0
@@ -46,18 +40,9 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <HoldPleaseMusic :loading="loading && !isMuted" />
-    
     <div v-if="loading" class="content">
       <div class="header">
         <h2 class="title">An LLM is rendering the next frame of your desktop OS</h2>
-        <div class="controls">
-          <button class="icon-button" @click="toggleMute">
-            <span class="material-symbols-outlined">
-              {{ isMuted ? 'volume_off' : 'volume_up' }}
-            </span>
-          </button>
-        </div>
       </div>
       
       <div class="spinner-container">
@@ -131,26 +116,6 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
-.controls {
-  display: flex;
-  gap: 8px;
-}
-
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.2s;
-}
-
-.icon-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
 
 .spinner-container {
   margin-bottom: 24px;

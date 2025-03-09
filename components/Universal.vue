@@ -3,7 +3,7 @@
 import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
-import SendMessageBar from './SendMessageBar.vue'
+import ControlBar from './ControlBar.vue'
 import AuthPopover from './AuthPopover.vue'
 import { ENABLE_DATA_USE_CACHED } from '~/lib/constants'
 
@@ -73,7 +73,7 @@ async function sendMessage(msg) {
       :sendMessage="sendMessage"
     />
     
-    <SendMessageBar
+    <ControlBar
       :loading="loading"
       :sendMessage="sendMessage"
     />
