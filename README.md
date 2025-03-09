@@ -14,8 +14,9 @@ a feature by talking about it. I've been thinking of such direct-to-screen LLMs 
 because they are authored inside themselves and can adapt to be whatever program you need.
 
 Where code is brittle, the universal program is fluid. Where code is one-size-fits-all, the universal program
-is trivial to customize. I predict universal programs will have much higher diversity of features and interface as a result.
-Even in Linux, where diversity is highest, to some extent, every Linux desktop is kinda the same `¯\_(ツ)_/¯`.
+is trivial to customize to your particular needs. I predict universal programs will have much higher diversity
+of features and interface as a result. Even in Linux, where diversity is highest, to sooome extent, every Linux
+desktop is kinda the same `¯\_(ツ)_/¯`.
 
 <p>
   <a href="https://universal.nuxt.dev">
