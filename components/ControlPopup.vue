@@ -32,7 +32,6 @@ watch(() => props.loading, (isLoading, wasLoading) => {
   } else {
     showPopup.value = isLoading
   }
-  
 }, { immediate: true })
 </script>
 
