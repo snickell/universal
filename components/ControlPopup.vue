@@ -204,12 +204,12 @@ button.show-popup-button .material-symbols-outlined {
   overflow: hidden;
   padding: 0 24px;
 
-  animation: expandContentAreaHeight 0.4s forwards;
-  animation-delay: 0.4s;
-
   max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
+
+  animation: expandContentAreaHeight 0.4s forwards;
+  animation-delay: 0.4s;
 }
 
 @keyframes expandContentAreaHeight {
