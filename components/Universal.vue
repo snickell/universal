@@ -53,13 +53,14 @@ async function sendMessage(msg) {
     lastDocRef.value = doc
 
     screenHTML.value = doc.body.innerHTML
-    loading.value = false
   } catch (e) {
     console.error(e)
     if (e.status === 401) {
       needAuth.value = true
     }
   }
+  
+  loading.value = false
 }
 </script>
 

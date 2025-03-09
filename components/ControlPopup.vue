@@ -22,20 +22,35 @@ const showPopupButtonRef = ref(null)
 
 const mute = ref(false)
 
+function hidePopup() {
+  if (props.needAuth) return
+  showPopup.value = false
+}
+
 // Before we show the popup, we have to measure the width of the popup button
 // because we morph the button into the titlebar of the popup in a CSS animation
 watch(() => showPopup.value, () => 
   showPopupButtonWidth.value = showPopupButtonRef.value?.offsetWidth
 )
 
+watch(() => props.needAuth, (needAuth) => {
+  if (needAuth) {
+    showPopup.value = true
+  }
+}, { immediate: true })
+
 // Whenever loading changes, set showPopup to be the same (but user can override)
 watch(() => props.loading, (isLoading, wasLoading) => {
+  if (props.needAuth) return
+
   if (!isLoading && wasLoading) {
     // wait 5s before hiding the popup when we're done loading, otherwise you're reading
     // and its like whiplash when the LLM finishes. TODO: something better
-    setTimeout(() => showPopup.value = false, 5000)
+    setTimeout(hidePopup, 5000)
+  } else if (isLoading) {
+    showPopup.value = true
   } else {
-    showPopup.value = isLoading
+    hidePopup()
   }
 }, { immediate: true })
 </script>
@@ -45,7 +60,7 @@ watch(() => props.loading, (isLoading, wasLoading) => {
     <HoldPleaseMusic :loading="loading" :mute="mute" />
 
     <transition name="fullscreen-blur-mask">
-      <div v-if="showPopup" class="fullscreen-blur-mask" @click="showPopup = false"></div>
+      <div v-if="showPopup" class="fullscreen-blur-mask" @click="hidePopup()"></div>
     </transition>
     
     <transition name="popup" duration="800">
@@ -59,7 +74,7 @@ watch(() => props.loading, (isLoading, wasLoading) => {
               {{ mute ? 'volume_off' : 'volume_up' }}
             </span>
           </button>
-          <button class="icon-button" @click="showPopup = false">
+          <button class="icon-button" @click="hidePopup()">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
