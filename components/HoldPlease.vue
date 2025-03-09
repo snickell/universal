@@ -71,8 +71,10 @@ onUnmounted(() => {
     </div>
     
     <div v-else class="idle-content">
-      <h2 class="idle-title">LLM is idle: click somewhere to generate another frame</h2>
-      <p class="idle-description">Each time you click, we send the click event to the LLM, and it draws another frame of the screen.</p>
+      <h2 class="idle-title">LLM is idle: if you click somewhere on the desktop, we'll start generating another frame</h2>
+      <p class="idle-description">
+        Each time you click, we send the click event to the LLM, and it draws another frame of the screen. Rendering a frame is slow, it requires 10s to ~2 minutes.
+      </p>
     </div>
   </div>
 </template>
@@ -138,7 +140,6 @@ onUnmounted(() => {
 }
 
 .info {
-  max-width: 45em;
   line-height: 1.5;
   margin: 0;
   text-align: left;

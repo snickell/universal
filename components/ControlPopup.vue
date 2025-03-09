@@ -121,7 +121,7 @@ onUnmounted(stopHoldPleaseMusic)
   color: #333;
   border-radius: 10px 10px 10px 0px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  max-width: 60em;
+  max-width: 50em;
   max-height: 100vh;
   overflow-y: auto;
   padding: 0;
