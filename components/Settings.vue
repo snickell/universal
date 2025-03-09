@@ -25,7 +25,7 @@
         </div>
 
     </div>
-    <button class="toggle" @click="showSettings = !showSettings">⛭</button>
+    <button class="toggle" @click="showSettings = !showSettings">☰</button>
   </div>
 </template>
 
