@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch } from 'vue'
 import AuthStatus from './AuthStatus.vue'
 import HoldPlease from './HoldPlease.vue'
+import HoldPleaseMusic from './HoldPleaseMusic.vue'
 
 const props = defineProps({
   loading: {
@@ -11,10 +12,9 @@ const props = defineProps({
 })
 
 const showControl = ref(false)
-const isMuted = ref(false)
+const mute = ref(false)
 const toggleButtonWidth = ref(null)
 const toggleButtonRef = ref(null)
-let audio = null
 
 function measureToggleWidth() {
   if (toggleButtonRef.value) {
@@ -30,46 +30,22 @@ function toggleControl() {
 }
 
 function toggleMute() {
-  isMuted.value = !isMuted.value
-  if (isMuted.value) {
-    stopHoldPleaseMusic()
-  } else if (props.loading) {
-    startHoldPleaseMusic()
-  }
-}
-
-function startHoldPleaseMusic() {
-  if (isMuted.value) return
-  audio = new Audio()
-  audio.src = 'https://universal-static.pages.dev/holdplease.mp3'
-  audio.loop = true
-  audio.play().catch(error => console.log(error))
-}
-
-function stopHoldPleaseMusic() {
-  if (audio) {
-    audio.pause()
-    audio.src = ''
-    audio = null
-  }
+  mute.value = !mute.value
 }
 
 watch(() => props.loading, (isLoading) => {
   if (isLoading) {
     showControl.value = true
     measureToggleWidth()
-    if (!isMuted.value) startHoldPleaseMusic()
   } else {
     showControl.value = false
-    stopHoldPleaseMusic()
   }
 }, { immediate: true })
-
-onUnmounted(stopHoldPleaseMusic)
 </script>
 
 <template>
   <div class="control-popup">
+    <HoldPleaseMusic :loading="loading" :mute="mute" />
     <div v-if="showControl" class="fullscreen-blur-mask" @click="showControl = false"></div>
     
     <div v-if="showControl" class="popup">
@@ -79,7 +55,7 @@ onUnmounted(stopHoldPleaseMusic)
         <div class="header-buttons">
           <button class="icon-button" @click="toggleMute">
             <span class="material-symbols-outlined">
-              {{ isMuted ? 'volume_off' : 'volume_up' }}
+              {{ mute ? 'volume_off' : 'volume_up' }}
             </span>
           </button>
           <button class="icon-button" @click="showControl = false">

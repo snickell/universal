@@ -5,12 +5,17 @@ const props = defineProps({
   loading: {
     type: Boolean,
     required: true
+  },
+  mute: {
+    type: Boolean,
+    default: false
   }
 })
 
 let audio = null
 
 function startHoldPleaseMusic() {
+  if (props.mute) return
   audio = new Audio()
   audio.src = 'https://universal-static.pages.dev/holdplease.mp3'
   audio.loop = true
@@ -32,6 +37,14 @@ watch(() => props.loading, (isLoading) => {
     stopHoldPleaseMusic()
   }
 }, { immediate: true })
+
+watch(() => props.mute, (isMuted) => {
+  if (isMuted) {
+    stopHoldPleaseMusic()
+  } else if (props.loading) {
+    startHoldPleaseMusic()
+  }
+})
 
 onUnmounted(stopHoldPleaseMusic)
 </script>
