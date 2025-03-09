@@ -13,29 +13,38 @@ const loading = ref(false)
 const needAuth = ref(false)
 const lastDocRef = ref(null)
 
-// search doc for any nodes with an id and a data-use-cached attribute, and replace their innerHTML
+globalThis.debug ||= {}
+
+const truncate = str => !str ? String(str) : String(str).replace(/\s+/g, ' ').slice(0, 80)
+
+// search doc for any nodes with an id and a data-use-cached attribute, and replace their outerHTML
 // in doc with the innerHTML of the corresponding node with the same id= from lastDoc.value
 function replaceDataUseCachedElements({doc, prevDoc}) {
   doc.querySelectorAll('[id][data-use-cached]').forEach(node => {
     const id = node.id
     const nodeFromPrevDocWithSameID = prevDoc.getElementById(id)
     if (nodeFromPrevDocWithSameID) {
-      console.log(`data-use-cached(node=${node}), replacing with ${nodeFromPrevDocWithSameID.id}`)
-      node.innerHTML = nodeFromPrevDocWithSameID.innerHTML
+      console.log(`data-use-cached(#${node.id}), replacing:`, node, 'with:', nodeFromPrevDocWithSameID)
+      node.outerHTML = nodeFromPrevDocWithSameID.outerHTML
     } else {
-      console.error(`data-use-cached(node=${node}) ERROR, no matching node in lastDoc`)
+      console.error(`data-use-cached(#${node.id}) ERROR replacing`, node, 'no node with a matching id in prevDoc=', prevDoc)
     }
   })
 }
 
 async function sendMessage(msg) {
   loading.value = true
-  console.log("sendMessage", msg)
+  const truncatedMsg = truncate(msg)
+  console.log()
+  console.log(`agentSendMessage('${truncatedMsg}''):`, msg)
   try {
     const { screenHTML: newContent } = await agentSendMessage({ msg })
-    console.log("sendMessage =>\n", newContent)
+
+    globalThis.debug.screenHTML = newContent
+    console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(newContent)}' (see: globalThis.debug.screenHTML)'`)
 
     const doc = new DOMParser().parseFromString(newContent, 'text/html')
+    console.log(`agentSendMessage() returned parsed doc=`, doc)
 
     // implement data-use-cached html attribute in responses
     if (ENABLE_DATA_USE_CACHED && lastDocRef.value) {
