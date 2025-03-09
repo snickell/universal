@@ -59,130 +59,88 @@ onUnmounted(stopHoldPleaseMusic)
 </script>
 
 <template>
-  <div style="display: flex; height: 100%">
-    <div>
-      <div v-if="showControl" @click="showControl = false" class="fullscreen-fadeout" />
-        <div v-if="showControl" class="control-page">
-          <div class="titlebar">
-            <div class="titlebar-title"></div>
-            <div class="header-buttons">
-              <button class="icon-button" @click="toggleMute">
-                <span class="material-symbols-outlined">
-                  {{ isMuted ? 'volume_off' : 'volume_up' }}
-                </span>
-              </button>
-              <button class="icon-button" @click="showControl = false">
-                <span class="material-symbols-outlined">close</span>
-              </button>
-            </div>
-          </div>
-          
-          <div class="content-area">
-            <HoldPlease :loading="loading" />
-            
-            <div class="auth-section">
-              <AuthStatus />
-            </div>
-          </div>
+  <div class="control-popup">
+    <div v-if="showControl" class="fullscreen-blur-mask" @click="showControl = false"></div>
+    
+    <div v-if="showControl" class="popup">
+      <div class="titlebar">
+        <span class="title-text">The Universal Program</span>
+        
+        <div class="header-buttons">
+          <button class="icon-button" @click="toggleMute">
+            <span class="material-symbols-outlined">
+              {{ isMuted ? 'volume_off' : 'volume_up' }}
+            </span>
+          </button>
+          <button class="icon-button" @click="showControl = false">
+            <span class="material-symbols-outlined">close</span>
+          </button>
         </div>
+      </div>
+      
+      <div class="content-area">
+        <HoldPlease :loading="loading" />
+        
+        <div class="auth-section">
+          <AuthStatus />
+        </div>
+      </div>
     </div>
+    
     <button class="toggle" @click="toggleControl">
       <span class="title-text">The Universal Program</span>
-      <div class="vertical-line"></div>
+      <span class="spacer"></span>
       <span class="material-symbols-outlined">arrow_drop_down</span>
     </button>
   </div>
+  
 </template>
 
 <style scoped>
-.fullscreen-fadeout {
+.control-popup {
+  position: relative;
+  height: 100%;
+  display: flex;
+}
+
+.fullscreen-blur-mask {
   position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
-  z-index: 10001;
   background-color: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(3px);
   opacity: 0;
-  animation: fadeIn 0.3s forwards;
+  animation: fadeInFullscreenBlurMask 0.8s forwards;
+  z-index: 10001;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInFullscreenBlurMask {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.control-page {
-  bottom: 100%;
-  position: absolute;
-  left: 0;
-  background-color: #e6edf5;
-  color: #333;
-  border-radius: 10px 10px 10px 0px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  max-width: 50em;
-  max-height: 100vh;
-  overflow-y: auto;
-  padding: 0;
-  z-index: 10002;
-  animation: slideUp 0.3s forwards;
-  transform-origin: bottom left;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.titlebar {
-  background-color: #1a365d;
-  color: white;
-  padding: 12px 16px;
-  border-radius: 10px 10px 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-}
-
-.titlebar-title {
-  font-size: 1.2rem;
-  font-weight: 500;
-  text-align: left;
-}
-
-.content-area {
-  padding: 24px;
-  text-align: left;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-button.toggle {
+/* There's two copies of almost the same element, one is a button that toggles the popup on/off,
+  the other is the titlebar of the popup. The former morphs into the latter, so they share most style
+*/
+button.toggle,
+.popup .titlebar 
+{
   white-space: nowrap;
   font-size: 1.4rem;
   padding: 0 12px;
-  height: 100%;
   display: flex;
   align-items: center;
-  gap: 4px;
   background-color: #0070f3;
   color: white;
-  cursor: default;
   font-family: "Cedarville Cursive", cursive;
   border: none;
-  position: relative;
-  z-index: 10003;
+  width: 340px;
+}
+
+button.toggle {
+  gap: 4px;
 }
 
 button.toggle:hover {
@@ -197,12 +155,65 @@ button.toggle .material-symbols-outlined {
   font-size: 1.5em;
 }
 
-.vertical-line {
+.popup {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #e6edf5;
+  overflow: hidden;
+  z-index: 10002;
+}
+
+.titlebar {
+  animation: expandTitlebarWidth 0.4s forwards;
+}
+
+@keyframes expandTitlebarWidth {
+  to {
+    width: 800px;
+  }
+}
+
+.header-buttons {
+  opacity: 0;
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeInButtons 0.3s forwards;
+}
+
+@keyframes fadeInButtons {
+  to { opacity: 1; }
+}
+
+.content-area {
+  overflow: hidden;
+  padding: 0 24px;
+
+  animation: expandContentAreaHeight 0.4s forwards;
+  animation-delay: 0.4s;
+
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@keyframes expandContentAreaHeight {
+  to {
+    max-height: 100vh;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+.spacer {
+  flex-grow: 1;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
   height: 50%;
-  width: 1px;
-  background-color: rgba(255, 255, 255, 0.5);
-  margin: 0 4px;
-  margin-left: 20px;
+  margin: 0 12px;
 }
 
 .icon-button {
