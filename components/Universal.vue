@@ -68,7 +68,6 @@ async function sendMessage(msg) {
 
 <template>
   <div class="universal">
-    <HoldPleaseMusic :loading="loading" />
     
     <ScreenContainer
       :screenHTML="screenHTML"
@@ -79,6 +78,8 @@ async function sendMessage(msg) {
       :loading="loading"
       :sendMessage="sendMessage"
     />
+
+    <HoldPleaseMusic :loading="loading" />
 
     <AuthPopover :needAuth="needAuth" />
   </div>
