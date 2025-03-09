@@ -12,10 +12,21 @@ const props = defineProps({
 
 const showControl = ref(false)
 const isMuted = ref(false)
+const toggleButtonWidth = ref(null)
+const toggleButtonRef = ref(null)
 let audio = null
+
+function measureToggleWidth() {
+  if (toggleButtonRef.value) {
+    toggleButtonWidth.value = toggleButtonRef.value.offsetWidth
+  }
+}
 
 function toggleControl() {
   showControl.value = !showControl.value
+  if (showControl.value) {
+    measureToggleWidth()
+  }
 }
 
 function toggleMute() {
@@ -46,11 +57,10 @@ function stopHoldPleaseMusic() {
 watch(() => props.loading, (isLoading) => {
   if (isLoading) {
     showControl.value = true
+    measureToggleWidth()
     if (!isMuted.value) startHoldPleaseMusic()
   } else {
-    setTimeout(() => {
-      showControl.value = false
-    }, 1000)
+    showControl.value = false
     stopHoldPleaseMusic()
   }
 }, { immediate: true })
@@ -63,7 +73,7 @@ onUnmounted(stopHoldPleaseMusic)
     <div v-if="showControl" class="fullscreen-blur-mask" @click="showControl = false"></div>
     
     <div v-if="showControl" class="popup">
-      <div class="titlebar">
+      <div class="titlebar" :style="{ width: toggleButtonWidth + 'px' }">
         <span class="title-text">The Universal Program</span>
         
         <div class="header-buttons">
@@ -87,7 +97,7 @@ onUnmounted(stopHoldPleaseMusic)
       </div>
     </div>
     
-    <button class="toggle" @click="toggleControl">
+    <button class="toggle" ref="toggleButtonRef" @click="toggleControl">
       <span class="title-text">The Universal Program</span>
       <span class="spacer"></span>
       <span class="material-symbols-outlined">arrow_drop_down</span>
@@ -136,11 +146,14 @@ button.toggle,
   color: white;
   font-family: "Cedarville Cursive", cursive;
   border: none;
-  width: 340px;
 }
 
 button.toggle {
   gap: 4px;
+}
+
+.popup .titlebar {
+  animation: expandTitlebarWidth 0.4s forwards;
 }
 
 button.toggle:hover {
@@ -166,9 +179,7 @@ button.toggle .material-symbols-outlined {
   z-index: 10002;
 }
 
-.titlebar {
-  animation: expandTitlebarWidth 0.4s forwards;
-}
+
 
 @keyframes expandTitlebarWidth {
   to {
