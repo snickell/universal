@@ -42,7 +42,7 @@ onUnmounted(() => {
   <div>
     <div v-if="loading" class="content">
       <div class="header">
-        <h2 class="title">An LLM is rendering the next frame of your desktop OS</h2>
+        <h2 class="title">The LLM is hallucinating the next frame of your desktop OS</h2>
       </div>
       
       <div class="spinner-container">
@@ -57,7 +57,7 @@ onUnmounted(() => {
         <h1>What's happening right now?</h1>
 
         <p>
-          Each time you click, an LLM is rendering the frame from scratch.
+          Each time you click, the LLM renders the frame from scratch to respond to your click or command.
           This process can take as little as 10s for a menu click or as much as 1-2 minutes
           for full screen renders of a complex app.
         </p>
