@@ -11,13 +11,17 @@ const props = defineProps({
   sendMessage: {
     type: Function,
     required: true
+  },
+  needAuth: {
+    type: Boolean,
+    required: true
   }
 })
 </script>
 
 <template>
   <div class="control-bar">
-    <ControlPopup :loading="loading" />
+    <ControlPopup :loading="loading" :needAuth="needAuth" />
     <SendMessage :sendMessage="sendMessage" />
   </div>
 </template>

@@ -1,11 +1,16 @@
 <script setup>
 import { ref, watch } from 'vue'
 import AuthStatus from './AuthStatus.vue'
+import AuthBeggar from './AuthBeggar.vue'
 import HoldPlease from './HoldPlease.vue'
 import HoldPleaseMusic from './HoldPleaseMusic.vue'
 
 const props = defineProps({
   loading: {
+    type: Boolean,
+    required: true
+  },
+  needAuth: {
     type: Boolean,
     required: true
   }
@@ -61,11 +66,13 @@ watch(() => props.loading, (isLoading, wasLoading) => {
       </div>
       
       <div class="content-area">
-        <HoldPlease :loading="loading" />
-        
-        <div class="auth-section">
-          <AuthStatus />
-        </div>
+        <AuthBeggar v-if="needAuth" />
+        <template v-else>
+          <HoldPlease :loading="loading" />
+          <div class="auth-section">
+            <AuthStatus />
+          </div>
+        </template>
       </div>
     </div>
     </transition>

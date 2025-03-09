@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
-import AuthPopover from './AuthPopover.vue'
 import { ENABLE_DATA_USE_CACHED } from '~/lib/constants'
 
 const screenHTML = ref('')
@@ -54,14 +53,13 @@ async function sendMessage(msg) {
     lastDocRef.value = doc
 
     screenHTML.value = doc.body.innerHTML
+    loading.value = false
   } catch (e) {
     console.error(e)
     if (e.status === 401) {
       needAuth.value = true
     }
   }
-  
-  loading.value = false
 }
 </script>
 
@@ -76,9 +74,8 @@ async function sendMessage(msg) {
     <ControlBar
       :loading="loading"
       :sendMessage="sendMessage"
+      :needAuth="needAuth"
     />
-
-    <AuthPopover :needAuth="needAuth" />
   </div>
 </template>
 
