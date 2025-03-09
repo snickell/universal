@@ -92,7 +92,16 @@ async function sendMessage(msg) {
 }
 </style>
 
-<!-- Import Material Symbols globally -->
 <style>
+/* Material Design Symbols (formerly known as Material Icons) */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+/* Roboto is our OS screen font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/*
+Cedarville Cursive is our "application" font, its intended to be visually quite different
+to make it easy to see what's part of the OS and what's part of the VM.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
 </style>
