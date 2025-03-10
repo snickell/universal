@@ -14,6 +14,9 @@ export default defineNuxtConfig({
     devServer: {
       watch: ['lib'],
     },
+    experimental: {
+      websocket: true
+    }
   },
 
   hub: {
