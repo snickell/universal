@@ -1,9 +1,3 @@
-import { resolve } from 'path'
-
-const libPath = resolve(__dirname, './lib/**/*.js')
-
-console.log("libPath", libPath)
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -16,15 +10,12 @@ export default defineNuxtConfig({
     },
     experimental: {
       websocket: true
-    }
-  },
-
-  hub: {
-    // NuxtHub (https://hub.nuxt.com/) options for cloudflare deployment
+    },
+    preset: "cloudflare_durable"
   },
 
   modules: [
-    '@nuxthub/core',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    'nitro-cloudflare-dev',
   ],
 })

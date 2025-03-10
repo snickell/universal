@@ -9,9 +9,10 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "nuxt:preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "npx nuxthub deploy"
+    "preview": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@nuxthub/core": "^0.8.17",
@@ -22,5 +23,8 @@
     "nuxt-auth-utils": "^0.5.16",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "devDependencies": {
+    "wrangler": "^3.112.0"
   }
 }
