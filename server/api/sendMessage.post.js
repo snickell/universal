@@ -10,7 +10,7 @@ function truncate(str, len=40) {
 
 async function sendScreenHTMLDelta(frame, textDelta) {
   const screenHTMLDelta = { frameID: frame.frameID, screenHTMLDelta: textDelta }
-  console.log(`sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
+  // console.log(`sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
 
   // TODO: if this was a websocket, we would transmit the screenHTMLDelta here
 }
