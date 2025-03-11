@@ -15,11 +15,30 @@ const {sendMessage} = defineProps({
 })
 const screenContainer = ref(null)
 
+let clickTimeout = null
+
 function handleScreenClick(event) {
+  if (clickTimeout) return
+
+  clickTimeout = setTimeout(() => {
+    let el = event.target
+    while (el && !el.id) el = el.parentElement
+    if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
+    clickTimeout = null
+  }, 200) // Slight delay to detect if a dblclick follows
+}
+
+function handleScreenDoubleClick(event) {
+  if (clickTimeout) {
+    clearTimeout(clickTimeout)
+    clickTimeout = null
+  }
+
   let el = event.target
   while (el && !el.id) el = el.parentElement
-  if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
+  if (el && el.id) sendMessage(`dblclick on element with id="${el.id}"`)
 }
+
 
 let lastWidth = null
 let lastHeight = null
@@ -64,6 +83,7 @@ onUnmounted(() => {
   <div class="screen-container"
     ref="screenContainer"
     @click="handleScreenClick"
+    @dblclick="handleScreenDoubleClick"
     v-html="screenHTML"
   ></div>
 </template>
