@@ -94,6 +94,11 @@ onUnmounted(() => {
   display: flex;
   overflow: hidden;
   background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
+  
+  /* Don't let any children inside #screen, returned by the LLM, escape their box */
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
 }
 </style>
 
