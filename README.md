@@ -19,7 +19,7 @@ of features and interface as a result. Even in Linux, where diversity is highest
 desktop is kinda the same `¯\_(ツ)_/¯`.
 
 <p>
-  <a href="https://universal.snickell.workers.dev">
+  <a href="https://universal.oroborus.org">
     <strong>GO TRY THE DEMO NOW: </strong><br/>
     <img src="https://universal-static.pages.dev/universal-mar-9-2025.png" alt="screenshot of the universal program from mar 9, 2025" height="340">
   </a>
