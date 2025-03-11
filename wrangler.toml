@@ -2,6 +2,9 @@ name = "universal"
 compatibility_date = "2024-09-19"
 main = "./.output/server/index.mjs"
 assets = { directory = "./.output/public/", binding = "ASSETS" }
+routes = [
+  { pattern = "universal.oroborus.org", custom_domain = true }
+]
 
 [observability]
 enabled = true
