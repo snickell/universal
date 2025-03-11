@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { sendMessage as agentSendMessage } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
-import { ENABLE_DATA_USE_CACHED } from '~/lib/constants'
+import { initialPromptName } from '~/lib/constants'
 
 const screenHTML = ref('')
 const loading = ref(false)
@@ -36,7 +36,7 @@ async function sendMessage(msg) {
   console.log()
   console.log(`agentSendMessage('${truncatedMsg}''):`, msg)
   try {
-    const { screenHTML: newContent } = await agentSendMessage({ msg })
+    const { screenHTML: newContent } = await agentSendMessage({ msg, initialPromptName })
 
     globalThis.debug.screenHTML = newContent
     console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(newContent)}' (see: globalThis.debug.screenHTML)'`)
@@ -45,10 +45,8 @@ async function sendMessage(msg) {
     console.log(`agentSendMessage() returned parsed doc=`, doc)
 
     // implement data-use-cached html attribute in responses
-    if (ENABLE_DATA_USE_CACHED && lastDocRef.value) {
+    if (lastDocRef.value) {
       replaceDataUseCachedElements({doc, prevDoc: lastDocRef.value})
-    } else {
-      console.warn("data-use-cached is disabled")
     }
     lastDocRef.value = doc
 

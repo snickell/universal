@@ -1,19 +1,12 @@
 // agent code that can run either server-side or client-side
 
 import { streamText, type CoreMessage } from 'ai'
-import { SYSTEM_PROMPT } from '@/lib/systemPrompt'
-import { FIRST_SCREEN_HTML } from '@/lib/cacheFirstScreenHTML'
+import { initialPrompts, SYSTEM_PROMPT } from '@/lib/prompts'
 import { USE_CHEAP_MODEL, CACHE_FIRST_SCREEN_HTML, MOCK_GENERATE_TEXT } from '@/lib/constants'
 import { getModel } from '@/lib/getModel'
 
 // instruction to render a new frame of the screen with no modifications
 const RENDER_SCREEN_MSG = 'render screen'
-
-console.log("\n\nUSING SYSTEM PROMPT:\n", SYSTEM_PROMPT, "\n\n")
-
-function systemPrompt() : CoreMessage {
-  return { role: 'system', content: SYSTEM_PROMPT }
-}
 
 async function streamScreenHTML(frame, textStream, sendScreenHTMLDelta) {
   let screenHTML = ''
@@ -56,30 +49,41 @@ export class Frame {
 
 type SendFrame = (frame: Frame) => Promise<void>
 type SendScreenHTMLDelta = (frame: Frame, textDelta: string) => Promise<void>
+export type InitialPromptName = keyof typeof initialPrompts
 
 export function createAgent({openRouterAPIKey}) {
   const model = getModel({openRouterAPIKey, useCheapModel: USE_CHEAP_MODEL})
 
   async function sendMessage(
-    { msg = RENDER_SCREEN_MSG, messages, sendFrame, sendScreenHTMLDelta }:
-    { msg?: string; messages?: CoreMessage[], sendFrame: SendFrame; sendScreenHTMLDelta: SendScreenHTMLDelta },
+    { msg, messages, initialPromptName, sendFrame, sendScreenHTMLDelta }:
+    { msg?: string; messages?: CoreMessage[], initialPromptName?: InitialPromptName, sendFrame: SendFrame; sendScreenHTMLDelta: SendScreenHTMLDelta },
   ): Promise<Frame> {
     const start = Date.now()
 
-    const firstMessage = !messages
-    if (firstMessage) {
-      messages = [systemPrompt()]
+    const isFirstMessage = !messages
+    let initialPrompt
+    if (isFirstMessage) {
+      if (msg && initialPromptName) throw new Error('cannot provide both msg and initialPromptName, chose one or the other')
+      if (initialPromptName && !(initialPromptName in initialPrompts)) throw new Error(`initialPromptName must be one of ${initialPrompts.join(', ')}`)
+
+      initialPrompt = initialPrompts[initialPromptName]
+
+      messages = [{ role: 'system', content: SYSTEM_PROMPT }]
+      msg = initialPrompt.prompt
     }
 
     const frame = new Frame({
-      messages: messages,
+      messages: [
+        ...messages,
+        { role: 'user', content: msg },
+      ],
     })
 
     frame.messages.push({ role: 'user', content: msg })
-    if (firstMessage && CACHE_FIRST_SCREEN_HTML) {
-      frame.screenHTML = FIRST_SCREEN_HTML
+    if (isFirstMessage && CACHE_FIRST_SCREEN_HTML && initialPrompt.cachedFirstScreenHtml) {
+      frame.screenHTML = initialPrompt.cachedFirstScreenHtml
     } else {
-      const { textStream } = await streamText({ model, messages })
+      const { textStream } = await streamText({ model, messages: frame.messages })
       frame.screenHTML = await streamScreenHTML(frame, textStream, sendScreenHTMLDelta)
     }
     frame.messages.push({ role: 'assistant', content: frame.screenHTML })
@@ -89,7 +93,7 @@ export function createAgent({openRouterAPIKey}) {
     console.log(`sendMessage() took ${duration} seconds, returning a ${(frame.screenHTML.length/1024).toFixed(3)}kb frame, msg => ${msg.replace(/\s+/g, ' ').slice(0, 40)}`)
 
     sendFrame(frame)
-
+    console.log("ITS", frame.screenHTML)
     return frame
   }
 
