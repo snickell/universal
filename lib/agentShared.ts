@@ -12,17 +12,23 @@ async function streamScreenHTML(frame, textStream, sendScreenHTMLDelta) {
   let screenHTML = ''
 
   let firstLoop = true
+  let firstLoopTextDeltaAccumulator = ''
   let trimLastLine = false
   for await (let textDelta of textStream) {
     if (firstLoop) {
       firstLoop = false
-      // Claude never seems to need this, but a number of CHEAP_MODELs do
-      if (textDelta.startsWith('```')) {
-        const msg = `WARNING: LLM model did not follow instructions and returned a markdown code block (i.e. it starts with: \`\`\`)`
-        if (!textDelta.includes('\n')) throw new Error(msg + ' cannot recover, because the first textDelta is too short and does not contain a newline')
-        console.warn(msg + ' stripping first and last line to try to recover')
-        textDelta = textDelta.split("\n").slice(1).join("\n")
-        trimLastLine = true
+      // Claude never seems to need this, but a number of CHEAP_MODELs do tend to start with a markdown block: ```, ugh
+      // this is explicitly against our system prompt directions, but, dumb is dumb
+      if (textDelta.startsWith('`')) {
+        // keep looping until we have a whole first line to examine
+        if (!(firstLoopTextDeltaAccumulator += textDelta).includes('\n') && firstLoopTextDeltaAccumulator.length < 100) continue
+        textDelta = firstLoopTextDeltaAccumulator
+        if (textDelta.startsWith('```')) {
+          console.warn('WARNING: LLM model did not follow instructions and returned a markdown code block (i.e. it starts with: \`\`\`), stripping first and last line to try to recover')
+          console.log('textDelta:', textDelta)
+          textDelta = textDelta.split("\n").slice(1).join("\n")
+          trimLastLine = true
+        }
       }
     }
 
