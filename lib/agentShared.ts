@@ -23,6 +23,7 @@ export class Frame {
   frameID: string = crypto.randomUUID()
   messages: CoreMessage[] = []
   screenHTML: string = ""
+  modelId: string = ""
 
   constructor(init?: Partial<Frame>) {
     Object.assign(this, init)
@@ -35,6 +36,7 @@ export type InitialPromptName = keyof typeof initialPrompts
 
 export function createAgent({openRouterAPIKey}) {
   const model = getModel({openRouterAPIKey, useCheapModel: USE_CHEAP_MODEL})
+  console.log('createAgent(): model=', model.modelId)
 
   async function sendMessage(
     { msg, messages, initialPromptName, sendFrame, sendScreenHTMLDelta }:
@@ -55,6 +57,7 @@ export function createAgent({openRouterAPIKey}) {
     }
 
     const frame = new Frame({
+      modelId: model.modelId,
       messages: [
         ...messages,
         { role: 'user', content: msg },
