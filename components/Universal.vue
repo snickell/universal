@@ -8,8 +8,9 @@ import { initialPromptName } from '~/lib/constants'
 
 const screenHTML = ref('')
 const loading = ref(false)
-const needAuth = ref(false)
 const lastDocRef = ref(null)
+
+const { loggedIn } = useUserSession()
 
 globalThis.debug ||= {}
 
@@ -73,7 +74,7 @@ async function sendMessage(msg) {
     <ControlBar
       :loading="loading"
       :sendMessage="sendMessage"
-      :needAuth="needAuth"
+      :needAuth="!loggedIn"
     />
   </div>
 </template>
