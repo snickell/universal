@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 import ControlPopup from './ControlPopup.vue'
 import SendMessage from './SendMessage.vue'
 
@@ -15,13 +14,21 @@ const props = defineProps({
   needAuth: {
     type: Boolean,
     required: true
+  },
+  screenPreviewHTML: {
+    type: String,
+    required: false
   }
 })
 </script>
 
 <template>
   <div class="control-bar">
-    <ControlPopup :loading="loading" :needAuth="needAuth" />
+    <ControlPopup
+      :loading="loading"
+      :needAuth="needAuth"
+      :screenPreviewHTML="screenPreviewHTML" 
+    />
     <SendMessage :sendMessage="sendMessage" />
   </div>
 </template>

@@ -5,6 +5,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     required: true
+  },
+  screenPreviewHTML: {
+    type: String,
+    required: true
   }
 })
 
@@ -40,21 +44,42 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div v-if="loading" class="content">
+    <div class="content">
+
       <div class="header">
-        <h2 class="title">The LLM is hallucinating the next frame of your desktop OS</h2>
-      </div>
-      
-      <div class="spinner-container">
-        <span class="material-symbols-outlined spinner">progress_activity</span>
-      </div>
-      
-      <div class="timer">
-        {{ elapsedSeconds }} seconds elapsed of 10s - 120s
+        <h2>
+          <span v-if="loading">The LLM is hallucinating the next frame of your desktop OS</span>
+          <span v-else>The LLM is idle: frame complete</span>
+        </h2>
       </div>
 
+      <ScreenPreview
+        :screenPreviewHTML="screenPreviewHTML"
+      >
+        <div v-if="loading" class="middle-of-screen">
+          <div class="spinner-container">
+            <span class="material-symbols-outlined spinner">progress_activity</span>
+          </div>
+        </div>
+        <div v-else>
+          <div class="blurring-backgrop"></div>
+          <div class="middle-of-screen">
+            <button
+              @click="$emit('close-popup')"
+              style="font-size: 200%; background-color: #0060df; padding: 10px 20px; color: white; white-space: nowrap; cursor: pointer;"
+            >
+              frame done - go see it!
+            </button>
+          </div>          
+        </div>
+      </ScreenPreview>
+
+      <div v-if="loading" class="timer">
+        {{ elapsedSeconds }} seconds elapsed of 10s - 120s
+      </div>
+      
       <div class="info">
-        <h1>What's happening right now?</h1>
+        <h1>How does this work? What is it doing?</h1>
 
         <p>
           Each time you click, the LLM renders the frame from scratch to respond to your click or command.
@@ -69,58 +94,48 @@ onUnmounted(() => {
         </p>
       </div>
     </div>
-    
-    <div v-else class="idle-content">
-      <h2 class="idle-title">LLM is idle: if you click somewhere on the desktop, we'll start generating another frame</h2>
-      <p class="idle-description">
-        Each time you click, we send the click event to the LLM, and it draws another frame of the screen. Rendering a frame is slow, it requires 10s to ~2 minutes.
-      </p>
-    </div>
   </div>
 </template>
 
 <style scoped>
+.blurring-backgrop {
+  background-color: rgba(255,255,255,0.25);
+  padding: 10px 20px;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  position: absolute;
+  backdrop-filter: blur(10px);
+}
+
+.middle-of-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .content {
-  padding: 20px 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
 }
 
-.idle-content {
-  padding: 20px 0;
-  text-align: left;
-}
-
-.idle-title {
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.idle-description {
-  color: #666;
-  font-size: 1rem;
-}
-
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.title {
+.header h1 {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 500;
+  margin-bottom: 1em;
 }
 
 
 .spinner-container {
-  margin-bottom: 24px;
+  background-color: rgba(255,255,255,0.25);
+  border-radius: 32px;
+  height: 64px;
 }
 
 .spinner {
@@ -145,7 +160,7 @@ onUnmounted(() => {
   text-align: left;
 }
 
-.info h1 {
+h1, h2 {
   font-size: 1.25em;
 }
 

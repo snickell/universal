@@ -13,6 +13,10 @@ const props = defineProps({
   needAuth: {
     type: Boolean,
     required: true
+  },
+  screenPreviewHTML: {
+    type: String,
+    required: true
   }
 })
 
@@ -39,18 +43,10 @@ watch(() => props.needAuth, (needAuth) => {
   }
 }, { immediate: true })
 
-// Whenever loading changes, set showPopup to be the same (but user can override)
+// Whenever we start loading, show the popup
 watch(() => props.loading, (isLoading, wasLoading) => {
-  if (props.needAuth) return
-
-  if (!isLoading && wasLoading) {
-    // wait 5s before hiding the popup when we're done loading, otherwise you're reading
-    // and its like whiplash when the LLM finishes. TODO: something better
-    setTimeout(hidePopup, 5000)
-  } else if (isLoading) {
+  if (isLoading) {
     showPopup.value = true
-  } else {
-    hidePopup()
   }
 }, { immediate: true })
 </script>
@@ -83,7 +79,12 @@ watch(() => props.loading, (isLoading, wasLoading) => {
       <div class="content-area">
         <AuthBeggar v-if="needAuth" />
         <template v-else>
-          <HoldPlease :loading="loading" />
+          <HoldPlease
+            @close-popup="hidePopup"
+            :loading="loading"
+            :screenPreviewHTML="screenPreviewHTML"
+          />
+
           <div class="auth-section">
             <AuthStatus />
           </div>
@@ -98,7 +99,6 @@ watch(() => props.loading, (isLoading, wasLoading) => {
       <span class="material-symbols-outlined">arrow_drop_down</span>
     </button>
   </div>
-  
 </template>
 
 <style scoped>

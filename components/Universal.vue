@@ -7,6 +7,7 @@ import ControlBar from './ControlBar.vue'
 import { initialPromptName, USE_WEB_SOCKET } from '~/lib/constants'
 
 const screenHTMLRef = ref('')
+const screenPreviewHTMLRef = ref('')
 const loading = ref(false)
 const lastScreenElRef = ref(null)
 
@@ -31,11 +32,21 @@ function replaceDataUseCachedElements({el, prevEl}) {
   })
 }
 
+class InvalidScreenHTMLError extends Error {
+  constructor(screenHTML) {
+    super("Could not parse screenHTML, or it didn't contain a #screen element")
+    this.name = 'InvalidScreenHTMLError'
+    this.screenHTML = screenHTML
+  }
+}
+
 // parse HTML string, extract #screen element, and fill in elements cached from the previous screen
 function materializeScreenEl(rawScreenHTML, cacheFromEl) {
   const screenEl = new DOMParser()
     .parseFromString(rawScreenHTML, 'text/html')
     .getElementById('screen')
+
+  if (!screenEl) throw new InvalidScreenHTMLError(rawScreenHTML)
 
   // remove all attrs from #screen except id="screen"
   Array.from(screenEl.attributes)
@@ -60,10 +71,12 @@ function materializeScreenEl(rawScreenHTML, cacheFromEl) {
 
 async function sendMessage(msg) {
   loading.value = true
+  screenPreviewHTMLRef.value = ''
+
   const truncatedMsg = truncate(msg)
   console.log()
   console.log(`sendMessage('${truncatedMsg}''):`, msg)
-    
+
   function receiveFrame(frame) {
     loading.value = false
 
@@ -75,10 +88,22 @@ async function sendMessage(msg) {
 
     lastScreenElRef.value = screenEl
     screenHTMLRef.value = screenEl.outerHTML
+    screenPreviewHTMLRef.value = screenHTMLRef.value
   }
 
-  function receiveScreenHTMLDelta(screenHTMLDelta) {
+  let screenHTMLDeltaAccumulator = ''
+  function receiveScreenHTMLDelta({ frameID, screenHTMLDelta}) {
     console.log('receiveScreenHTMLDelta:', screenHTMLDelta)
+    screenHTMLDeltaAccumulator += screenHTMLDelta
+    try {
+      const screenEl = materializeScreenEl(screenHTMLDeltaAccumulator, lastScreenElRef.value)
+      screenPreviewHTMLRef.value = screenEl.outerHTML
+    } catch (err) {
+      // its expected that we might get an InvalidScreenHTMLError until we've received the full screen
+      if (!(err instanceof InvalidScreenHTMLError)) {
+        throw err
+      }
+    }
   }
 
   let firstError = true
@@ -111,6 +136,7 @@ async function sendMessage(msg) {
       :loading="loading"
       :sendMessage="sendMessage"
       :needAuth="!loggedIn"
+      :screenPreviewHTML="screenPreviewHTMLRef"
     />
   </div>
 </template>

@@ -13,6 +13,7 @@ const {sendMessage} = defineProps({
     required: true
   }
 })
+
 const screenContainer = ref(null)
 
 let clickTimeout = null
