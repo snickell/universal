@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
-import { initialPromptName, USE_WEB_SOCKET } from '~/lib/constants'
+import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW } from '~/lib/constants'
 
 const screenHTMLRef = ref('')
 const screenPreviewHTMLRef = ref('')
@@ -53,14 +53,6 @@ function materializeScreenEl(rawScreenHTML, cacheFromEl) {
     .filter(attr => attr.name !== 'id')
     .forEach(attr => screenEl.removeAttribute(attr.name))
 
-  if (!screenEl) {
-    const msg = 'sendMessage() ERROR: no #screen element in response'
-    console.error(msg, rawScreenHTML)
-    throw new Error(msg)
-  }
-
-  console.log(`sendMessage() screenEl=`, screenEl)
-
   // implement data-use-cached html attribute in responses
   if (cacheFromEl) {
     replaceDataUseCachedElements({el: screenEl, prevEl: cacheFromEl})
@@ -93,7 +85,7 @@ async function sendMessage(msg) {
 
   let screenHTMLDeltaAccumulator = ''
   function receiveScreenHTMLDelta({ frameID, screenHTMLDelta}) {
-    console.log('receiveScreenHTMLDelta:', screenHTMLDelta)
+    if (DEBUG_STREAMING_PREVIEW) console.log('receiveScreenHTMLDelta:', screenHTMLDelta)
     screenHTMLDeltaAccumulator += screenHTMLDelta
     try {
       const screenEl = materializeScreenEl(screenHTMLDeltaAccumulator, lastScreenElRef.value)

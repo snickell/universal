@@ -30,6 +30,8 @@ export class Frame {
   }
 }
 
+const truncate = str => !str ? String(str) : String(str).replace(/\s+/g, ' ').slice(0, 40)
+
 type SendFrame = (frame: Frame) => Promise<void>
 type SendScreenHTMLDelta = (frame: Frame, textDelta: string) => Promise<void>
 export type InitialPromptName = keyof typeof initialPrompts
@@ -66,8 +68,10 @@ export function createAgent({openRouterAPIKey}) {
 
     frame.messages.push({ role: 'user', content: msg })
     if (isFirstMessage && CACHE_FIRST_SCREEN_HTML && initialPrompt.cachedFirstScreenHtml) {
+      console.log(`sendMessage(): cached frame ${frame.frameID}, returning ${initialPromptName}`)
       frame.screenHTML = initialPrompt.cachedFirstScreenHtml
     } else {
+      console.log(`sendMessage(): rendering frame ${frame.frameID}, msg => ${truncate(msg)}`)
       const { textStream } = await streamText({ model, messages: frame.messages })
       frame.screenHTML = await streamScreenHTML(frame, textStream, sendScreenHTMLDelta)
     }
@@ -75,7 +79,7 @@ export function createAgent({openRouterAPIKey}) {
 
     const end = Date.now()
     const duration = ((end - start) / 1000).toFixed(1)
-    console.log(`sendMessage() took ${duration} seconds, returning a ${(frame.screenHTML.length/1024).toFixed(3)}kb frame, msg => ${msg.replace(/\s+/g, ' ').slice(0, 40)}`)
+    console.log(`sendMessage(): frame complete, took ${duration} seconds, returning a ${(frame.screenHTML.length/1024).toFixed(3)}kb frame, msg => ${truncate(msg)}`)
 
     sendFrame(frame)
 

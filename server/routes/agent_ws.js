@@ -1,6 +1,7 @@
 // Implements a WebSocket that forwards messages between agent.js and agentShared.js
 import { createAgent } from '@/lib/agentShared'
-import { getDurableObjectEnv } from '~/server/plugins/cache-durable-object'
+import { getDurableObjectEnv } from '@/server/plugins/cache-durable-object'
+import { DEBUG_WEBSOCKET } from '@/lib/constants'
 
 // This is annoying, but in prod we'll be running as part of a cloudflare durable object
 // to access UNIVERSAL_OPENROUTER_API_KEY, we need to use the env variable passed to us
@@ -26,30 +27,32 @@ function truncate(str, len=40) {
   return String(str).replace(/\s+/g, ' ').slice(0, len)
 }
 
+const debugWS = (...args) => DEBUG_WEBSOCKET ? console.log('DEBUG_WEBSOCKET', ...args) : undefined
+
 export default defineWebSocketHandler({
   open(peer) {
-    console.log("websocket: open", peer.id);
+    debugWS("websocket: open", peer.id);
   },
   close(peer) {
-    console.log("websocket: close", peer.id);
+    debugWS("websocket: close", peer.id);
   },
   async message(peer, body) {
-    console.log(`websocket: raw body=${truncate(body)}`)
+    debugWS(`websocket: raw body=${truncate(body)}`)
 
     async function sendScreenHTMLDelta(frame, textDelta) {
       const screenHTMLDelta = { frameID: frame.frameID, screenHTMLDelta: textDelta }
-      console.log(`websocket: sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
+      debugWS(`websocket: sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
 
       peer.send({screenHTMLDelta})
     }
 
     async function sendFrame(frame) {
-      console.log(`websocket: sendFrame(${frame.frameID})`)
+      debugWS(`websocket: sendFrame(${frame.frameID})`)
       peer.send({frame})
     }
 
     async function sendError(err) {
-      console.error(`websocket: sendError(${err.message})`)
+      debugWS(`websocket: sendError(${err.message})`)
       peer.send({error: err.message})
     }
 
