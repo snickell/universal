@@ -156,10 +156,6 @@ async function sendMessage(msg) {
       :screenPreviewHTML="screenPreviewHTMLRef"
       v-model:isControlPopupOpen="isControlPopupOpen"
     />
-
-    <div style="position: absolute; top: 0; left: 0; z-index: 1000; background-color: red; font-size: 300%">
-      isControlPopupOpen: {{ String(isControlPopupOpen) }}
-    </div>
   </div>
 </template>
 
