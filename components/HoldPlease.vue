@@ -49,7 +49,7 @@ onUnmounted(() => {
       <div class="header">
         <h2>
           <span v-if="loading">The LLM is hallucinating the next frame of your desktop OS</span>
-          <span v-else>The LLM is idle: frame complete</span>
+          <span v-else>The LLM has <i>finished hallucinating</i>... for now 🌈</span>
         </h2>
       </div>
 
@@ -74,8 +74,11 @@ onUnmounted(() => {
         </div>
       </ScreenPreview>
 
-      <div v-if="loading" class="timer">
-        {{ elapsedSeconds }} seconds elapsed of 10s - 120s
+      <div style="margin-top: 1em">
+        <div class="timer">
+          <span v-if="loading">Rendering: {{ elapsedSeconds }} seconds elapsed of 10s - 120s</span>
+          <span v-else>Rendering: done</span>
+        </div>
       </div>
       
       <div class="info">
