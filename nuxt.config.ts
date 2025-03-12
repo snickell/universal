@@ -10,9 +10,9 @@ export default defineNuxtConfig({
     },
     // Enabling websocket: true causes 2x startup errors in nuxt-auth-utils
     // see: https://github.com/atinux/nuxt-auth-utils/issues/372
-    // experimental: {
-    //   websocket: true
-    // },
+    experimental: {
+      websocket: true
+    },
     preset: "cloudflare_durable"
   },
 

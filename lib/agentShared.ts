@@ -93,7 +93,12 @@ export function createAgent({openRouterAPIKey}) {
     console.log(`sendMessage() took ${duration} seconds, returning a ${(frame.screenHTML.length/1024).toFixed(3)}kb frame, msg => ${msg.replace(/\s+/g, ' ').slice(0, 40)}`)
 
     sendFrame(frame)
-    console.log("<screenHTML>\n", frame.screenHTML, "\n</screenHTML>")
+
+    // Log full screenHTML on prod, too noisy for dev
+    if (!import.meta.dev) {
+      console.log(`<screenHTML>\n${frame.screenHTML}"\n</screenHTML>`)
+    }
+
     return frame
   }
 
