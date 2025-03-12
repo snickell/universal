@@ -1,10 +1,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { sendMessage as agentSendMessage } from '@/lib/agent'
+import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
-import { initialPromptName } from '~/lib/constants'
+import { initialPromptName, USE_WEB_SOCKET } from '~/lib/constants'
 
 const screenHTMLRef = ref('')
 const loading = ref(false)
@@ -88,7 +88,8 @@ async function sendMessage(msg) {
     loading.value = false
   }
 
-  agentSendMessage({ 
+  const sendMessageToServer = USE_WEB_SOCKET ? sendMessageWebSocket : sendMessageHTTP
+  sendMessageToServer({ 
     msg,
     initialPromptName,
     receiveFrame,
