@@ -20,6 +20,8 @@ const props = defineProps({
     required: false
   }
 })
+
+const isControlPopupOpen = defineModel('isControlPopupOpen')
 </script>
 
 <template>
@@ -27,7 +29,8 @@ const props = defineProps({
     <ControlPopup
       :loading="loading"
       :needAuth="needAuth"
-      :screenPreviewHTML="screenPreviewHTML" 
+      :screenPreviewHTML="screenPreviewHTML"
+      v-model:showPopup="isControlPopupOpen"
     />
     <SendMessage :sendMessage="sendMessage" />
   </div>

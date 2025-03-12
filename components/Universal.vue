@@ -8,8 +8,11 @@ import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW } from '~/li
 
 const screenHTMLRef = ref('')
 const screenPreviewHTMLRef = ref('')
+const nextFrameScreenHTMLRef = ref('')
 const loading = ref(false)
 const lastScreenElRef = ref(null)
+
+const isControlPopupOpen = ref(true)
 
 const { loggedIn } = useUserSession()
 
@@ -61,6 +64,16 @@ function materializeScreenEl(rawScreenHTML, cacheFromEl) {
   return screenEl
 }
 
+// watch isControlPopupOpen, if it transitions to false and nextFrameScreenHTMLRef is not null
+// then set screenHTMLRef to nextFrameScreenHTMLRef and set nextFrameScreenHTMLRef to null
+watch(() => isControlPopupOpen.value, (isOpen) => {
+  if (!isOpen && nextFrameScreenHTMLRef.value) {
+    const nextFrameScreenHTML = nextFrameScreenHTMLRef.value
+    nextFrameScreenHTMLRef.value = null
+    screenHTMLRef.value = nextFrameScreenHTML
+  }
+})
+
 async function sendMessage(msg) {
   loading.value = true
   screenPreviewHTMLRef.value = ''
@@ -79,8 +92,20 @@ async function sendMessage(msg) {
     const screenEl = materializeScreenEl(rawScreenHTML, lastScreenElRef.value)
 
     lastScreenElRef.value = screenEl
-    screenHTMLRef.value = screenEl.outerHTML
-    screenPreviewHTMLRef.value = screenHTMLRef.value
+
+    const nextFrameScreenHTML = screenEl.outerHTML
+    screenPreviewHTMLRef.value = nextFrameScreenHTML
+
+    // Now here we play a little game, if the popup is open we don't immediately swap
+    // in the new screen, we wait until the popup is closed. This allows the user to
+    // see the new frame transition in, and reminds them what they had clicked on to
+    // get the frame. People forget a lot in 1 minute!
+    if (isControlPopupOpen.value) {
+      nextFrameScreenHTMLRef.value = nextFrameScreenHTML
+    } else {
+      nextFrameScreenHTMLRef.value = null
+      screenHTMLRef.value = nextFrameScreenHTML
+    }
   }
 
   let screenHTMLDeltaAccumulator = ''
@@ -129,7 +154,12 @@ async function sendMessage(msg) {
       :sendMessage="sendMessage"
       :needAuth="!loggedIn"
       :screenPreviewHTML="screenPreviewHTMLRef"
+      v-model:isControlPopupOpen="isControlPopupOpen"
     />
+
+    <div style="position: absolute; top: 0; left: 0; z-index: 1000; background-color: red; font-size: 300%">
+      isControlPopupOpen: {{ String(isControlPopupOpen) }}
+    </div>
   </div>
 </template>
 

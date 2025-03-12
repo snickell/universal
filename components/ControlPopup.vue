@@ -20,7 +20,7 @@ const props = defineProps({
   }
 })
 
-const showPopup = ref(false)
+const showPopup = defineModel('showPopup')
 const showPopupButtonWidth = ref(null)
 const showPopupButtonRef = ref(null)
 
