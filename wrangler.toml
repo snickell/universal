@@ -11,3 +11,8 @@ enabled = true
 
 [observability.logs]
 enabled = true
+
+# These definitions from the experimental cloudflare durable PR: https://github.com/nitrojs/nitro/pull/2801
+[[durable_objects.bindings]]
+name = "$DurableObject"
+class_name = "$DurableObject"

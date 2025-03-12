@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     experimental: {
       websocket: true
     },
+    // see the experimental cloudflare durable PR: https://github.com/nitrojs/nitro/pull/2801
     preset: "cloudflare_durable"
   },
 
