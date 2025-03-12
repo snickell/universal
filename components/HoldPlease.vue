@@ -53,31 +53,34 @@ onUnmounted(() => {
         </h2>
       </div>
 
-      <ScreenPreview
-        :screenPreviewHTML="screenPreviewHTML"
-      >
-        <div v-if="loading" class="middle-of-screen">
-          <div class="spinner-container">
-            <span class="material-symbols-outlined spinner">progress_activity</span>
+      <details open class="preview-expander">
+        <summary>Preview of the frame as it renders</summary>
+        <ScreenPreview
+          :screenPreviewHTML="screenPreviewHTML"
+        >
+          <div v-if="loading" class="middle-of-screen">
+            <div class="spinner-container">
+              <span class="material-symbols-outlined spinner">progress_activity</span>
+            </div>
           </div>
-        </div>
-        <div v-else>
-          <div class="blurring-backgrop"></div>
-          <div class="middle-of-screen">
-            <button
-              @click="$emit('close-popup')"
-              style="font-size: 200%; background-color: #0060df; padding: 10px 20px; color: white; white-space: nowrap; cursor: pointer;"
-            >
-              frame done - go see it!
-            </button>
-          </div>          
-        </div>
-      </ScreenPreview>
+          <div v-else>
+            <div class="blurring-backgrop"></div>
+            <div class="middle-of-screen">
+              <button
+                @click="$emit('close-popup')"
+                style="font-size: 200%; background-color: #0060df; padding: 10px 20px; color: white; white-space: nowrap; cursor: pointer;"
+              >
+                frame done - go see it!
+              </button>
+            </div>          
+          </div>
+        </ScreenPreview>
+      </details>
 
       <div style="margin-top: 1em">
         <div class="timer">
-          <span v-if="loading">Rendering: {{ elapsedSeconds }} seconds elapsed of 10s - 120s</span>
-          <span v-else>Rendering: done</span>
+          <span v-if="loading">Rendering: {{ elapsedSeconds }} seconds elapsed of 10s to 120s</span>
+          <span v-else>Rendering: <i>done</i></span>
         </div>
       </div>
       
@@ -101,6 +104,18 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.preview-expander {
+  width: 100%;
+  background-color: #0060df;
+  color: white;
+  outline: 3px solid #0070f3;
+}
+
+.preview-expander summary {
+  font-size: 120%;
+  padding: 5px 10px;
+}
+
 .blurring-backgrop {
   background-color: rgba(255,255,255,0.25);
   padding: 10px 20px;

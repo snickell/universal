@@ -36,7 +36,6 @@ const cssVars = computed(() => ({
   aspect-ratio: var(--aspect-ratio);
   width: 100%;
   position: relative;
-  outline: 3px solid #0070f3;
   overflow: hidden;
 }
 
