@@ -36,9 +36,9 @@ async function sendMessage(msg) {
   const truncatedMsg = truncate(msg)
   console.log()
   console.log(`agentSendMessage('${truncatedMsg}''):`, msg)
-  try {
-    const { screenHTML: newContent } = await agentSendMessage({ msg, initialPromptName })
-
+    
+  function receiveFrame(frame) {
+    const newContent = frame.screenHTML
     globalThis.debug.screenHTML = newContent
     console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(newContent)}' (see: globalThis.debug.screenHTML)'`)
 
@@ -52,14 +52,21 @@ async function sendMessage(msg) {
     lastDocRef.value = doc
 
     screenHTML.value = doc.body.innerHTML
-  } catch (e) {
-    console.error(e)
-    if (e.status === 401) {
-      needAuth.value = true
-    }
+
+    loading.value = false
   }
-  
-  loading.value = false
+
+  function receiveScreenHTMLDelta(screenHTMLDelta) {
+    console.log('receiveScreenHTMLDelta:', screenHTMLDelta)
+  }
+
+  function onError(error) {
+    // TODO: display an error message? idk
+    console.error('agentSendMessage() error:', error)
+    loading.value = false
+  }
+
+  agentSendMessage({ msg, initialPromptName, receiveFrame, receiveScreenHTMLDelta, onError })
 }
 </script>
 
