@@ -65,12 +65,12 @@ watch(() => props.loading, (isLoading, wasLoading) => {
         <span class="cursive-text-lower-baseline">The Universal Program</span>
         
         <div class="titlebar-buttons">
-          <button class="icon-button" @click="mute = !mute">
+          <button class="icon-button" @click="mute = !mute" title="Mute terrible hold music">
             <span class="material-symbols-outlined">
               {{ mute ? 'volume_off' : 'volume_up' }}
             </span>
           </button>
-          <button class="icon-button" @click="hidePopup()">
+          <button class="icon-button" @click="hidePopup()" title="Hide popup (don't worry, hiding won't interrupt rendering!)">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
