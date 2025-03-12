@@ -77,8 +77,8 @@ export function createAgent({openRouterAPIKey}) {
     sendFrame(frame)
 
     // Log full screenHTML on prod, too noisy for dev
-    if (!import.meta.dev || true) {
-      console.log(`<screenHTML>\n${frame.screenHTML}"\n</screenHTML>`)
+    if (!import.meta.dev) {
+      console.log(`<screenHTML frameID="${frame.frameID}">\n${frame.screenHTML}"\n</screenHTML>`)
     }
 
     return frame
