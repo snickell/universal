@@ -19,6 +19,7 @@ export default defineNuxtConfig({
 
   modules: [
     'nuxt-auth-utils',
-    'nitro-cloudflare-dev',
+    // this causes errors on `npm run dev` if $DurableObject are defined in wrangler.toml:
+    //'nitro-cloudflare-dev',
   ],
 })
