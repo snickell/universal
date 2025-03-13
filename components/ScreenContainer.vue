@@ -16,30 +16,46 @@ const {sendMessage} = defineProps({
 
 const screenContainer = ref(null)
 
-let clickTimeout = null
-
-function handleScreenClick(event) {
-  if (clickTimeout) return
-
-  clickTimeout = setTimeout(() => {
-    let el = event.target
-    while (el && !el.id) el = el.parentElement
-    if (el && el.id) sendMessage(`click on element with id="${el.id}"`)
-    clickTimeout = null
-  }, 200) // Slight delay to detect if a dblclick follows
-}
-
-function handleScreenDoubleClick(event) {
-  if (clickTimeout) {
-    clearTimeout(clickTimeout)
-    clickTimeout = null
-  }
-
+function sendMessageAboutEvent(event) {
   let el = event.target
+
+  // The event.target el might not have a id attr if the LLM didn't follow instructions
+  // if it doesn't have an id, we walk up the tree until we find a parent el that does have one
   while (el && !el.id) el = el.parentElement
-  if (el && el.id) sendMessage(`dblclick on element with id="${el.id}"`)
+  if (el && el.id) {
+    sendMessage(`${event.type} on element with id="${el.id}"`, {
+      target: el,
+      type: event.type,
+      // These are relative to el, the first ancestor with an id:
+      offsetX: event.clientX - el.getBoundingClientRect().left,
+      offsetY: event.clientY - el.getBoundingClientRect().top,
+    })
+  } else {
+    console.error('ScreenContainer: no element with an id found for event', event)
+  }
 }
 
+// javascript fires a click before a double-click, it doesn't wait to see if a
+// second click is coming so we have to implement that logic ourselves
+let pendingSingleClickTimeout = null
+const DOUBLE_CLICK_TIMEOUT_MS = 500
+function onClickOrDblClick(event) {
+  if (!pendingSingleClickTimeout) {
+    // we got a single click, lets wait and see if its a double-click
+    pendingSingleClickTimeout = setTimeout(() => {
+      // pendingSingleClickTimeout expired and no new clicks were received
+      // therefore: its just a single click, send the event:
+      sendMessageAboutEvent(event)
+      pendingSingleClickTimeout = null
+    }, DOUBLE_CLICK_TIMEOUT_MS)
+  } else {
+    // a dblclick happened before pendingSingleClickTimeout expired
+    // therefore: this is a double-click, send the event:
+    clearTimeout(pendingSingleClickTimeout)
+    pendingSingleClickTimeout = null
+    sendMessageAboutEvent(event)
+  }
+}
 
 let lastWidth = null
 let lastHeight = null
@@ -83,8 +99,8 @@ onUnmounted(() => {
 <template>
   <div class="screen-container"
     ref="screenContainer"
-    @click="handleScreenClick"
-    @dblclick="handleScreenDoubleClick"
+    @click="onClickOrDblClick"
+    @dblclick="onClickOrDblClick"
     v-html="screenHTML"
   ></div>
 </template>
