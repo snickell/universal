@@ -1,7 +1,7 @@
 // agent code that can run either server-side or client-side
 
 import { streamText, type CoreMessage } from 'ai'
-import { initialPrompts, SYSTEM_PROMPT } from '@/lib/prompts'
+import { initialPrompts } from '@/lib/prompts'
 import { USE_CHEAP_MODEL, CACHE_FIRST_SCREEN_HTML, MOCK_GENERATE_TEXT } from '@/lib/constants'
 import { getModel } from '@/lib/getModel'
 
@@ -54,7 +54,7 @@ export function createAgent({openRouterAPIKey}) {
 
       initialPrompt = initialPrompts[initialPromptName]
 
-      messages = [{ role: 'system', content: SYSTEM_PROMPT }]
+      messages = [{ role: 'system', content: initialPrompt.systemPrompt }]
       msg = initialPrompt.prompt
     }
 
