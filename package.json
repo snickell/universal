@@ -21,6 +21,7 @@
     "debounce": "^2.2.0",
     "nuxt": "^3.15.4",
     "nuxt-auth-utils": "^0.5.16",
+    "throttleit": "^2.1.0",
     "vue": "latest",
     "vue-router": "latest"
   },

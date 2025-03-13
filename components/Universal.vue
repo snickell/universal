@@ -1,10 +1,11 @@
 
 <script setup>
-import { ref } from 'vue'
+import throttle from 'throttleit'
+
 import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
-import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW } from '~/lib/constants'
+import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/lib/constants'
 
 const screenHTMLRef = ref('')
 const screenPreviewHTMLRef = ref('')
@@ -22,12 +23,12 @@ const truncate = str => !str ? String(str) : String(str).replace(/\s+/g, ' ').sl
 
 // search doc for any nodes with an id and a data-use-cached attribute, and replace their outerHTML
 // in doc with the innerHTML of the corresponding node with the same id= from lastDoc.value
-function replaceDataUseCachedElements({el, prevEl}) {
+function replaceDataUseCachedElements({el, prevEl, logDataUseCached = false}) {
   el.querySelectorAll('[id][data-use-cached]').forEach(node => {
     const id = node.id
     const nodeFromPrevDocWithSameID = prevEl.querySelector(`#${id}`)
     if (nodeFromPrevDocWithSameID) {
-      console.log(`data-use-cached(#${node.id}), replacing:`, node, 'with:', nodeFromPrevDocWithSameID)
+      if (logDataUseCached) console.log(`data-use-cached(#${node.id}), replacing:`, node, 'with:', nodeFromPrevDocWithSameID)
       node.outerHTML = nodeFromPrevDocWithSameID.outerHTML
     } else {
       console.error(`data-use-cached(#${node.id}) ERROR replacing`, node, 'no node with a matching id in prevDoc=', prevEl)
@@ -44,7 +45,7 @@ class InvalidScreenHTMLError extends Error {
 }
 
 // parse HTML string, extract #screen element, and fill in elements cached from the previous screen
-function materializeScreenEl(rawScreenHTML, cacheFromEl) {
+function materializeScreenEl(rawScreenHTML, cacheFromEl, logDataUseCached = false) {
   const screenEl = new DOMParser()
     .parseFromString(rawScreenHTML, 'text/html')
     .getElementById('screen')
@@ -58,7 +59,7 @@ function materializeScreenEl(rawScreenHTML, cacheFromEl) {
 
   // implement data-use-cached html attribute in responses
   if (cacheFromEl) {
-    replaceDataUseCachedElements({el: screenEl, prevEl: cacheFromEl})
+    replaceDataUseCachedElements({el: screenEl, prevEl: cacheFromEl, logDataUseCached})
   }
 
   return screenEl
@@ -89,7 +90,7 @@ async function sendMessage(msg) {
     globalThis.debug.rawScreenHTML = rawScreenHTML
     console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(rawScreenHTML)}' (see: globalThis.debug.rawScreenHTML)'`)
 
-    const screenEl = materializeScreenEl(rawScreenHTML, lastScreenElRef.value)
+    const screenEl = materializeScreenEl(rawScreenHTML, lastScreenElRef.value, true)
 
     lastScreenElRef.value = screenEl
 
@@ -108,13 +109,17 @@ async function sendMessage(msg) {
     }
   }
 
+  const updateScreenPreview = throttle(function (screenHTML) {
+      const screenEl = materializeScreenEl(screenHTMLDeltaAccumulator, lastScreenElRef.value)
+      screenPreviewHTMLRef.value = screenEl.outerHTML
+  }, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS)
+
   let screenHTMLDeltaAccumulator = ''
   function receiveScreenHTMLDelta({ frameID, screenHTMLDelta}) {
     if (DEBUG_STREAMING_PREVIEW) console.log('receiveScreenHTMLDelta:', screenHTMLDelta)
     screenHTMLDeltaAccumulator += screenHTMLDelta
     try {
-      const screenEl = materializeScreenEl(screenHTMLDeltaAccumulator, lastScreenElRef.value)
-      screenPreviewHTMLRef.value = screenEl.outerHTML
+      updateScreenPreview(screenHTMLDeltaAccumulator)
     } catch (err) {
       // its expected that we might get an InvalidScreenHTMLError until we've received the full screen
       if (!(err instanceof InvalidScreenHTMLError)) {
