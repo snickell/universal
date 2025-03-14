@@ -14,6 +14,10 @@ function getAgent() {
     const UNIVERSAL_OPENROUTER_API_KEY = process.env.UNIVERSAL_OPENROUTER_API_KEY || getDurableObjectEnv().UNIVERSAL_OPENROUTER_API_KEY
     if (!UNIVERSAL_OPENROUTER_API_KEY) throw new Error("Cannot getAgent(): UNIVERSAL_OPENROUTER_API_KEY is not set in process.env or the DurableObject's env")
 
+    const env = getDurableObjectEnv()
+    // list all the keys in env:
+    console.log("getDurableObjectEnv keys:", Object.keys(env))
+
     _agent = createAgent({ openRouterAPIKey: UNIVERSAL_OPENROUTER_API_KEY })
   }
   return _agent

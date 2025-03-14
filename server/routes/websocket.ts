@@ -1,4 +1,7 @@
 export default defineEventHandler(() => {
+  // list all the keys in process.env:
+  console.log("process.env keys:", Object.keys(process.env))
+  
   return /* html */ `<!doctype html>
   <html lang="en" data-theme="dark">
     <head>
