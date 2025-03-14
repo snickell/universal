@@ -42,13 +42,9 @@ export default defineWebSocketHandler({
   },
   async message(peer, body) {
     debugWS(`websocket: raw body=${truncate(body)}`)
-    console.log('websocket: Object.keys(peer)=', Object.keys(peer), "peer=", peer);
-    let keys = []
-    for (const key in peer) {
-      keys += key
-    }
-    console.log('websocket: peer keys by for loop=', keys)
-    console.log('websocket: peer.cfEnv=', peer.cfEnv, 'peer.cfCtx=', peer.cfCtx)
+    console.log('websocket: Object.keys(peer)=', Object.keys(peer), "peer=", peer, "peer._internal", peer._internal);
+    console.log('websocket: Object.keys(peer._internal)=', Object.keys(peer._internal));
+    console.log('websocket: peer._internal.cfEnv=', peer._internal.cfEnv, 'peer._internal.cfCtx=', peer._internal.cfCtx)
 
     async function sendScreenHTMLDelta(frame, textDelta) {
       const screenHTMLDelta = { frameID: frame.frameID, screenHTMLDelta: textDelta }
