@@ -30,10 +30,6 @@ function truncate(str, len=40) {
 const debugWS = (...args) => DEBUG_WEBSOCKET ? console.log('DEBUG_WEBSOCKET', ...args) : undefined
 
 export default defineWebSocketHandler({
-  upgrade(req) {
-    console.log(`websocket: upgrade, req=`, Object.keys(req), req)
-    console.log(`websocket: upgrade req.context=`, Object.keys(req.context), req.context)
-  },
   open(peer) {
     debugWS("websocket: open", peer.id);
   },
