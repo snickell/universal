@@ -15,10 +15,13 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
     "@nuxthub/core": "^0.8.17",
     "@openrouter/ai-sdk-provider": "^0.4.1",
     "ai": "^4.1.46",
     "debounce": "^2.2.0",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.40.0",
     "nuxt": "^3.15.4",
     "nuxt-auth-utils": "^0.5.16",
     "throttleit": "^2.1.0",
@@ -26,6 +29,7 @@
     "vue-router": "latest"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.30.5",
     "wrangler": "^3.112.0"
   }
 }
