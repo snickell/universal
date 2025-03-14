@@ -1,10 +1,11 @@
 name = "universal"
-compatibility_date = "2024-09-19"
+compatibility_date = "2025-03-14"
 main = "./.output/server/index.mjs"
 assets = { directory = "./.output/public/", binding = "ASSETS" }
 routes = [
   { pattern = "universal.oroborus.org", custom_domain = true }
 ]
+compatibility_flags = ["nodejs_compat"] # Enabled just for drizzle, do we actually need this?
 
 [observability]
 enabled = true
@@ -20,3 +21,9 @@ class_name = "$DurableObject"
 [[migrations]]
 tag = "v1"
 new_classes = ["$DurableObject"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "universal"
+database_id = "e12ef9e4-9c35-4dd4-87a6-fbc683ee4dda"
+migrations_dir = "drizzle/migrations"
