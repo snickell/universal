@@ -12,7 +12,7 @@
     "nuxt:preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "preview": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler d1 migrations apply DB && wrangler deploy"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
