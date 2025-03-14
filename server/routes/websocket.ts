@@ -1,7 +1,11 @@
-export default defineEventHandler(() => {
+export default defineEventHandler((event) => {
   // list all the keys in process.env:
   console.log("process.env keys:", Object.keys(process.env))
-  
+
+  const { cloudflare } = event.context
+  console.log("cloudflare.env keys: ", Object.keys(cloudflare.env))
+
+
   return /* html */ `<!doctype html>
   <html lang="en" data-theme="dark">
     <head>
