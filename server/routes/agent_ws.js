@@ -30,7 +30,6 @@ function truncate(str, len=40) {
 const debugWS = (...args) => DEBUG_WEBSOCKET ? console.log('DEBUG_WEBSOCKET', ...args) : undefined
 
 export default defineWebSocketHandler({
-  /*
   async upgrade(request) {
     // Make sure the user is authenticated before upgrading the WebSocket connection
     const userSession = await requireUserSession(request)
@@ -38,7 +37,6 @@ export default defineWebSocketHandler({
 
     console.log("websocket upgrade: navigator.userAgent", navigator.userAgent)
   },
-  */
   open(peer) {
     debugWS("websocket: open", peer.id);
   },
