@@ -48,7 +48,7 @@ export function createAgent({openRouterAPIKey}) {
 
     const frame = new Frame({
       universalSesssionID,
-      modelId: model.modelId,
+      modelID: model.modelId,
       messages: [...messages],
     })
 

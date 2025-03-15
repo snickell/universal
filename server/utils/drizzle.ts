@@ -58,7 +58,7 @@ export async function selectOrCreateUser(db: DrizzleDB, { google_auth_id, name, 
 }
 
 // const session = selectOrCreateSession(db, {universalSesssionID, user})
-export async function selectOrCreateUniversalSession(db: DrizzleDB, { universalSesssionID, user }: { universalSesssionID: string, user: User }): Promise<UniversalSession|null> {
+export async function selectOrCreateUniversalSession(db: DrizzleDB, { universalSesssionID, user }: { universalSesssionID: string, user: User }): Promise<UniversalSession> {
   if (universalSesssionID) {
     // Try to find existing session
     const existingSessions = await db
@@ -89,4 +89,35 @@ export async function selectOrCreateUniversalSession(db: DrizzleDB, { universalS
   console.log("selectOrCreateUniversalSession(): created new session.id=", newSession[0].id)
   
   return new UniversalSession(newSession[0])
+}
+
+// TODO: implement:
+// await insertFrame(db, {frame, universalSession})
+export async function insertFrame(db: DrizzleDB, { frame, universalSession }: { frame: Frame, universalSession: UniversalSession }) {
+  if (frame.universalSesssionID !== universalSession.id) {
+    throw new Error('insertFrame(): frame.universalSesssionID does not match universalSession.id')
+  }
+
+  // TODO: use schema.messages to insert frame.inputMessage and frame.outputMessage
+  const newInputMessage = await db.insert(schema.messages).values({
+    ...frame.inputMessage,
+    universalSessionID: frame.universalSesssionID
+  }).returning().get()
+  if (!newInputMessage?.id) throw new Error('insertFrame(): failed to create new inputMessage')
+
+  const newOutputMessage = await db.insert(schema.messages).values({
+    ...frame.outputMessage,
+    universalSessionID: frame.universalSesssionID
+  }).returning().get()
+  if (!newOutputMessage?.id) throw new Error('insertFrame(): failed to create new outputMessage')
+
+  const newFrame = await db.insert(schema.frames).values({
+    universalSessionID: universalSession.id,
+    inputMessageID: newInputMessage.id,
+    outputMessageID: newOutputMessage.id,
+    ...frame
+  }).returning().get()
+  if (!newFrame?.id) throw new Error('insertFrame(): failed to create new frame')
+
+  console.log("insertFrame(): created new frame.id=", newFrame.id, "in session.id=", universalSession.id)
 }

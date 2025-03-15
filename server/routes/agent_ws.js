@@ -33,9 +33,7 @@ export default defineWebSocketHandler({
   async upgrade(request) {
     // Make sure the user is authenticated before upgrading the WebSocket connection
     const userSession = await requireUserSession(request)
-    console.log(`websocket upgrade: userSession.user=`, JSON.stringify(userSession.user))
-
-    console.log("websocket upgrade: navigator.userAgent", navigator.userAgent)
+    console.log(`websocket upgrade: userSession?.user?.name=`, JSON.stringify(userSession?.user?.name))
   },
   open(peer) {
     debugWS("websocket: open", peer.id);
@@ -46,8 +44,6 @@ export default defineWebSocketHandler({
   async message(peer, body) {
     debugWS(`websocket: raw body=${truncate(body)}`)
 
-    console.log("websocket message: navigator.userAgent", navigator.userAgent)
-
     async function sendScreenHTMLDelta(frame, textDelta) {
       const screenHTMLDelta = { frameID: frame.id, universalSesssionID: frame.universalSesssionID, screenHTMLDelta: textDelta }
       debugWS(`websocket: sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
@@ -57,6 +53,7 @@ export default defineWebSocketHandler({
 
     async function sendFrame(frame) {
       debugWS(`websocket: sendFrame(${frame.id})`)
+      await insertFrame(db, {frame, universalSession})
       peer.send({frame})
     }
 
@@ -71,7 +68,7 @@ export default defineWebSocketHandler({
 
     // Make sure the user is authenticated before upgrading the WebSocket connection
     const userSession = await requireUserSession(peer)
-    console.log(`websocket message: userSession.user=`, JSON.stringify(userSession.user))
+    console.log(`websocket message: userSession?.user?.name=`, JSON.stringify(userSession?.user?.name))
 
     // see: ./auth/google.get.ts
     const { name, email, google_auth_id} = userSession.user
@@ -88,7 +85,7 @@ export default defineWebSocketHandler({
     try {
       await getAgent().sendMessage({
         msg,
-        universalSesssionID,
+        universalSesssionID: universalSession.id,
         messages,
         initialPromptName,
         sendFrame,

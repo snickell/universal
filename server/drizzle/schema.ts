@@ -30,7 +30,7 @@ export const messages = sqliteTable("messages", {
   type: text().notNull().$type<MessageTypes>(),
 
   role: text().notNull().$type<"user" | "system">(),
-  content: text(),
+  content: text().notNull(),
 
   createdAt: integer({ mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
   universalSessionID: text().notNull().references(() => universalSessions.id),
@@ -45,19 +45,19 @@ export const messages = sqliteTable("messages", {
 
 export const frames = sqliteTable("frames", {
   id: ulid().primaryKey(),
-  modelID: text(),
+  modelID: text().notNull(),
 
-  screenHTML: text(),
+  screenHTML: text(), // TODO, implement and make .notNull()
   createdAt: integer({ mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
   
-  renderStartTime: integer({ mode: "timestamp" }),
-  renderEndTime: integer({ mode: "timestamp" }),
-  renderTimeSecs: integer(),
+  renderStartTime: integer({ mode: "timestamp" }).notNull(),
+  renderEndTime: integer({ mode: "timestamp" }).notNull(),
+  renderTimeSecs: integer().notNull(),
 
-  inputMessageID: text().references(() => messages.id),
-  outputMessageID: text().references(() => messages.id),
+  inputMessageID: text().notNull().references(() => messages.id),
+  outputMessageID: text().notNull().references(() => messages.id),
   universalSessionID: text().notNull().references(() => universalSessions.id),
-  prevFrameID: text(),
+  prevFrameID: text(), // TODO: implement
 }, (table) => [
   check("id__validULID__frames", validULID(table.id)),
   index("universalSessionID__frames").on(table.universalSessionID),

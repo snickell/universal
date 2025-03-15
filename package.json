@@ -12,7 +12,9 @@
     "nuxt:preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "preview": "wrangler d1 migrations apply --local DB && wrangler dev",
-    "deploy": "wrangler d1 migrations apply --remote DB && wrangler deploy"
+    "deploy": "wrangler d1 migrations apply --remote DB && wrangler deploy",
+    "migrations:generate": "drizzle-kit generate",
+    "migrations:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",

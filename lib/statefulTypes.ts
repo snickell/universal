@@ -31,12 +31,12 @@ export enum MessageTypes {
   RawScreenHTML = 'raw_screen_html',
 }
 
-class Message {
+export class Message {
   id: ID = ulid()
   universalSesssionID: string
 
   content: string
-  date: Date = new Date()
+  createdAt: Date = new Date()
 
   type: MessageTypes
 
@@ -46,11 +46,11 @@ class Message {
 }
 
 export class InputMessage extends Message implements CoreUserMessage {
-  role: 'user'
+  role: 'user' = 'user'
 }
 
 export class OutputMessage extends Message implements CoreSystemMessage {
-  role: 'system'
+  role: 'system' = 'system'
 }
 
 export class Frame {
@@ -61,20 +61,19 @@ export class Frame {
 
   messages: CoreMessage[] = []
   screenHTML: string = ""
-  modelId: string = ""
+  modelID: string = ""
 
   universalSession: UniversalSession = null
   inputMessage: InputMessage = null
   outputMessage: OutputMessage = null
 
-  date: Date = new Date()
+  createdAt: Date = new Date()
   renderStartTime: Date = new Date()
   renderEndTime: Date = null
   renderTimeSecs: number = 0
 
   constructor(init?: Partial<Frame>) {
     Object.assign(this, init)
-    this.universalSesssionID ||= ulid()
   }
 
   setInputMessage(msgString: string) {
