@@ -11,8 +11,8 @@
     "generate": "nuxt generate",
     "nuxt:preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "preview": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "preview": "wrangler d1 migrations apply --local DB && wrangler dev",
+    "deploy": "wrangler d1 migrations apply DB && wrangler deploy"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
@@ -26,11 +26,12 @@
     "nuxt-auth-utils": "^0.5.16",
     "throttleit": "^2.1.0",
     "ulid": "^2.3.0",
+    "ulid-workers": "^2.1.0",
     "vue": "latest",
     "vue-router": "latest"
   },
   "devDependencies": {
     "drizzle-kit": "^0.30.5",
-    "wrangler": "^3.112.0"
+    "wrangler": "^4.0.0"
   }
 }

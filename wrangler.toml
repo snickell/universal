@@ -26,4 +26,4 @@ new_classes = ["$DurableObject"]
 binding = "DB"
 database_name = "universal"
 database_id = "e12ef9e4-9c35-4dd4-87a6-fbc683ee4dda"
-migrations_dir = "drizzle/migrations"
+migrations_dir = "server/drizzle/migrations"
