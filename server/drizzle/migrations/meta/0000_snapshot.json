@@ -1,0 +1,370 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "7e9fec98-7e7c-4530-9b94-f9b9589945d3",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "frames": {
+      "name": "frames",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text(26)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "modelID": {
+          "name": "modelID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "screenHTML": {
+          "name": "screenHTML",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "renderStartTime": {
+          "name": "renderStartTime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "renderEndTime": {
+          "name": "renderEndTime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "renderTimeSecs": {
+          "name": "renderTimeSecs",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "inputMessageID": {
+          "name": "inputMessageID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "outputMessageID": {
+          "name": "outputMessageID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "universalSessionID": {
+          "name": "universalSessionID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "prevFrameID": {
+          "name": "prevFrameID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "universalSessionID__frames": {
+          "name": "universalSessionID__frames",
+          "columns": [
+            "universalSessionID"
+          ],
+          "isUnique": false
+        },
+        "prevFrameID__frames": {
+          "name": "prevFrameID__frames",
+          "columns": [
+            "prevFrameID"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "frames_inputMessageID_messages_id_fk": {
+          "name": "frames_inputMessageID_messages_id_fk",
+          "tableFrom": "frames",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "inputMessageID"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "frames_outputMessageID_messages_id_fk": {
+          "name": "frames_outputMessageID_messages_id_fk",
+          "tableFrom": "frames",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "outputMessageID"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "frames_universalSessionID_universal_sessions_id_fk": {
+          "name": "frames_universalSessionID_universal_sessions_id_fk",
+          "tableFrom": "frames",
+          "tableTo": "universal_sessions",
+          "columnsFrom": [
+            "universalSessionID"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "id__validULID__frames": {
+          "name": "id__validULID__frames",
+          "value": "LENGTH(\"frames\".\"id\") = 26"
+        }
+      }
+    },
+    "messages": {
+      "name": "messages",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text(26)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "universalSessionID": {
+          "name": "universalSessionID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "universalSessionID__messages": {
+          "name": "universalSessionID__messages",
+          "columns": [
+            "universalSessionID"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "messages_universalSessionID_universal_sessions_id_fk": {
+          "name": "messages_universalSessionID_universal_sessions_id_fk",
+          "tableFrom": "messages",
+          "tableTo": "universal_sessions",
+          "columnsFrom": [
+            "universalSessionID"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "id__validULID__messages": {
+          "name": "id__validULID__messages",
+          "value": "LENGTH(\"messages\".\"id\") = 26"
+        },
+        "type_matches_role__messages": {
+          "name": "type_matches_role__messages",
+          "value": "\n    (\"messages\".\"role\" = 'user' AND (\"messages\".\"type\" = 'prompt' OR \"messages\".\"type\" = 'events')) OR \n    (\"messages\".\"role\" = 'system' AND \"messages\".\"type\" = 'raw_screen_html')\n  "
+        }
+      }
+    },
+    "universal_sessions": {
+      "name": "universal_sessions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text(26)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userID": {
+          "name": "userID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "userID__universal_sessions": {
+          "name": "userID__universal_sessions",
+          "columns": [
+            "userID"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "universal_sessions_userID_users_id_fk": {
+          "name": "universal_sessions_userID_users_id_fk",
+          "tableFrom": "universal_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userID"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "id__validULID__universal_sessions": {
+          "name": "id__validULID__universal_sessions",
+          "value": "LENGTH(\"universal_sessions\".\"id\") = 26"
+        }
+      }
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text(26)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "google_auth_id": {
+          "name": "google_auth_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "users_google_auth_id_unique": {
+          "name": "users_google_auth_id_unique",
+          "columns": [
+            "google_auth_id"
+          ],
+          "isUnique": true
+        },
+        "google_auth_id__users": {
+          "name": "google_auth_id__users",
+          "columns": [
+            "google_auth_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

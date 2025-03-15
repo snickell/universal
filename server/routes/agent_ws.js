@@ -30,6 +30,13 @@ function truncate(str, len=40) {
 const debugWS = (...args) => DEBUG_WEBSOCKET ? console.log('DEBUG_WEBSOCKET', ...args) : undefined
 
 export default defineWebSocketHandler({
+  async upgrade(request) {
+    // Make sure the user is authenticated before upgrading the WebSocket connection
+    const userSession = await requireUserSession(request)
+    console.log(`websocket upgrade: userSession.user=`, JSON.stringify(userSession.user))
+
+    console.log("websocket upgrade: navigator.userAgent", navigator.userAgent)
+  },
   open(peer) {
     debugWS("websocket: open", peer.id);
   },
@@ -38,6 +45,8 @@ export default defineWebSocketHandler({
   },
   async message(peer, body) {
     debugWS(`websocket: raw body=${truncate(body)}`)
+
+    console.log("websocket message: navigator.userAgent", navigator.userAgent)
 
     async function sendScreenHTMLDelta(frame, textDelta) {
       const screenHTMLDelta = { frameID: frame.id, universalSesssionID: frame.universalSesssionID, screenHTMLDelta: textDelta }
@@ -58,6 +67,23 @@ export default defineWebSocketHandler({
 
     const { msg, universalSesssionID, messages, initialPromptName } = body.json()
     console.log(`websocket: received msg=${msg}`)
+
+
+    // Make sure the user is authenticated before upgrading the WebSocket connection
+    const userSession = await requireUserSession(peer)
+    console.log(`websocket message: userSession.user=`, JSON.stringify(userSession.user))
+
+    // see: ./auth/google.get.ts
+    const { name, email, google_auth_id} = userSession.user
+    console.log("websocket: google_auth_id=", google_auth_id)
+    console.log("websocket: about to useDrizzle")
+    const db = useDrizzle()
+    const user = await selectOrCreateUser(db, {google_auth_id, name, email})
+    console.log("websocket: looked up user.google_auth_id", user.google_auth_id)
+
+    console.log("websocket: about to selectOrCreateSession")
+    const universalSession = await selectOrCreateUniversalSession(db, {universalSesssionID, user})
+    console.log("websocket: universalSession.id", universalSession.id)
 
     try {
       await getAgent().sendMessage({
