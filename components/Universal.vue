@@ -107,6 +107,8 @@ async function sendMessage(msg) {
       nextFrameScreenHTMLRef.value = null
       screenHTMLRef.value = nextFrameScreenHTML
     }
+
+    return nextFrameScreenHTML
   }
 
   const updateScreenPreview = throttle(function (screenHTML) {

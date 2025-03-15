@@ -15,18 +15,18 @@ export * as schema from '../drizzle/schema'
 import * as sql from 'drizzle-orm/sql'
 export * as sql from 'drizzle-orm/sql'
 
-type DrizzleDB = DrizzleD1Database | LibSQLDatabase
+type DrizzleDB = LibSQLDatabase<typeof schema>
 
 export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
   if (event?.context?.cloudflare?.env?.DB) {
     // we're in a cloudflare worker
-    return drizzleD1(event.context.cloudflare.env.DB)
+    return drizzleD1(event.context.cloudflare.env.DB, {schema})
   } else if (getDurableObject()?.env?.DB) {
     // we're on a cloudflare durable object, in a websocket handler
-    return drizzleD1(getDurableObject().env.DB)
+    return drizzleD1(getDurableObject().env.DB, {schema})
   } else {
     // we're running locally in dev
-    return drizzleLibSQL(process.env.DB_FILE_NAME!)
+    return drizzleLibSQL(process.env.DB_FILE_NAME!, {schema})
   }
 }
 
