@@ -36,8 +36,8 @@ function queueEventToSendAsMessage({event, sendImmediately = false}) {
     if (event.type == 'click' && isATextInputEl(el)) return
 
     const universalEvent = {
-      target: { id: el.id },
       type: event.type,
+      target: { id: el.id },
       at: new Date().toISOString(),
     }
 

@@ -29,10 +29,11 @@ export default defineEventHandler(async (event) => {
   // Make sure we're logged in with Google auth to protect expensive LLM calls
   await requireUserSession(event)
 
-  const { msg, messages, initialPromptName } = await readBody(event)
+  const { msg, universalSesssionID, messages, initialPromptName } = await readBody(event)
 
   return agent.sendMessage({
     msg,
+    universalSesssionID,
     messages,
     initialPromptName,
     sendFrame,

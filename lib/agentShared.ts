@@ -4,6 +4,7 @@ import { streamText, type CoreMessage } from 'ai'
 import { initialPrompts } from '@/lib/prompts'
 import { USE_CHEAP_MODEL, CACHE_FIRST_SCREEN_HTML, MOCK_GENERATE_TEXT } from '@/lib/constants'
 import { getModel } from '@/lib/getModel'
+import { Frame, MessageTypes } from '~/lib/statefulTypes'
 
 // instruction to render a new frame of the screen with no modifications
 const RENDER_SCREEN_MSG = 'render screen'
@@ -19,17 +20,6 @@ async function streamScreenHTML(frame, textStream, sendScreenHTMLDelta) {
   return screenHTML
 }
 
-export class Frame {
-  frameID: string = crypto.randomUUID()
-  messages: CoreMessage[] = []
-  screenHTML: string = ""
-  modelId: string = ""
-
-  constructor(init?: Partial<Frame>) {
-    Object.assign(this, init)
-  }
-}
-
 const truncate = str => !str ? String(str) : String(str).replace(/\s+/g, ' ').slice(0, 40)
 
 type SendFrame = (frame: Frame) => Promise<void>
@@ -41,11 +31,9 @@ export function createAgent({openRouterAPIKey}) {
   console.log('createAgent(): model=', model.modelId)
 
   async function sendMessage(
-    { msg, messages, initialPromptName, sendFrame, sendScreenHTMLDelta }:
-    { msg?: string; messages?: CoreMessage[], initialPromptName?: InitialPromptName, sendFrame: SendFrame; sendScreenHTMLDelta: SendScreenHTMLDelta },
+    { msg, universalSesssionID, messages, initialPromptName, sendFrame, sendScreenHTMLDelta }:
+    { msg?: string; universalSesssionID?: string, messages?: CoreMessage[], initialPromptName?: InitialPromptName, sendFrame: SendFrame; sendScreenHTMLDelta: SendScreenHTMLDelta },
   ): Promise<Frame> {
-    const start = Date.now()
-
     const isFirstMessage = !messages
     let initialPrompt
     if (isFirstMessage) {
@@ -59,33 +47,32 @@ export function createAgent({openRouterAPIKey}) {
     }
 
     const frame = new Frame({
+      universalSesssionID,
       modelId: model.modelId,
-      messages: [
-        ...messages,
-        { role: 'user', content: msg },
-      ],
+      messages: [...messages],
     })
 
-    frame.messages.push({ role: 'user', content: msg })
+    frame.setInputMessage(msg)
+
     if (isFirstMessage && CACHE_FIRST_SCREEN_HTML && initialPrompt.cachedFirstScreenHtml) {
       console.log(`sendMessage(): cached frame ${frame.frameID}, returning ${initialPromptName}`)
-      frame.screenHTML = initialPrompt.cachedFirstScreenHtml
+      const rawScreenHTML = initialPrompt.cachedFirstScreenHtml
+      frame.setOutputMessage(rawScreenHTML, {type: MessageTypes.RawScreenHTML})
     } else {
       console.log(`sendMessage(): rendering frame ${frame.frameID}, msg => ${truncate(msg)}`)
       const { textStream } = await streamText({ model, messages: frame.messages })
-      frame.screenHTML = await streamScreenHTML(frame, textStream, sendScreenHTMLDelta)
+      const rawScreenHTML = await streamScreenHTML(frame, textStream, sendScreenHTMLDelta)
+      frame.setOutputMessage(rawScreenHTML, {type: MessageTypes.RawScreenHTML})
     }
-    frame.messages.push({ role: 'assistant', content: frame.screenHTML })
 
-    const end = Date.now()
-    const duration = ((end - start) / 1000).toFixed(1)
-    console.log(`sendMessage(): frame complete, took ${duration} seconds, returning a ${(frame.screenHTML.length/1024).toFixed(3)}kb frame, msg => ${truncate(msg)}`)
+    const renderDuration = frame.stopRenderClock()
+    console.log(`sendMessage(): frame complete, took ${renderDuration.toFixed(1)} seconds, returning a ${(frame.outputMessage.content.length/1024).toFixed(3)}kb frame, msg => ${truncate(msg)}`)
 
     sendFrame(frame)
 
     // Log full screenHTML on prod, too noisy for dev
     if (!import.meta.dev) {
-      console.log(`<screenHTML frameID="${frame.frameID}">\n${frame.screenHTML}"\n</screenHTML>`)
+      console.log(`<screenHTML frameID="${frame.frameID}">\n${frame.outputMessage.content}"\n</screenHTML>`)
     }
 
     return frame

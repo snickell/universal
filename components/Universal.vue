@@ -86,7 +86,7 @@ async function sendMessage(msg) {
   function receiveFrame(frame) {
     loading.value = false
 
-    const rawScreenHTML = frame.screenHTML
+    const rawScreenHTML = frame.outputMessage.content
     globalThis.debug.rawScreenHTML = rawScreenHTML
     console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(rawScreenHTML)}' (see: globalThis.debug.rawScreenHTML)'`)
 

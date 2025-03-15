@@ -38,12 +38,9 @@ export default defineWebSocketHandler({
   },
   async message(peer, body) {
     debugWS(`websocket: raw body=${truncate(body)}`)
-    console.log('websocket: Object.keys(peer)=', Object.keys(peer), "peer=", peer, "peer._internal", peer._internal);
-    console.log('websocket: Object.keys(peer._internal)=', Object.keys(peer._internal));
-    console.log('websocket: peer._internal.cfEnv=', peer._internal.cfEnv, 'peer._internal.cfCtx=', peer._internal.cfCtx)
 
     async function sendScreenHTMLDelta(frame, textDelta) {
-      const screenHTMLDelta = { frameID: frame.frameID, screenHTMLDelta: textDelta }
+      const screenHTMLDelta = { frameID: frame.frameID, universalSesssionID: frame.universalSesssionID, screenHTMLDelta: textDelta }
       debugWS(`websocket: sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
 
       peer.send({screenHTMLDelta})
@@ -59,12 +56,13 @@ export default defineWebSocketHandler({
       peer.send({error: err.message})
     }
 
-    const { msg, messages, initialPromptName } = body.json()
+    const { msg, universalSesssionID, messages, initialPromptName } = body.json()
     console.log(`websocket: received msg=${msg}`)
 
     try {
       await getAgent().sendMessage({
         msg,
+        universalSesssionID,
         messages,
         initialPromptName,
         sendFrame,
