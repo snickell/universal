@@ -20,7 +20,7 @@ function getAgent() {
 }
 
 function shortFrameID(frame) {
-  return frame.frameID.slice(0, 8)
+  return frame.id.slice(0, 8)
 }
 
 function truncate(str, len=40) {
@@ -40,14 +40,14 @@ export default defineWebSocketHandler({
     debugWS(`websocket: raw body=${truncate(body)}`)
 
     async function sendScreenHTMLDelta(frame, textDelta) {
-      const screenHTMLDelta = { frameID: frame.frameID, universalSesssionID: frame.universalSesssionID, screenHTMLDelta: textDelta }
+      const screenHTMLDelta = { frameID: frame.id, universalSesssionID: frame.universalSesssionID, screenHTMLDelta: textDelta }
       debugWS(`websocket: sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
 
       peer.send({screenHTMLDelta})
     }
 
     async function sendFrame(frame) {
-      debugWS(`websocket: sendFrame(${frame.frameID})`)
+      debugWS(`websocket: sendFrame(${frame.id})`)
       peer.send({frame})
     }
 

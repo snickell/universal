@@ -55,11 +55,11 @@ export function createAgent({openRouterAPIKey}) {
     frame.setInputMessage(msg)
 
     if (isFirstMessage && CACHE_FIRST_SCREEN_HTML && initialPrompt.cachedFirstScreenHtml) {
-      console.log(`sendMessage(): cached frame ${frame.frameID}, returning ${initialPromptName}`)
+      console.log(`sendMessage(): cached frame ${frame.id}, returning ${initialPromptName}`)
       const rawScreenHTML = initialPrompt.cachedFirstScreenHtml
       frame.setOutputMessage(rawScreenHTML, {type: MessageTypes.RawScreenHTML})
     } else {
-      console.log(`sendMessage(): rendering frame ${frame.frameID}, msg => ${truncate(msg)}`)
+      console.log(`sendMessage(): rendering frame ${frame.id}, msg => ${truncate(msg)}`)
       const { textStream } = await streamText({ model, messages: frame.messages })
       const rawScreenHTML = await streamScreenHTML(frame, textStream, sendScreenHTMLDelta)
       frame.setOutputMessage(rawScreenHTML, {type: MessageTypes.RawScreenHTML})
@@ -72,7 +72,7 @@ export function createAgent({openRouterAPIKey}) {
 
     // Log full screenHTML on prod, too noisy for dev
     if (!import.meta.dev) {
-      console.log(`<screenHTML frameID="${frame.frameID}">\n${frame.outputMessage.content}"\n</screenHTML>`)
+      console.log(`<screenHTML frameID="${frame.id}">\n${frame.outputMessage.content}"\n</screenHTML>`)
     }
 
     return frame

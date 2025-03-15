@@ -15,13 +15,13 @@ export class User {
 }
 
 export class UniversalSession {
-  universalSesssionID: string = null
-  frames: Frame[] = []
+  id: string = ulid()
   user: User = null
+
+  frames: Frame[] = []
 
   constructor(init?: Partial<UniversalSession>) {
     Object.assign(this, init)
-    this.universalSesssionID ||= ulid()
   }
 }
 
@@ -32,7 +32,7 @@ export enum MessageTypes {
 }
 
 class Message {
-  messageID: ID = ulid()
+  id: ID = ulid()
   universalSesssionID: string
 
   content: string
@@ -54,8 +54,9 @@ export class OutputMessage extends Message implements CoreSystemMessage {
 }
 
 export class Frame {
+  id: ID = ulid()
+  
   universalSesssionID: ID = null
-  frameID: ID = ulid()
   prevFrameID: ID = null
 
   messages: CoreMessage[] = []

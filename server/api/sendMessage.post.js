@@ -1,7 +1,7 @@
 import { createAgent } from '@/lib/agentShared'
 
 function shortFrameID(frame) {
-  return frame.frameID.slice(0, 8)
+  return frame.id.slice(0, 8)
 }
 
 function truncate(str, len=40) {
@@ -9,14 +9,14 @@ function truncate(str, len=40) {
 }
 
 async function sendScreenHTMLDelta(frame, textDelta) {
-  const screenHTMLDelta = { frameID: frame.frameID, screenHTMLDelta: textDelta }
+  const screenHTMLDelta = { frameID: frame.id, screenHTMLDelta: textDelta }
   // console.log(`sendScreenHTMLDelta(${shortFrameID(frame)}, '${truncate(textDelta)}')`)
 
   // TODO: if this was a websocket, we would transmit the screenHTMLDelta here
 }
 
 async function sendFrame(frame) {
-  console.log(`sendFrame(${frame.frameID})`)
+  console.log(`sendFrame(${frame.id})`)
 
   // TODO: if this was a websocket, we would transmit the frame here
 }
