@@ -1,5 +1,5 @@
 import { type CoreMessage, type CoreSystemMessage, type CoreUserMessage } from 'ai'
-import { ulid } from 'ulid'
+import { ulid } from '@/lib/ulid'
 
 type ID = string
 
@@ -55,7 +55,7 @@ export class OutputMessage extends Message implements CoreSystemMessage {
 
 export class Frame {
   id: ID = ulid()
-  
+
   universalSesssionID: ID = null
   prevFrameID: ID = null
 
