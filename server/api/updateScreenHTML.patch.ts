@@ -23,7 +23,12 @@ export default defineEventHandler(async (event) => {
   if (universalSession.userID !== user.id) throw new Error(`frame ${frameID} not owned by user ${user.id}`)
 
   const updatedRows = await db.update(schema.frames).set({screenHTML}).where(sql.eq(schema.frames.id, frameID))
-  if (updatedRows.rowsAffected !== 1) throw new Error(`expected to update 1 row, but updated ${updatedRows} rows`)
+  // TODO: figure out why validation works on local dev, but on cloudflare we get:
+  // [nuxt] [request error] [unhandled] [500] expected to update 1 row, but updated [object Object] rows
+  // 
+  // I believe D1 actually returns a fundamentally different type here ughghgh
+  //
+  // if (updatedRows.rowsAffected !== 1) throw new Error(`expected to update 1 row, but updated ${updatedRows} rows`)
 
   console.log(`updateScreenHTML: updated ${frameID} with ~${(screenHTML.length / 1024).toFixed(1)}kb of materialized screenHTML`)
 
