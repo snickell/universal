@@ -3,9 +3,21 @@ import { ulid } from 'ulid'
 
 type ID = string
 
+export class User {
+  id: ID = ulid()
+  name: string
+  email: string
+  google_auth_id: string
+
+  constructor(init?: Partial<User>) {
+    Object.assign(this, init)
+  }
+}
+
 export class UniversalSession {
   universalSesssionID: string = null
   frames: Frame[] = []
+  user: User = null
 
   constructor(init?: Partial<UniversalSession>) {
     Object.assign(this, init)
