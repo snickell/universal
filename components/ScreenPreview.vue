@@ -7,7 +7,7 @@ const props = defineProps({
   scale: {
     type: Number,
     required: false,
-    default: 1,
+    default: 2,
   }
 })
 
