@@ -17,6 +17,11 @@ const cssVars = computed(() => ({
   '--aspect-ratio': aspectRatio.value,
   '--scale': scale.value,
 }))
+
+// expose screenEl to our parents just like ScreenContainer exposed it to us
+const screenContainer = ref(null)
+const screenEl = computed(() => screenContainer.value?.screenEl)
+defineExpose({ screenEl, scale })
 </script>
 
 <template>
@@ -25,6 +30,7 @@ const cssVars = computed(() => ({
       <ScreenContainer
         :screenHTML="screenPreviewHTML"
         :sendMessage="() => {}"
+        ref="screenContainer"
       />
     </div>
     <slot></slot>

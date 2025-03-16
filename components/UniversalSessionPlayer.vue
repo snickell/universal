@@ -64,21 +64,21 @@ async function gotoNextFrame() {
   if (nextEvents.value) {
     for (const event of nextEvents.value) {
       if (event.type === 'click' || event.type === "dblclick") {
-        const shrinkEl = screenPreview.value.$el.querySelector('.shrink')
-        const screenEl = shrinkEl.querySelector('#screen')
+        const screenEl = screenPreview.value.screenEl // #screen for the current frame
+        console.log("screenEl=", screenEl)
         const targetEl = screenEl.querySelector(`#${event.target.id}`)
         if (!targetEl) {
           console.error(`Could not find target element with id="${event.target.id}"`)
           continue
         }
 
-        const scaleFactor = parseFloat(getComputedStyle(shrinkEl).transform.split(", ")[0].replace("matrix(", ""))
+        const scaleFactor = 1.0 / screenPreview.value.scale
         console.log("scaleFactor=", scaleFactor)
 
-        const { x: shrinkX, y: shrinkY } = shrinkEl.getBoundingClientRect()
+        const {x: screenX, y: screenY} = screenEl.getBoundingClientRect()
         const {x: targetX, y: targetY} = targetEl.getBoundingClientRect()
-        const x = (targetX - shrinkX) + (event.offsetX * scaleFactor)
-        const y = (targetY - shrinkY) + (event.offsetY * scaleFactor)
+        const x = (targetX - screenX) + (event.offsetX * scaleFactor)
+        const y = (targetY - screenY) + (event.offsetY * scaleFactor)
         console.log("targetEl=", targetEl, "x=", x, "y=", y)
         await animateMovingMouseTo(x, y)
         await animateClickingMouse()
@@ -92,9 +92,7 @@ async function gotoNextFrame() {
 
 // fetch universalSession when universalSessionID changes:
 watch(() => props.universalSessionID, async (newUniversalSessionID) => {
-  const url = `/api/universal-session/${newUniversalSessionID}`
-  console.log("url=", url)
-  const {data, error} = await useFetch(url)
+  const {data, error} = await useFetch(`/api/universal-session/${newUniversalSessionID}`)
   // TODO: don't use useFetch? handle errors?
   universalSession.value = data.value
 }, { immediate: true })

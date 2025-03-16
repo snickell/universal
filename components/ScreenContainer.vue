@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import debounce from 'debounce'
 import { SEND_RESIZE_MESSAGES } from '~/lib/constants'
 
-const {sendMessage} = defineProps({
+const props = defineProps({
   screenHTML: {
     type: String,
     required: true
@@ -42,6 +42,8 @@ function queueEventToSendAsMessage({event, sendImmediately = false}) {
     }
 
     if (event instanceof MouseEvent) {
+      // PSA: if event is missing some of its expected properties, check cloneEvent() below
+
       universalEvent.button = event.button
 
       // These are relative to el, the first ancestor with an id:
@@ -61,7 +63,17 @@ function sendQueuedEventsAsMessage() {
   console.log(`sendQueuedEventsAsMessage`, eventQueue)
   const events = eventQueue
   eventQueue = []
-  sendMessage(JSON.stringify({events}))
+  props.sendMessage(JSON.stringify({events}))
+}
+
+function cloneEvent(nativeEvent) {
+  const clonedEvent = Object.fromEntries([
+    'type', 'target', 'currentTarget', 'clientX', 'clientY', 'offsetX', 'offsetY',
+    'pageX', 'pageY', 'screenX', 'screenY', 'key', 'code', 'keyCode', 'shiftKey',
+    'ctrlKey', 'altKey', 'metaKey', 'button', 'buttons', 'detail', 'timeStamp', 'defaultPrevented'
+  ].map(key => [key, nativeEvent[key]]))
+  Object.setPrototypeOf(clonedEvent, Object.getPrototypeOf(nativeEvent))
+  return clonedEvent
 }
 
 // javascript fires a click before a double-click, it doesn't wait to see if a
@@ -69,6 +81,9 @@ function sendQueuedEventsAsMessage() {
 let pendingSingleClickTimeout = null
 const DOUBLE_CLICK_TIMEOUT_MS = 500
 function onClickOrDblClick(event) {
+  // we need to clone parts of the event, because weird shadow DOM trickery makes
+  // the event target and other entries get "retargeted" by the time our setTimeout fires.
+  event = cloneEvent(event)
   if (!pendingSingleClickTimeout) {
     // we got a single click, lets wait and see if its a double-click
     pendingSingleClickTimeout = setTimeout(() => {
@@ -99,13 +114,48 @@ async function sendDimensions() {
   lastWidth = width
   lastHeight = height
   
-  sendMessage(`render all future screens with width=${width} and height=${height}`)
+  props.sendMessage(`render all future screens with width=${width} and height=${height}`)
+}
+
+const shadowRoot = ref(null)
+const screenEl = ref(null)
+
+const updateScreenHTML = () => {
+  if (shadowRoot.value && props.screenHTML) {
+    // Prepend style to screenHTML using template string
+    shadowRoot.value.innerHTML = `
+      <style>
+        /* #screen is defined in the prompt to be the top-level container */
+        #screen {
+          flex: 1;
+          font-family: Roboto, sans-serif;
+          font-size: 14px;
+          display: flex;
+          flex-direction: column;
+        }
+      </style>
+      ${props.screenHTML}
+    `
+    screenEl.value = shadowRoot.value.querySelector('#screen')
+  }
 }
 
 let resizeObserver = null
+
 onMounted(async () => {
   // render initial frame, should be cached and therefore 'instant'
-  await sendMessage()
+  await props.sendMessage()
+
+  // Create a shadow DOM to contain the wild HTML/CSS returned by the LLM
+  if (screenContainer.value) {
+    shadowRoot.value = screenContainer.value.attachShadow({ mode: 'open' })
+    
+    // Add event listeners directly to shadowRoot
+    shadowRoot.value.addEventListener('click', onClickOrDblClick)
+    shadowRoot.value.addEventListener('dblclick', onClickOrDblClick)
+
+    updateScreenHTML()
+  }
 
   // send initial dimensions, this will render a second frame, which will be slow
   sendDimensions()
@@ -117,20 +167,23 @@ onMounted(async () => {
   resizeObserver.observe(screenContainer.value)
 })
 
+
+
+watch(() => props.screenHTML, updateScreenHTML)
+
 onUnmounted(() => {
   if (resizeObserver) {
     resizeObserver.disconnect()
     resizeObserver = null
   }
 })
+
+defineExpose({ screenEl})
 </script>
 
 <template>
   <div class="screen-container"
     ref="screenContainer"
-    @click="onClickOrDblClick"
-    @dblclick="onClickOrDblClick"
-    v-html="screenHTML"
   ></div>
 </template>
 
@@ -145,17 +198,5 @@ onUnmounted(() => {
   overflow: hidden;
   position: relative;
   z-index: 0;
-}
-</style>
-
-<!-- we must use an unscoped <style> to style the contents of the v-html -->
-<style>
-/* #screen is defined in the prompt to be the top-level container */
-#screen {
-  flex: 1;
-  font-family: Roboto, sans-serif;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
 }
 </style>
