@@ -5,7 +5,17 @@ import throttle from 'throttleit'
 import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '@/lib/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
+import UniversalSessionPlayer from './UniversalSessionPlayer.vue'
 import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/lib/constants'
+
+// Add universalSessionID prop
+const props = defineProps({
+  universalSessionID: {
+    type: String,
+    required: false,
+    default: null
+  }
+})
 
 const screenHTMLRef = ref('')
 const screenPreviewHTMLRef = ref('')
@@ -150,19 +160,24 @@ async function sendMessage(msg) {
 
 <template>
   <div class="universal">
-    
-    <ScreenContainer
-      :screenHTML="screenHTMLRef"
-      :sendMessage="sendMessage"
-    />
-    
-    <ControlBar
-      :loading="loading"
-      :sendMessage="sendMessage"
-      :needAuth="!loggedIn"
-      :screenPreviewHTML="screenPreviewHTMLRef"
-      v-model:isControlPopupOpen="isControlPopupOpen"
-    />
+    <!-- Conditional rendering based on universalSessionID -->
+    <template v-if="universalSessionID">
+      <UniversalSessionPlayer :universalSessionID="universalSessionID" />
+    </template>
+    <template v-else>
+      <ScreenContainer
+        :screenHTML="screenHTMLRef"
+        :sendMessage="sendMessage"
+      />
+      
+      <ControlBar
+        :loading="loading"
+        :sendMessage="sendMessage"
+        :needAuth="!loggedIn"
+        :screenPreviewHTML="screenPreviewHTMLRef"
+        v-model:isControlPopupOpen="isControlPopupOpen"
+      />
+    </template>
   </div>
 </template>
 
