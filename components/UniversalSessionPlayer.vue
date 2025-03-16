@@ -26,14 +26,35 @@ const nextEvents = computed(() => {
 })
 
 async function animateMovingMouseTo(x, y) {
-  console.log("animateMovingMouseTo", x, y)
-  // TODO: implement this, preferably somehow using CSS animations, but its ok if its manual if that's much simpler
-  currentMouseX.value = x
-  currentMouseY.value = y
+  return new Promise((resolve) => {
+    const mouseEl = document.querySelector('.mouse')
+
+    function onTransitionEnd() {
+      mouseEl.removeEventListener("transitionend", onTransitionEnd)
+      resolve()
+    }
+
+    mouseEl.addEventListener("transitionend", onTransitionEnd, { once: true })
+
+    // Update position (CSS transition handles smooth movement)
+    currentMouseX.value = x
+    currentMouseY.value = y
+  })
 }
 
 async function animateClickingMouse() {
-  // TODO: for now just pulse the mouse's size
+  return new Promise(async (resolve) => {
+    const mouseEl = document.querySelector('.mouse')
+
+    await new Promise(resolve => setTimeout(resolve, 250))
+    mouseEl.style.transform = "scale(1.5)"
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+    mouseEl.style.transform = "scale(1)"
+
+    await new Promise(resolve => setTimeout(resolve, 500))
+    resolve()
+  })
 }
 
 async function gotoNextFrame() {
@@ -56,10 +77,10 @@ async function gotoNextFrame() {
 
         const { x: shrinkX, y: shrinkY } = shrinkEl.getBoundingClientRect()
         const {x: targetX, y: targetY} = targetEl.getBoundingClientRect()
-        const x = (targetX - shrinkX) / scaleFactor
-        const y = (targetY - shrinkY) / scaleFactor
+        const x = (targetX - shrinkX) + (event.offsetX * scaleFactor)
+        const y = (targetY - shrinkY) + (event.offsetY * scaleFactor)
         console.log("targetEl=", targetEl, "x=", x, "y=", y)
-        await animateMovingMouseTo(x + event.offsetX, y + event.offsetY)
+        await animateMovingMouseTo(x, y)
         await animateClickingMouse()
       }
     }
@@ -91,9 +112,11 @@ const mouseStyle = computed(() => ({
       :screenPreviewHTML="screenHTML"
       ref="screenPreview"
     >
-      <template #in-screen-coordinates>
-        <div class="mouse" :style="mouseStyle">🐁</div>
-      </template>
+      <div class="mouse" :style="mouseStyle">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f">
+          <path d="M551-80 406-392 240-160v-720l560 440H516l144 309-109 51Z" stroke="white" stroke-width="40" stroke-linejoin="miter"/>
+        </svg>
+      </div>
     </ScreenPreview>
   </div>
   <div id="controls">
@@ -115,59 +138,6 @@ const mouseStyle = computed(() => ({
   left: var(--mouse-x);
   font-size: 200%;
   aspect-ratio: 1;
+  transition: top 0.5s ease-out, left 0.5s ease-out;
 }
 </style>
-
-
-<!--
-// GET of /api/universal-sessions/${universalSessionID} returns, for example:
-{
-  "id": "01JPCGWVA2M0C2WCM62QZB0V4Y",
-  "userID": "01JPCGWTEJDYXE3ZMEPXBYJ584",
-  "createdAt": null,
-  "frames": [
-    {
-      "id": "01JPCGWVA32WT868CZBPTFDAES",
-      "modelID": "anthropic/claude-3.7-sonnet",
-      "screenHTML": "<div id=\"screen\">...snip...</div>",
-      "createdAt": "2025-03-15T09:06:54.000Z",
-      "renderStartTime": "2025-03-15T09:06:54.000Z",
-      "renderEndTime": "2025-03-15T09:06:54.000Z",
-      "renderTimeSecs": 0,
-      "inputMessageID": "01JPCGWVA39PANZTSB2ZJ2SV55",
-      "outputMessageID": "01JPCGWVA3VG6TVXFYZQWHY70Q",
-      "universalSessionID": "01JPCGWVA2M0C2WCM62QZB0V4Y",
-      "prevFrameID": null,
-      "inputMessage": {
-        "id": "01JPCGWVA39PANZTSB2ZJ2SV55",
-        "type": "prompt",
-        "role": "user",
-        "content": "...snip...",
-        "createdAt": "2025-03-15T09:06:54.000Z",
-        "universalSessionID": "01JPCGWVA2M0C2WCM62QZB0V4Y"
-      }
-    },
-    {
-      "id": "01JPCGX5P59T4X2WQTT7QBY2E4",
-      "modelID": "anthropic/claude-3.7-sonnet",
-      "screenHTML": "<div id=\"screen\">...snip...</div>",
-      "createdAt": "2025-03-15T09:07:05.000Z",
-      "renderStartTime": "2025-03-15T09:07:05.000Z",
-      "renderEndTime": "2025-03-15T09:07:18.000Z",
-      "renderTimeSecs": 13.54,
-      "inputMessageID": "01JPCGX5P54K63XZKMMYP23WZP",
-      "outputMessageID": "01JPCGXJX8BNYZS8WT4A5X62F7",
-      "universalSessionID": "01JPCGWVA2M0C2WCM62QZB0V4Y",
-      "prevFrameID": null,
-      "inputMessage": {
-        "id": "01JPCGX5P54K63XZKMMYP23WZP",
-        "type": "events",
-        "role": "user",
-        "content": "{\"msg\":[{\"type\":\"click\",\"target\":{\"id\":\"file-menu\"},\"at\":\"2025-03-15T09:07:05.007Z\",\"button\":0,\"offsetX\":0.1015625,\"offsetY\":13.5}]}",
-        "createdAt": "2025-03-15T09:07:05.000Z",
-        "universalSessionID": "01JPCGWVA2M0C2WCM62QZB0V4Y"
-      }
-    }
-  ]
-}
--->
