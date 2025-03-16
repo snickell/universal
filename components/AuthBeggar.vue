@@ -13,7 +13,11 @@ const { openInPopup } = useUserSession()
         I require you to auth with google as a crude way of limiting the number of frames any one individual can generate.
       </p>
       <p>
-        I will not email you, or sell your email, or whatever. This is for cost-control purposes only.
+        I will not email you, disclose your email, sell your email, or whatever. This is for cost-control purposes only.
+      </p>
+      <p>
+        Please note: your use of this demo will be <b>visible to the world</b> in our <NuxtLink to="/universal-sessions">gallery</NuxtLink> (without your email attached).
+        Imagine you're using the demo publicly at an art gallery, and don't enter any personal information.
       </p>
       <GoogleSigninButton />
       <div style="display: none">
