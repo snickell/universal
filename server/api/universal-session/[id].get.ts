@@ -17,8 +17,6 @@ export default defineEventHandler(async (event) => {
     }
   })
 
-  console.log("universalSession", universalSession)
-
   if (!universalSession) throw createError({ statusCode: 404, statusMessage: "Session not found" })
 
   return universalSession
