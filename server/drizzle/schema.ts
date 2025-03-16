@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer, check, SQLiteColumn, index } from "drizzle-orm/sqlite-core"
-import { sql } from "drizzle-orm"
+import { sql, relations } from "drizzle-orm"
 import { MessageTypes } from "@/lib/statefulTypes"
 
 // Using ULIDs for IDs, its like uuid but lexicographically sortable: https://github.com/ulid/spec
@@ -63,6 +63,53 @@ export const frames = sqliteTable("frames", {
   index("universalSessionID__frames").on(table.universalSessionID),
   index("prevFrameID__frames").on(table.prevFrameID),
 ])
+
+export const usersRelations = relations(users, ({ many }) => ({
+  universalSessions: many(universalSessions),
+}))
+
+export const universalSessionsRelations = relations(universalSessions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [universalSessions.userID],
+    references: [users.id],
+  }),
+  messages: many(messages),
+  frames: many(frames),
+}))
+
+export const messagesRelations = relations(messages, ({ one, many }) => ({
+  universalSession: one(universalSessions, {
+    fields: [messages.universalSessionID],
+    references: [universalSessions.id],
+  }),
+  inputFrames: many(frames, {
+    relationName: "inputMessageFrames",
+  }),
+  outputFrames: many(frames, {
+    relationName: "outputMessageFrames",
+  }),
+}))
+
+export const framesRelations = relations(frames, ({ one }) => ({
+  universalSession: one(universalSessions, {
+    fields: [frames.universalSessionID],
+    references: [universalSessions.id],
+  }),
+  inputMessage: one(messages, {
+    fields: [frames.inputMessageID],
+    references: [messages.id],
+    relationName: "inputMessageFrames",
+  }),
+  outputMessage: one(messages, {
+    fields: [frames.outputMessageID],
+    references: [messages.id],
+    relationName: "outputMessageFrames",
+  }),
+  prevFrame: one(frames, {
+    fields: [frames.prevFrameID],
+    references: [frames.id],
+  }),
+}))
 
 export type UniversalSession = typeof universalSessions.$inferSelect
 export type Frame = typeof frames.$inferSelect
