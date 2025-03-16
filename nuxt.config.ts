@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   typescript: { strict: false },
 
   nitro: {
+    sourceMap: true,
     devServer: {
       watch: ['lib'],
     },

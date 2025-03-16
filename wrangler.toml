@@ -1,13 +1,14 @@
 name = "universal"
-# compatibility_date = "2025-03-14"
-compatibility_date = "2024-09-19"
+compatibility_date = "2025-03-16"
 main = "./.output/server/index.mjs"
 assets = { directory = "./.output/public/", binding = "ASSETS" }
 routes = [
   { pattern = "universal.oroborus.org", custom_domain = true }
 ]
-# compatibility_flags = ["nodejs_compat"] # Enabled just for drizzle, do we actually need this?
-keep_vars = true # use the dashboard as source of truth for secrets & vars
+compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
+# use the dashboard as source of truth for secrets & vars:
+keep_vars = true 
+upload_source_maps = true
 
 [observability]
 enabled = true
