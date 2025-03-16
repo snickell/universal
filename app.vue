@@ -10,7 +10,7 @@
     <Body>
       <div>
       </div>
-      <Universal />
+      <NuxtPage />
     </Body>
   </Html>
 </template>
