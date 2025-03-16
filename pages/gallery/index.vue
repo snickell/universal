@@ -52,7 +52,7 @@ function nextPage() {
     <div v-else>
       <div class="sessions-grid">
         <div v-for="session in sessions" :key="session.id" class="session-card">
-        <NuxtLink :to="`/universal-sessions/${session.id}`" class="session-link">
+        <NuxtLink :to="`/gallery/${session.id}`" class="session-link">
           <div class="preview-container">
             <ScreenPreview 
               v-if="session.frames && session.frames.length > 0" 
