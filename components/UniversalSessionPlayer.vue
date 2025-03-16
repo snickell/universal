@@ -108,6 +108,7 @@ const mouseStyle = computed(() => ({
   <div style="position: relative">
     <ScreenPreview
       :screenPreviewHTML="screenHTML"
+      scale="1"
       ref="screenPreview"
     >
       <div class="mouse" :style="mouseStyle">

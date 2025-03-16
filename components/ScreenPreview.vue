@@ -3,6 +3,11 @@ const props = defineProps({
   screenPreviewHTML: {
     type: String,
     required: false
+  },
+  scale: {
+    type: Number,
+    required: false,
+    default: 1,
   }
 })
 
@@ -11,7 +16,7 @@ const aspectRatio = ref(3/2)
 
 // scale controls how much bigger the "virtual screen" is than the preview
 // you could also think of this as the oversampling / anti-aliasing factor
-const scale = ref(2)
+const scale = ref(props.scale)
 
 const cssVars = computed(() => ({
   '--aspect-ratio': aspectRatio.value,

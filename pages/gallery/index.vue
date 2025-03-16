@@ -55,7 +55,8 @@ function nextPage() {
         <NuxtLink :to="`/gallery/${session.id}`" class="session-link">
           <div class="preview-container">
             <ScreenPreview 
-              v-if="session.frames && session.frames.length > 0" 
+              v-if="session.frames && session.frames.length > 0"
+              scale="3"
               :screenPreviewHTML="session.frames[0].screenHTML" 
             />
             <div v-else class="no-preview">No preview available</div>
@@ -138,7 +139,7 @@ h1 {
 }
 
 .preview-container {
-  height: 200px;
+  height: 260px;
   overflow: hidden;
   background-color: #f5f5f5;
 }
