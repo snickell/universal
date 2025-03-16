@@ -26,6 +26,7 @@ const cssVars = computed(() => ({
         :screenHTML="screenPreviewHTML"
         :sendMessage="() => {}"
       />
+      <slot name="in-screen-coordinates"></slot>
     </div>
     <slot></slot>
   </div>
