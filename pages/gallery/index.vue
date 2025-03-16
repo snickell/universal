@@ -1,7 +1,7 @@
 <script setup>
 // Pagination state
 const currentPage = ref(1)
-const limit = ref(10)
+const limit = ref(9)
 
 // Reactive fetch that updates when page changes
 const { data, refresh } = useAsyncData(

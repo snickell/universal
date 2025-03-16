@@ -4,7 +4,7 @@ import { sql } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const limit = parseInt(query.limit as string) || 10 // Default to 10 sessions per page
+  const limit = parseInt(query.limit as string) || 9 // Default to 9 sessions per page
   const page = parseInt(query.page as string) || 1 // Default to first page
   const offset = (page - 1) * limit
 
