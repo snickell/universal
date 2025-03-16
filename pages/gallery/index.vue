@@ -39,6 +39,8 @@ function prevPage() {
 function nextPage() {
   goToPage(currentPage.value + 1)
 }
+
+const scaleOfPreviews = 3
 </script>
 
 <template>
@@ -56,7 +58,7 @@ function nextPage() {
           <div class="preview-container">
             <ScreenPreview 
               v-if="session.frames && session.frames.length > 0"
-              scale="3"
+              :scale="scaleOfPreviews"
               :screenPreviewHTML="session.frames[0].screenHTML" 
             />
             <div v-else class="no-preview">No preview available</div>
