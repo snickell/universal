@@ -5,7 +5,8 @@ assets = { directory = "./.output/public/", binding = "ASSETS" }
 routes = [
   { pattern = "universal.oroborus.org", custom_domain = true }
 ]
-compatibility_flags = ["nodejs_compat"] # Enabled just for drizzle, do we actually need this?
+# compatibility_flags = ["nodejs_compat"] # Enabled just for drizzle, do we actually need this?
+keep_vars = true # use the dashboard as source of truth for secrets & vars
 
 [observability]
 enabled = true
