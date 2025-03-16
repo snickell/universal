@@ -28,7 +28,7 @@ export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
     return drizzleD1(getDurableObject().env.DB, {schema})
   } else {
     // we're running locally in dev
-    return drizzleLibSQL(process.env.DB_FILE_NAME!, {schema})
+    return drizzleLibSQL(process.env.DB_FILE_NAME!, {schema, logger: true})
   }
 }
 
