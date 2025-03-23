@@ -20,6 +20,12 @@ export * as sql from 'drizzle-orm/sql'
 type DrizzleDB = LibSQLDatabase<typeof schema> // | DrizzleD1Database<typeof schema>
 
 export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
+  console.log("process.env.DB", process.env.DB)
+  console.log("event", event)
+  console.log("event?.context", event?.context)
+  console.log("event?.context?.cloudflare", event?.context?.cloudflare)
+  console.log("event?.context?.cloudflare?.env", event?.context?.cloudflare?.env)
+  console.log("event?.context?.cloudflare?.env?.DB", event?.context?.cloudflare?.env?.DB)
   if (event?.context?.cloudflare?.env?.DB) {
     // we're in a cloudflare worker
     console.log("useDrizzle(): we're in a cloudflare worker")
