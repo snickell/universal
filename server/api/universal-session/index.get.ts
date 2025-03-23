@@ -9,16 +9,9 @@ export default defineEventHandler(async (event) => {
   const offset = (page - 1) * limit
 
   const db = useDrizzle(event)
-  
-  console.log("/api/universal-session", { limit, page })
 
-  // Get total count for pagination
-  const result = await db.select({ 
-    count: sql`count(*)` 
-  }).from(universalSessions)
-  const totalCount = Number(result[0].count)
-  console.log("/api/universal-session", { totalCount })
-  
+  console.log("/api/universal-session 1", { limit, page })
+
   // Get paginated sessions
   const sessions = await db.query.universalSessions.findMany({
     orderBy: (universalSession, { desc }) => [desc(universalSession.createdAt)],
@@ -36,11 +29,18 @@ export default defineEventHandler(async (event) => {
     }
   })
 
-  console.log("/api/universal-session", { sessions_length: sessions.length })
+  console.log("/api/universal-session 2", { sessions_length: sessions.length })
 
   sessions.forEach(session => {
-    console.log("/api/universal-session", { session_id: session.id, frame_id: session.frames[0].id })
+    console.log("/api/universal-session 3", { session_id: session.id, frame_id: session.frames[0].id })
   })
+
+  // Get total count for pagination
+  const result = await db.select({ 
+    count: sql`count(*)` 
+  }).from(universalSessions)
+  const totalCount = Number(result[0].count)
+  console.log("/api/universal-session 4", { totalCount })
 
   // Calculate total pages
   const totalPages = Math.ceil(totalCount / limit)
