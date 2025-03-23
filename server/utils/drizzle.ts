@@ -14,14 +14,16 @@ import * as schema from '../drizzle/schema'
 export * as schema from '../drizzle/schema'
 import * as sql from 'drizzle-orm/sql'
 export * as sql from 'drizzle-orm/sql'
-
+import {inspect} from 'util'
 // TODO: technically, our type can be either of these, but including the union appears
 // to be confusing VSCode, and making a mess of using TS
 type DrizzleDB = LibSQLDatabase<typeof schema> // | DrizzleD1Database<typeof schema>
 
 export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
+  console.log(`process.env=${inspect(process.env)}`)
   console.log(`process.env.DB=${process.env.DB}`)
   console.log(`event=${event}`)
+  console.log(`event.context=${inspect(event?.context)}`)
   console.log(`event?.context=${event?.context}`)
   console.log(`event?.context?.cloudflare=${event?.context?.cloudflare}`)
   console.log(`event?.context?.cloudflare?.env=${event?.context?.cloudflare?.env}`)
