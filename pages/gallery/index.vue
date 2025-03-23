@@ -3,6 +3,8 @@
 const currentPage = ref(1)
 const limit = ref(9)
 
+globalThis.debug ||= {}
+
 // Reactive fetch that updates when page changes
 const { data, refresh } = useAsyncData(
   () => $fetch('/api/universal-session', {
@@ -17,7 +19,13 @@ const { data, refresh } = useAsyncData(
 )
 
 // Computed properties for pagination
-const sessions = computed(() => data.value?.sessions || [])
+const sessions = computed(() => {
+  globalThis.debug.sessionsData = data
+  console.log("data.value", data.value)
+  console.log("data.value.sessions", data.value?.sessions)
+
+  return data.value?.sessions || []
+})
 const pagination = computed(() => data.value?.pagination || { page: 1, totalPages: 1 })
 
 // Format date for display
