@@ -1,4 +1,6 @@
 <script setup>
+definePageMeta({ ssr: false })
+
 // Pagination state
 const currentPage = ref(1)
 const limit = ref(9)
