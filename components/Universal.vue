@@ -1,4 +1,3 @@
-
 <script setup>
 import throttle from 'throttleit'
 
@@ -168,7 +167,9 @@ async function sendMessage(msg) {
       <ScreenContainer
         :screenHTML="screenHTMLRef"
         :sendMessage="sendMessage"
-      />
+      >
+        <SponsorEmbeddedInDesktop />
+      </ScreenContainer>
       
       <ControlBar
         :loading="loading"

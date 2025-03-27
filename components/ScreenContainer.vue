@@ -167,8 +167,6 @@ onMounted(async () => {
   resizeObserver.observe(screenContainer.value)
 })
 
-
-
 watch(() => props.screenHTML, updateScreenHTML)
 
 onUnmounted(() => {
@@ -182,21 +180,26 @@ defineExpose({ screenEl})
 </script>
 
 <template>
-  <div class="screen-container"
-    ref="screenContainer"
-  ></div>
+  <div class="bg">
+    <slot></slot>
+    <div class="screen-container"
+      ref="screenContainer"
+    ></div>
+  </div>
 </template>
 
 <style scoped>
-.screen-container {
+.screen-container, .bg {
   flex-grow: 1;
   display: flex;
   overflow: hidden;
-  background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
   
   /* Don't let any children inside #screen, returned by the LLM, escape their box */
   overflow: hidden;
   position: relative;
-  z-index: 0;
+}
+
+.bg {
+  background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
 }
 </style>
