@@ -27,10 +27,6 @@
         gives you (and many more people) the opportunity to "see the future today".
       </p>
       <p>
-        OpenRouter made this demo technically viable even before they made
-        it financially viable.
-      </p>
-      <p>
         If I hadn't originally built Universal on OpenRouter, I suspect I would have given up after the first
         7 models I tried failed: "neat idea, but oh well, doesn't work". Instead swapping models was easy,
         so I kept going and eventually discovered the only contemporary model that <i>could</i> handle this task.
