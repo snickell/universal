@@ -31,7 +31,11 @@ const sessions = computed(() => {
 
 // Format date for display
 function formatDate(timestamp) {
-  return new Date(timestamp).toLocaleString()
+  return new Date(timestamp).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
 }
 
 // Navigation functions
@@ -53,9 +57,34 @@ const scaleOfPreviews = 3
 </script>
 
 <template>
-  <div class="sessions-list">
-    <h1>Recent Universal Sessions</h1>
+  <div class="sessions-list" style='padding: 0px 40px;'>
+    <div style="display: flex;">
+      <h2 style="flex-grow: 1">Gallery</h2>
+      <!-- Pagination controls -->
+      <div class="pagination">
+        <button 
+          @click="prevPage" 
+          :disabled="currentPage <= 1"
+          class="pagination-button"
+        >
+          Previous
+        </button>
+        
+        <span class="pagination-info">
+          Page {{ currentPage }}
+        </span>
+        
+        <button 
+          @click="nextPage" 
+          class="pagination-button"
+        >
+          Next
+        </button>
+      </div>
+    </div>
     
+
+
     <div class="sessions-grid">
       <div v-if="!sessions || sessions.length === 0" class="no-sessions">
         You've reached the last page.
@@ -70,14 +99,15 @@ const scaleOfPreviews = 3
         </div>
         
         <div class="session-info">
-          <div class="session-date">Created: {{ formatDate(session.createdAt) }}</div>
+          <div class="session-date">{{ formatDate(session.createdAt) }}</div>
+          <div class="session-n-frames">{{ session.numFrames }} frames</div>
         </div>
       </NuxtLink>
       </div>
     </div>
       
     <!-- Pagination controls -->
-    <div class="pagination">
+    <div class="pagination" style="margin-top: 20px;">
       <button 
         @click="prevPage" 
         :disabled="currentPage <= 1"
@@ -144,7 +174,7 @@ h1 {
 }
 
 .preview-container {
-  height: 260px;
+  
   overflow: hidden;
   background-color: #f5f5f5;
 }
@@ -159,19 +189,19 @@ h1 {
 
 .session-info {
   padding: 10px;
+  display: flex;
 }
 
 .session-date {
   font-size: 14px;
   color: #666;
+  flex-grow: 1;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  padding: 10px;
 }
 
 .pagination-button {

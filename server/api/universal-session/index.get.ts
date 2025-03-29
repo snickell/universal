@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       .offset(1)
       .limit(1)
     ))
-    .where((t) => gt(t.numFrames, 1))
+    .where((t) => gt(t.numFrames, sessionMustHaveAtLeastNFrames))
     .orderBy(desc(universalSessions.createdAt))
     .limit(limit)
     .offset(offset)
