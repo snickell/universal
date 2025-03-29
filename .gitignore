@@ -1,5 +1,5 @@
 # local sqlite db for dev
-universal.sqlite
+*.sqlite
 
 # misc
 .DS_Store
