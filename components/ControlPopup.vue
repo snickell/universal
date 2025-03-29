@@ -95,6 +95,8 @@ watch(() => props.loading, (isLoading, wasLoading) => {
     
     <button class="show-popup-button" ref="showPopupButtonRef" @click="showPopup = true">
       <span class="cursive-text-lower-baseline">The Universal Program</span>
+      <span v-if="loading" class="spinner"></span>
+      <div v-else class="nospinner-spacer"></div>
       <span class="spacer"></span>
       <span class="material-symbols-outlined">arrow_drop_down</span>
     </button>
@@ -266,13 +268,35 @@ button.show-popup-button .spacer {
   flex-grow: 1;
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   height: 50%;
-  margin: 0 12px;
-  padding-left: 20px;
+  margin: 0 12px 0 0;
 }
 
 .auth-section {
   padding-top: 24px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   text-align: left;
+}
+
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: rgba(255, 255, 255, 0.8);
+  animation: spin 1s linear infinite;
+  margin: 0 12px;
+  width: 12px;
+}
+
+.nospinner-spacer {
+  margin: 0 12px;  
+  /* include 12px of spinner width + 4px of border width */
+  width: calc(12px + 2px * 2);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
