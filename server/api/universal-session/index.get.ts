@@ -15,9 +15,10 @@ export default defineEventHandler(async (event) => {
 
   console.log("/api/universal-session 1", { limit, page })
 
-  const sessions = await db.select({
+  const sessions = await db
+    .select({
       ...getTableColumns(universalSessions),
-      lastFrame: getTableColumns(frames),
+      thumbnailFrame: getTableColumns(frames),
       numFrames: db.$count(frames, eq(frames.universalSessionID, universalSessions.id)),
     })
     .from(universalSessions)
@@ -25,9 +26,10 @@ export default defineEventHandler(async (event) => {
       .from(frames)
       .where(eq(frames.universalSessionID, universalSessions.id))
       .orderBy(desc(frames.createdAt))
+      .offset(1)
       .limit(1)
     ))
-    .where((t) => gt(t.numFrames, sessionMustHaveAtLeastNFrames))
+    .where((t) => gt(t.numFrames, 1))
     .orderBy(desc(universalSessions.createdAt))
     .limit(limit)
     .offset(offset)
@@ -35,7 +37,7 @@ export default defineEventHandler(async (event) => {
   console.log("/api/universal-session 2", { sessions_length: sessions.length })
 
   sessions.forEach(session => {
-    console.log("/api/universal-session 3", { session_id: session.id, frame_id: session.lastFrame.id })
+    console.log("/api/universal-session 3", { session_id: session.id, thumbnail_frame_id: session.thumbnailFrame.id })
   })
 
   const elapsed = ((performance.now() - start) / 1000).toFixed(2)

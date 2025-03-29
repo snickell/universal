@@ -65,7 +65,7 @@ const scaleOfPreviews = 3
         <div class="preview-container">
           <ScreenPreview 
             :scale="scaleOfPreviews"
-            :screenPreviewHTML="session.lastFrame.screenHTML" 
+            :screenPreviewHTML="session.thumbnailFrame.screenHTML" 
           />
         </div>
         
