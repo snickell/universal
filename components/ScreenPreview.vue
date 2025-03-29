@@ -47,6 +47,7 @@ defineExpose({ screenEl, scale })
   aspect-ratio: var(--aspect-ratio);
   width: 100%;
   position: relative;
+  max-height: calc(100vh - 100px);
   overflow: hidden;
 }
 

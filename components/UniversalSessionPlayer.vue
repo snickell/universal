@@ -105,10 +105,26 @@ const mouseStyle = computed(() => ({
 
 <template>
 <div class="player">
-  <div style="position: relative">
+
+    <div class="header">
+      <div>
+        <span style="font-weight: bold; font-size: 130%">Instant Replay</span><br/>
+        <a href="#" @click.prevent="$router.back()">« Back to Gallery</a>
+      </div>
+      
+      <div style="flex-grow: 1"></div>
+      <div id="controls">
+        <button @click="currentFrameIndex--" :disabled="currentFrameIndex === 0">Previous Frame</button>
+        Frame {{ currentFrameIndex + 1 }} of {{ universalSession?.frames?.length }}
+        <button @click="gotoNextFrame" :disabled="universalSession?.frames && currentFrameIndex === universalSession.frames.length - 1"><b>Next Frame</b></button>
+      </div>
+    </div>
+    
+
+  <div style="position: relative; padding: 20px;">
     <ScreenPreview
       :screenPreviewHTML="screenHTML"
-      scale="1"
+      :scale=1
       ref="screenPreview"
     >
       <div class="mouse" :style="mouseStyle">
@@ -118,14 +134,52 @@ const mouseStyle = computed(() => ({
       </div>
     </ScreenPreview>
   </div>
-  <div id="controls">
-    <button @click="currentFrameIndex--" :disabled="currentFrameIndex === 0">Previous</button>
-    <button @click="gotoNextFrame" :disabled="universalSession?.frames && currentFrameIndex === universalSession.frames.length - 1">Next</button>
-  </div>
 </div>
 </template>
 
 <style scoped>
+
+.header {
+  display: flex;
+  padding: 10px;
+  background-color: #0070f3;
+  color: white;
+  align-items: center;
+}
+
+.header a {
+  color: white;
+}
+
+h2 {
+  margin: 0;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .player {
   display: flex;
   flex-direction: column;
