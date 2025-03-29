@@ -16,13 +16,17 @@ const { openInPopup } = useUserSession()
       <p>
         I will not email you, disclose your email, sell your email, or whatever. This is for cost-control purposes only.
       </p>
+      <div style="height: 1em"/>
       <Sponsor />
-      <p>
-        Please note: your use of this demo will be <b>visible to the world</b> in our
-        <NuxtLink to="/universal-sessions">gallery</NuxtLink> (without your email attached).
-        Imagine you're using the demo publicly at an art gallery, and don't enter any personal information.
-      </p>
-      <GoogleSigninButton />
+      <div style="display: flex; gap: 20px; margin-top: 2em; align-items: flex-end;">
+        <GoogleSigninButton />
+
+        <div>
+          Your use of this demo will be <b>visible to the world</b> in our
+          <NuxtLink to="/universal-sessions">gallery</NuxtLink> (without your email attached).
+          Imagine you're using the demo publicly at an art gallery, and don't enter any personal information.
+        </div>
+      </div>
       <div style="display: none">
         <h1>TODO</h1>
         <h2>Alternative: use your own OpenRouter account if you have one ❤️</h2>

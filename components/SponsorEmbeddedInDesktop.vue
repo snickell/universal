@@ -10,7 +10,7 @@
   font-family: sans-serif;
   background-color: #0070f3;
   color: white;
-  padding: 35px 20px 5px 25px;
+  padding: 35px 10px 5px 25px;
 
   position: absolute;
   right: 0;

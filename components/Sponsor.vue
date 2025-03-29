@@ -23,8 +23,7 @@
 
     <div>
       <p>
-        <b>Big thanks to <a href="https://openrouter.ai/">OpenRouter</a> for sponsoring Universal!</b> Their support
-        gives you (and many more people) the opportunity to "see the future today".
+        <b>Big thanks to <a href="https://openrouter.ai/">OpenRouter</a> for sponsoring Universal!</b>
       </p>
       <p>
         If I hadn't originally built Universal on OpenRouter, I suspect I would have given up after the first
@@ -43,7 +42,7 @@
 .sponsor {
   background-color: #0070f3;
   color: white;
-  padding: 20px;
+  padding: 5px 20px;
   display: flex;
   align-items: center;
   gap: 20px;
