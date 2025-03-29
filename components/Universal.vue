@@ -1,11 +1,7 @@
 <script setup>
 import throttle from 'throttleit'
 
-import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '~/shared/agent'
-import ScreenContainer from './ScreenContainer.vue'
-import ControlBar from './ControlBar.vue'
-import UniversalSessionPlayer from './UniversalSessionPlayer.vue'
-import { defaultInitialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/shared/constants'
+import { defaultInitialPromptName, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/shared/constants'
 import { initialPrompts } from '~/shared/prompts/index.js'
 
 const props = defineProps({
@@ -156,8 +152,7 @@ async function sendMessage(msg) {
     loading.value = false
   }
 
-  const sendMessageToServer = USE_WEB_SOCKET ? sendMessageWebSocket : sendMessageHTTP
-  sendMessageToServer({ 
+  sendMessageToBackend({ 
     msg,
     initialPromptName: props.initialPrompt,
     receiveFrame,

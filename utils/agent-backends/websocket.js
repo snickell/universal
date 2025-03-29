@@ -1,54 +1,5 @@
-import { DEBUG_WEBSOCKET } from './constants.js'
-
-let messages = undefined
-let universalSesssionID = undefined
-
-globalThis.debug ||= {}
-
-function getUniversalSesssionID() {
-  return universalSesssionID
-}
-
-function setUniversalSesssionID(_universalSesssionID) {
-  universalSesssionID = _universalSesssionID
-  globalThis.debug.universalSesssionID = universalSesssionID
-}
-
-function getMessages() {
-  return messages
-}
-
-function setMessages(_messages) {
-  messages = _messages
-  globalThis.debug.messages = messages
-}
-
-export async function sendMessage({ msg, initialPromptName, receiveFrame, receiveScreenHTMLDelta, onError }) {
-  const response = await fetch('/api/sendMessage', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-      msg,
-      universalSesssionID: getUniversalSesssionID(),
-      messages: getMessages() ,
-      initialPromptName,
-    })
-  })
-  
-  if (!response.ok) {
-    const err = new Error(`HTTP ${response.status}: ${response.statusText}`)
-    err.response = response
-    err.status = response.status
-    onError(err)
-    throw err
-  } else {
-    const frame = await response.json()
-    setMessages(frame.messages)
-    setUniversalSesssionID(frame.universalSesssionID)
-
-    await receiveFrame(frame)
-  }
-}
+import { DEBUG_WEBSOCKET } from '~/shared/constants.js'
+import { getUniversalSesssionID, setUniversalSesssionID, getMessages, setMessages } from './shared.js'
 
 const debugWS = (...args) => DEBUG_WEBSOCKET ? console.log('DEBUG_WEBSOCKET', ...args) : undefined
 
@@ -63,21 +14,7 @@ async function connectToWebSocket(path) {
   return ws
 }
 
-export async function updateScreenHTML({ frameID, screenHTML, onError }) {
-  const response = await fetch('/api/updateScreenHTML', {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ frameID, screenHTML })
-  })
-  
-  if (!response.ok) {
-    const err = new Error(`HTTP ${response.status}: ${response.statusText}`)
-    err.response = response
-    err.status = response.status
-    onError(err)
-    throw err
-  }
-}
+
 
 export async function sendMessageWebSocket({ msg, initialPromptName, receiveFrame, receiveScreenHTMLDelta, onError }) {
   debugWS('connecting')

@@ -1,5 +1,5 @@
 // Implements a WebSocket that forwards messages between agent.js and agentShared.js
-import { createAgent } from '~/shared/agentShared'
+import { createAgent } from '~/shared/agent'
 import { getDurableObjectEnv } from '@/server/plugins/cache-durable-object'
 import { DEBUG_WEBSOCKET } from '~/shared/constants'
 
