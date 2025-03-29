@@ -1,8 +1,10 @@
 // API endpoint to fetch the most recent universal sessions
-import { universalSessions } from '../../drizzle/schema'
-import { sql } from 'drizzle-orm'
+import { universalSessions, frames } from '../../drizzle/schema'
+import { sql, eq, desc, gt, getTableColumns } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
+  const sessionMustHaveAtLeastNFrames = 2
+
   const query = getQuery(event)
   const limit = parseInt(query.limit as string) || 9 // Default to 9 sessions per page
   const page = parseInt(query.page as string) || 1 // Default to first page
@@ -12,46 +14,34 @@ export default defineEventHandler(async (event) => {
 
   console.log("/api/universal-session 1", { limit, page })
 
-  // Get paginated sessions
-  const sessions = await db.query.universalSessions.findMany({
-    orderBy: (universalSession, { desc }) => [desc(universalSession.createdAt)],
-    limit,
-    offset,
-    with: {
-      frames: {
-        limit: 1, // Get only one frame for each session
-        orderBy: (frame, { desc }) => [desc(frame.createdAt)], // Get the LAST frame
-        with: {
-          inputMessage: true,
-          outputMessage: true,
-        }
-      }
-    }
-  })
+  const sessions = await db.select({
+      ...getTableColumns(universalSessions),
+      lastFrame: getTableColumns(frames),
+      numFrames: db.$count(frames, eq(frames.universalSessionID, universalSessions.id)),
+    })
+    .from(universalSessions)
+    .innerJoin(frames, eq(frames.id, db.select({ id: frames.id })
+      .from(frames)
+      .where(eq(frames.universalSessionID, universalSessions.id))
+      .orderBy(desc(frames.createdAt))
+      .limit(1)
+    ))
+    .where((t) => gt(t.numFrames, sessionMustHaveAtLeastNFrames))
+    .orderBy(desc(universalSessions.createdAt))
+    .limit(limit)
+    .offset(offset)
 
   console.log("/api/universal-session 2", { sessions_length: sessions.length })
 
   sessions.forEach(session => {
-    console.log("/api/universal-session 3", { session_id: session.id, frame_id: session.frames[0].id })
+    console.log("/api/universal-session 3", { session_id: session.id, frame_id: session.lastFrame.id })
   })
-
-  // Get total count for pagination
-  const result = await db.select({ 
-    count: sql`count(*)` 
-  }).from(universalSessions)
-  const totalCount = Number(result[0].count)
-  console.log("/api/universal-session 4", { totalCount })
-
-  // Calculate total pages
-  const totalPages = Math.ceil(totalCount / limit)
 
   return {
     sessions,
     pagination: {
-      total: totalCount,
       page,
       limit,
-      totalPages
     }
   }
 })

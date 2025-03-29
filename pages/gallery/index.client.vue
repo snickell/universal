@@ -28,7 +28,6 @@ const sessions = computed(() => {
 
   return data.value?.sessions || []
 })
-const pagination = computed(() => data.value?.pagination || { page: 1, totalPages: 1 })
 
 // Format date for display
 function formatDate(timestamp) {
@@ -37,7 +36,7 @@ function formatDate(timestamp) {
 
 // Navigation functions
 function goToPage(page) {
-  if (page >= 1 && page <= pagination.value.totalPages) {
+  if (page >= 1) {
     currentPage.value = page
   }
 }
@@ -57,52 +56,46 @@ const scaleOfPreviews = 3
   <div class="sessions-list">
     <h1>Recent Universal Sessions</h1>
     
-    <div v-if="!sessions || sessions.length === 0" class="no-sessions">
-      No sessions found.
-    </div>
-    
-    <div v-else>
-      <div class="sessions-grid">
-        <div v-for="session in sessions" :key="session.id" class="session-card">
-        <NuxtLink :to="`/gallery/${session.id}`" class="session-link">
-          <div class="preview-container">
-            <ScreenPreview 
-              v-if="session.frames && session.frames.length > 0"
-              :scale="scaleOfPreviews"
-              :screenPreviewHTML="session.frames[0].screenHTML" 
-            />
-            <div v-else class="no-preview">No preview available</div>
-          </div>
-          
-          <div class="session-info">
-            <div class="session-date">Created: {{ formatDate(session.createdAt) }}</div>
-          </div>
-        </NuxtLink>
+    <div class="sessions-grid">
+      <div v-if="!sessions || sessions.length === 0" class="no-sessions">
+        You've reached the last page.
+      </div>
+      <div v-else v-for="session in sessions" :key="session.id" class="session-card">
+      <NuxtLink :to="`/gallery/${session.id}`" class="session-link">
+        <div class="preview-container">
+          <ScreenPreview 
+            :scale="scaleOfPreviews"
+            :screenPreviewHTML="session.lastFrame.screenHTML" 
+          />
         </div>
+        
+        <div class="session-info">
+          <div class="session-date">Created: {{ formatDate(session.createdAt) }}</div>
+        </div>
+      </NuxtLink>
       </div>
+    </div>
       
-      <!-- Pagination controls -->
-      <div class="pagination">
-        <button 
-          @click="prevPage" 
-          :disabled="currentPage <= 1"
-          class="pagination-button"
-        >
-          Previous
-        </button>
-        
-        <span class="pagination-info">
-          Page {{ pagination.page }} of {{ pagination.totalPages }}
-        </span>
-        
-        <button 
-          @click="nextPage" 
-          :disabled="currentPage >= pagination.totalPages"
-          class="pagination-button"
-        >
-          Next
-        </button>
-      </div>
+    <!-- Pagination controls -->
+    <div class="pagination">
+      <button 
+        @click="prevPage" 
+        :disabled="currentPage <= 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+      
+      <span class="pagination-info">
+        Page {{ currentPage }}
+      </span>
+      
+      <button 
+        @click="nextPage" 
+        class="pagination-button"
+      >
+        Next
+      </button>
     </div>
   </div>
 </template>
