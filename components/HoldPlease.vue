@@ -48,7 +48,7 @@ onUnmounted(() => {
       <div class="preview">
         <details open class="preview-expander" style="padding: 6px 24px 0px 24px;">
           <summary>
-            <span v-if="loading">The LLM is hallucinating the next frame of your desktop OS</span>
+            <span v-if="loading">Please wait, the LLM is hallucinating the next frame of your desktop OS</span>
             <span v-else>The LLM has <i>finished hallucinating</i>... for now 🌈</span>
           </summary>
           <div>
@@ -76,13 +76,13 @@ onUnmounted(() => {
           </div>
         </details>
 
-        <div style="padding: 12px 24px 6px 24px; display: flex;">
-          <div class="timer">
+        <div style="padding: 12px 24px 6px 24px; display: flex; flex-wrap: wrap;">
+          <div class="timer" style="white-space: nowrap;">
             <span v-if="loading">Rendering frame: {{ elapsedSeconds }}s (estimate: 10 to 120s)</span>
             <span v-else>Rendering frame: <i>done</i></span>
           </div>
           <div style="flex-grow: 1"></div>
-          <div>
+          <div style="white-space: nowrap; margin-top: 4px;">
             Tired of waiting? <a href="/gallery" target="_blank" rel="noopener">Instant Replay Gallery</a>
           </div>
         </div>
