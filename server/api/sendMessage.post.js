@@ -1,4 +1,4 @@
-import { createAgent } from '@/lib/agentShared'
+import { createAgent } from '~/shared/agentShared'
 
 function shortFrameID(frame) {
   return frame.id.slice(0, 8)

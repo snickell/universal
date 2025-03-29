@@ -6,9 +6,6 @@ export default defineNuxtConfig({
 
   nitro: {
     sourceMap: true,
-    devServer: {
-      watch: ['lib'],
-    },
     // Enabling websocket: true causes 2x startup errors in nuxt-auth-utils
     // see: https://github.com/atinux/nuxt-auth-utils/issues/372
     experimental: {

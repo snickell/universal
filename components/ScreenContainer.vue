@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import debounce from 'debounce'
-import { SEND_RESIZE_MESSAGES } from '~/lib/constants'
+import { SEND_RESIZE_MESSAGES } from '~/shared/constants'
 
 const props = defineProps({
   screenHTML: {

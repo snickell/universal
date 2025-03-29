@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer, check, SQLiteColumn, index } from "drizzle-orm/sqlite-core"
 import { sql, relations } from "drizzle-orm"
-import { MessageTypes } from "@/lib/statefulTypes"
+import { MessageTypes } from "~/shared/statefulTypes"
 
 // Using ULIDs for IDs, its like uuid but lexicographically sortable: https://github.com/ulid/spec
 const ulid = () => text("id", { length: 26 }).notNull()

@@ -1,7 +1,7 @@
 // Implements a WebSocket that forwards messages between agent.js and agentShared.js
-import { createAgent } from '@/lib/agentShared'
+import { createAgent } from '~/shared/agentShared'
 import { getDurableObjectEnv } from '@/server/plugins/cache-durable-object'
-import { DEBUG_WEBSOCKET } from '@/lib/constants'
+import { DEBUG_WEBSOCKET } from '~/shared/constants'
 
 // This is annoying, but in prod we'll be running as part of a cloudflare durable object
 // to access UNIVERSAL_OPENROUTER_API_KEY, we need to use the env variable passed to us

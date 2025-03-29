@@ -1,5 +1,5 @@
-import { ulid } from '@/lib/ulid'
-export { ulid } from '@/lib/ulid'
+import { ulid } from '~/shared/ulid'
+export { ulid } from '~/shared/ulid'
 
 import { drizzle as drizzleD1, DrizzleD1Database } from 'drizzle-orm/d1'
 import { drizzle as drizzleLibSQL, LibSQLDatabase } from 'drizzle-orm/libsql'
@@ -8,7 +8,7 @@ import { H3Event, EventHandlerRequest } from 'h3'
 
 import { getDurableObject } from '@/server/plugins/cache-durable-object'
 
-import { User, UniversalSession, Frame } from '@/lib/statefulTypes'
+import { User, UniversalSession, Frame } from '~/shared/statefulTypes'
 
 import * as schema from '../drizzle/schema'
 export * as schema from '../drizzle/schema'

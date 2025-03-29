@@ -1,10 +1,10 @@
 // agent code that can run either server-side or client-side
 
 import { streamText, type CoreMessage } from 'ai'
-import { initialPrompts } from '@/lib/prompts'
-import { USE_CHEAP_MODEL, CACHE_FIRST_SCREEN_HTML, MOCK_GENERATE_TEXT } from '@/lib/constants'
-import { getModel } from '@/lib/getModel'
-import { Frame, MessageTypes } from '~/lib/statefulTypes'
+import { initialPrompts } from '~/shared/prompts'
+import { USE_CHEAP_MODEL, CACHE_FIRST_SCREEN_HTML, MOCK_GENERATE_TEXT } from '~/shared/constants'
+import { getModel } from '~/shared/getModel'
+import { Frame, MessageTypes } from '~/shared/statefulTypes'
 
 // instruction to render a new frame of the screen with no modifications
 const RENDER_SCREEN_MSG = 'render screen'

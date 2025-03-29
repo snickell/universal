@@ -1,11 +1,11 @@
 <script setup>
 import throttle from 'throttleit'
 
-import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '@/lib/agent'
+import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '~/shared/agent'
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
 import UniversalSessionPlayer from './UniversalSessionPlayer.vue'
-import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/lib/constants'
+import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/shared/constants'
 
 // Add universalSessionID prop
 const props = defineProps({

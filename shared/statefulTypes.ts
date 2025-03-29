@@ -1,5 +1,5 @@
 import { type CoreMessage, type CoreSystemMessage, type CoreUserMessage } from 'ai'
-import { ulid } from '@/lib/ulid'
+import { ulid } from '~/shared/ulid'
 
 type ID = string
 
