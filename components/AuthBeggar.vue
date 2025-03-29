@@ -22,9 +22,9 @@ const { openInPopup } = useUserSession()
         <GoogleSigninButton />
 
         <div>
-          Your use of this demo will be <b>visible to the world</b> in our
-          <NuxtLink to="/universal-sessions">gallery</NuxtLink> (without your email attached).
-          Imagine you're using the demo publicly at an art gallery, and don't enter any personal information.
+          PLEASE NOTE: your use of this demo will be <b>visible to the world</b> in our anonymous
+          <NuxtLink to="/universal-sessions">instant replay gallery</NuxtLink>.
+          Think "public art gallery": don't enter personal information.
         </div>
       </div>
       <div style="display: none">

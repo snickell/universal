@@ -102,6 +102,11 @@ onUnmounted(() => {
           Unfortunately, despite being very smart and fast, none of these have Claude's skill at visual layout, so they
           make ugly and barely usable pages.
         </p>
+        <p>
+          PLEASE NOTE: your use of this demo will be <b>visible to the world</b> in our anonymous
+          <NuxtLink to="/universal-sessions">instant replay gallery</NuxtLink>.
+          Think "I'm at a public art gallery" and please don't enter personal information.
+        </p>
       </div>
     </div>
   </div>
@@ -189,6 +194,11 @@ h2 {
   text-align: left;
   background: linear-gradient(to bottom, #104886, #0f2847);
   color: #d6e6fa;
+}
+
+.info a {
+
+  color: #0070f3;
 }
 
 h1, h2 {
