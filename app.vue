@@ -16,9 +16,20 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
   margin: 0;
   padding: 0;
   cursor: default;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
 }
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-weight: 200;
+}
+
 </style>

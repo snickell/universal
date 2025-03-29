@@ -77,7 +77,7 @@ watch(() => props.loading, (isLoading, wasLoading) => {
         </div>
       
         <div class="content-area">
-          <AuthBeggar v-if="needAuth" />
+          <AuthBeggar v-if="needAuth" style="padding: 24px; "/>
           <template v-else>
             <HoldPlease
               @close-popup="hidePopup"
@@ -85,7 +85,7 @@ watch(() => props.loading, (isLoading, wasLoading) => {
               :screenPreviewHTML="screenPreviewHTML"
             />
 
-            <div class="auth-section">
+            <div class="auth-section" style="padding: 24px; padding-top: 24px;">
               <AuthStatus />
             </div>
           </template>
@@ -117,9 +117,23 @@ watch(() => props.loading, (isLoading, wasLoading) => {
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  background-color: #e6edf5;
+  background-color: #0f2847;
+  color: #d6e6fa;
   overflow: hidden;
   z-index: 10002;
+}
+
+:deep button {
+  background-color: #d6e6fa;
+  padding: 0.4em 1.2em;
+}
+
+.popup a {
+  color: #0070f3;
+}
+
+.popup a:visited {
+  color: #0070f3;
 }
 
 .popup-enter-active,
@@ -230,12 +244,8 @@ button.show-popup-button .material-symbols-outlined {
 
 .popup .content-area {
   overflow: auto;
-  padding: 0 24px;
-
   max-height: 100vh;
-  padding-top: 24px;
-  padding-bottom: 24px;
-
+  
   transition: all 0.4s ease;
 }
 
@@ -261,8 +271,7 @@ button.show-popup-button .spacer {
 }
 
 .auth-section {
-  margin-top: 20px;
-  padding-top: 20px;
+  padding-top: 24px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   text-align: left;
 }

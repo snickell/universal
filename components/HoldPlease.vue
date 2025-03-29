@@ -45,47 +45,51 @@ onUnmounted(() => {
 <template>
   <div>
     <div class="content">
+      <div class="preview">
+        <details open class="preview-expander" style="padding: 6px 24px 0px 24px;">
+          <summary>
+            <span v-if="loading">The LLM is hallucinating the next frame of your desktop OS</span>
+            <span v-else>The LLM has <i>finished hallucinating</i>... for now 🌈</span>
+          </summary>
+          <div>
+            <ScreenPreview
+              :screenPreviewHTML="screenPreviewHTML"
+            >
+              <div v-if="loading" class="middle-of-screen">
+                <div class="spinner-container">
+                  <span class="material-symbols-outlined spinner">progress_activity</span>
+                </div>
+              </div>
+              <div v-else>
+                <div class="blurring-backgrop"></div>
+                <div class="middle-of-screen">
+                  <button
+                    @click="$emit('close-popup')"
+                    style="font-size: 150%; background-color: #d6e6fa; white-space: nowrap; cursor: pointer;"
+                  >
+                    frame done - go see it!
+                  </button>
+                </div>          
+              </div>
+            </ScreenPreview>
 
-      <div class="header">
-        <h2>
-          <span v-if="loading">The LLM is hallucinating the next frame of your desktop OS</span>
-          <span v-else>The LLM has <i>finished hallucinating</i>... for now 🌈</span>
-        </h2>
-      </div>
-
-      <details open class="preview-expander">
-        <summary>Preview of the frame as it renders</summary>
-        <ScreenPreview
-          :screenPreviewHTML="screenPreviewHTML"
-        >
-          <div v-if="loading" class="middle-of-screen">
-            <div class="spinner-container">
-              <span class="material-symbols-outlined spinner">progress_activity</span>
-            </div>
           </div>
-          <div v-else>
-            <div class="blurring-backgrop"></div>
-            <div class="middle-of-screen">
-              <button
-                @click="$emit('close-popup')"
-                style="font-size: 200%; background-color: #0060df; padding: 10px 20px; color: white; white-space: nowrap; cursor: pointer;"
-              >
-                frame done - go see it!
-              </button>
-            </div>          
-          </div>
-        </ScreenPreview>
-      </details>
+        </details>
 
-      <div style="margin-top: 1em">
-        <div class="timer">
-          <span v-if="loading">Rendering: {{ elapsedSeconds }} seconds elapsed of 10s to 120s</span>
-          <span v-else>Rendering: <i>done</i></span>
+        <div style="padding: 12px 24px 6px 24px; display: flex;">
+          <div class="timer">
+            <span v-if="loading">Rendering frame: {{ elapsedSeconds }}s (estimate: 10 to 120s)</span>
+            <span v-else>Rendering frame: <i>done</i></span>
+          </div>
+          <div style="flex-grow: 1"></div>
+          <div>
+            Tired of waiting? <a href="/gallery" target="_blank" rel="noopener">Instant Replay Gallery</a>
+          </div>
         </div>
       </div>
-      
-      <div class="info">
-        <h1>How does this work? What is it doing?</h1>
+
+      <div class="info" style="padding: 24px;">
+        <h2>How does this work? What is it doing?</h2>
 
         <p>
           Each time you click, the LLM renders the frame from scratch to respond to your click or command.
@@ -104,15 +108,22 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.preview-expander {
+.preview {
   width: 100%;
-  background-color: #0060df;
+  background-color: #115db0;
   color: white;
-  outline: 3px solid #0070f3;
+  outline: 3px solid #115db0;
+  border: 1px solid #0f2847;
+  border-left: 0;
+  border-right: 0;
+  font-size: 1.1rem;
+}
+
+.preview a {
+  color: white;
 }
 
 .preview-expander summary {
-  font-size: 120%;
   padding: 5px 10px;
 }
 
@@ -149,6 +160,12 @@ onUnmounted(() => {
   margin-bottom: 1em;
 }
 
+h2 {
+  margin: 0;
+  margin-bottom: 0.25em;
+  font-weight: 500;
+}
+
 
 .spinner-container {
   background-color: rgba(255,255,255,0.25);
@@ -166,23 +183,16 @@ onUnmounted(() => {
   100% { transform: rotate(360deg); }
 }
 
-.timer {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
 .info {
   line-height: 1.5;
   margin: 0;
   text-align: left;
+  background: linear-gradient(to bottom, #104886, #0f2847);
+  color: #d6e6fa;
 }
 
 h1, h2 {
-  font-size: 1.25em;
+  font-size: 1.2em;
 }
 
-.info p {
-  margin-bottom: 1.5em;
-}
 </style>

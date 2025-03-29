@@ -41,4 +41,12 @@ const { openInPopup } = useUserSession()
 #auth-popover h1 {
   margin-top: 0;
 }
+
+a {
+  color: #3394f8;
+}
+
+a:visited {
+  color: #0070f3;
+}
 </style>
