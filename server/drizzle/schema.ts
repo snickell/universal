@@ -11,7 +11,7 @@ export const users = sqliteTable("users", {
   name: text().notNull(),
   email: text().notNull(),
   google_auth_id: text().unique().notNull(),
-  createdAt: integer({ mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer({ mode: "timestamp_ms" }).notNull().default(sql`(unixepoch() * 1000)`),
 }, (table) => [
   index("google_auth_id__users").on(table.google_auth_id),
 ])
@@ -19,7 +19,7 @@ export const users = sqliteTable("users", {
 export const universalSessions = sqliteTable("universal_sessions", {
   id: ulid().primaryKey(),
   userID: text().notNull().references(() => users.id),
-  createdAt: integer({ mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer({ mode: "timestamp_ms" }).notNull().default(sql`(unixepoch() * 1000)`),
 }, (table) => [
   check("id__validULID__universal_sessions", validULID(table.id)),
   index("userID__universal_sessions").on(table.userID),
@@ -32,7 +32,7 @@ export const messages = sqliteTable("messages", {
   role: text().notNull().$type<"user" | "system">(),
   content: text().notNull(),
 
-  createdAt: integer({ mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer({ mode: "timestamp_ms" }).notNull().default(sql`(unixepoch() * 1000)`),
   universalSessionID: text().notNull().references(() => universalSessions.id),
 }, (table) => [
   check("id__validULID__messages", validULID(table.id)),
@@ -48,10 +48,10 @@ export const frames = sqliteTable("frames", {
   modelID: text().notNull(),
 
   screenHTML: text(), // TODO, implement and make .notNull()
-  createdAt: integer({ mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer({ mode: "timestamp_ms" }).notNull().default(sql`(unixepoch() * 1000)`),
   
-  renderStartTime: integer({ mode: "timestamp" }).notNull(),
-  renderEndTime: integer({ mode: "timestamp" }).notNull(),
+  renderStartTime: integer({ mode: "timestamp_ms" }).notNull(),
+  renderEndTime: integer({ mode: "timestamp_ms" }).notNull(),
   renderTimeSecs: integer().notNull(),
 
   inputMessageID: text().notNull().references(() => messages.id),
