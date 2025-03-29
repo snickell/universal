@@ -1,4 +1,6 @@
 <script setup>
+import { ref, computed, watch } from 'vue'
+
 const props = defineProps({
   universalSessionID: {
     type: String,
@@ -134,7 +136,12 @@ function sendMessage(msg) {
     <div id="controls">
       <button @click="currentFrameIndex--" :disabled="currentFrameIndex === 0">Previous Frame</button>
       Frame {{ currentFrameIndex + 1 }} of {{ universalSession?.frames?.length }}
-      <button @click="gotoNextFrame" :disabled="universalSession?.frames && currentFrameIndex === universalSession.frames.length - 1"><b>Next Frame</b></button>
+      <transition name="flash" appear>
+        <button 
+          @click="gotoNextFrame" 
+          :disabled="universalSession?.frames && currentFrameIndex === universalSession.frames.length - 1"
+        ><b>Next Frame</b></button>
+      </transition>
     </div>
   </div>
 </div>
@@ -181,6 +188,31 @@ button:hover:not(:disabled) {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.flash-enter-active {
+  animation: flash-button 1.5s;
+}
+
+@keyframes flash-button {
+  0%, 38% {
+    background-color: #f5f5f5;
+    color: black;
+  }
+  50% {
+    background-color: #0070f3;
+    color: white;
+  }
+  62% {
+    background-color: #f5f5f5;
+  }
+  75% {
+    background-color: #0070f3;
+    color: white;
+  }
+  88%, 100% {
+    background-color: #f5f5f5;
+  }
 }
 
 .player {
