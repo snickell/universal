@@ -14,31 +14,20 @@ import * as schema from '../drizzle/schema'
 export * as schema from '../drizzle/schema'
 import * as sql from 'drizzle-orm/sql'
 export * as sql from 'drizzle-orm/sql'
-import {inspect} from 'util'
+
 // TODO: technically, our type can be either of these, but including the union appears
 // to be confusing VSCode, and making a mess of using TS
 type DrizzleDB = LibSQLDatabase<typeof schema> // | DrizzleD1Database<typeof schema>
 
 export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
-  console.log(`process.env=${inspect(process.env)}`)
-  console.log(`process.env.DB=${process.env.DB}`)
-  console.log(`event=${event}`)
-  console.log(`event.context=${inspect(event?.context)}`)
-  console.log(`event?.context=${event?.context}`)
-  console.log(`event?.context?.cloudflare=${event?.context?.cloudflare}`)
-  console.log(`event?.context?.cloudflare?.env=${event?.context?.cloudflare?.env}`)
-  console.log(`event?.context?.cloudflare?.env?.DB=${event?.context?.cloudflare?.env?.DB}`)
   if (event?.context?.cloudflare?.env?.DB) {
     // we're in a cloudflare worker
-    console.log("useDrizzle(): we're in a cloudflare worker")
     return drizzleD1(event.context.cloudflare.env.DB, {schema})
   } else if (getDurableObject()?.env?.DB) {
     // we're on a cloudflare durable object, in a websocket handler
-    console.log("useDrizzle(): we're on a cloudflare durable")
     return drizzleD1(getDurableObject().env.DB, {schema})
   } else {
     // we're running locally in dev
-    console.log("useDrizzle(): we're running locally in dev")
     return drizzleLibSQL(process.env.DB_FILE_NAME!, {schema, logger: true})
   }
 }
@@ -53,7 +42,6 @@ export async function selectOrCreateUser(db: DrizzleDB, { google_auth_id, name, 
     .limit(1)
   
   if (existingUsers.length > 0) {
-    console.log("selectOrCreateUser(): returning existing user.id=", existingUsers[0].id)
     return new User(existingUsers[0])
   }
   
@@ -64,8 +52,6 @@ export async function selectOrCreateUser(db: DrizzleDB, { google_auth_id, name, 
     name,
     email
   }).returning()
-
-  console.log("selectOrCreateUser(): created new user.id=", newUser[0].id)
   
   return new User(newUser[0])
 }
@@ -82,7 +68,6 @@ export async function selectOrCreateUniversalSession(db: DrizzleDB, { universalS
     
     if (existingSessions.length > 0) {
       if (existingSessions[0].userID === user.id) {
-        console.log("selectOrCreateUniversalSession(): returning existing session.id=", existingSessions[0].id)
         return new UniversalSession(existingSessions[0])
       } else {
         // FIXME / TODO: the user is trying to access somebody else's session, that's
@@ -98,8 +83,6 @@ export async function selectOrCreateUniversalSession(db: DrizzleDB, { universalS
     id: ulid(),
     userID: user.id
   }).returning()
-
-  console.log("selectOrCreateUniversalSession(): created new session.id=", newSession[0].id)
   
   return new UniversalSession(newSession[0])
 }
@@ -131,6 +114,4 @@ export async function insertFrame(db: DrizzleDB, { frame, universalSession }: { 
     ...frame
   }).returning().get()
   if (!newFrame?.id) throw new Error('insertFrame(): failed to create new frame')
-
-  console.log("insertFrame(): created new frame.id=", newFrame.id, "in session.id=", universalSession.id)
 }
