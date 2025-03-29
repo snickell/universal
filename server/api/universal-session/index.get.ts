@@ -3,6 +3,7 @@ import { universalSessions, frames } from '../../drizzle/schema'
 import { sql, eq, desc, gt, getTableColumns } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
+  const start = performance.now()
   const sessionMustHaveAtLeastNFrames = 2
 
   const query = getQuery(event)
@@ -36,6 +37,9 @@ export default defineEventHandler(async (event) => {
   sessions.forEach(session => {
     console.log("/api/universal-session 3", { session_id: session.id, frame_id: session.lastFrame.id })
   })
+
+  const elapsed = ((performance.now() - start) / 1000).toFixed(2)
+  console.log(`gallery SQL query time: ${elapsed}s`)
 
   return {
     sessions,
