@@ -1,8 +1,6 @@
 import { sendMessageWebSocket } from './agent-backends/websocket.js'
 import { sendMessageHTTP } from './agent-backends/http.js'
 
-import { USE_WEB_SOCKET } from '~/shared/constants'
-
 export async function updateScreenHTML({ frameID, screenHTML, onError }) {
   const response = await fetch('/api/updateScreenHTML', {
     method: 'PATCH',

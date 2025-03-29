@@ -2,7 +2,6 @@
 
 import { streamText, type CoreMessage } from 'ai'
 import { initialPrompts } from '~/shared/prompts'
-import { USE_CHEAP_MODEL, CACHE_FIRST_SCREEN_HTML, MOCK_GENERATE_TEXT } from '~/shared/constants'
 import { getModel } from '~/shared/getModel'
 import { Frame, MessageTypes } from '~/shared/statefulTypes'
 

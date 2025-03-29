@@ -1,4 +1,3 @@
-import { DEBUG_WEBSOCKET } from '~/shared/constants.js'
 import { getUniversalSesssionID, setUniversalSesssionID, getMessages, setMessages } from './shared.js'
 
 const debugWS = (...args) => DEBUG_WEBSOCKET ? console.log('DEBUG_WEBSOCKET', ...args) : undefined

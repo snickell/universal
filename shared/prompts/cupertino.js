@@ -1,4 +1,4 @@
-import { USE_CHEAP_MODEL } from '../constants.js'
+import { USE_CHEAP_MODEL } from '../utils/constants.js'
 
 // Cheap models are dumb, they need a little PUSH to actually make something that's not a skeleton
 // even 4o needs this. Claude Sonnet 3.7 is basically the only model that doesn't need spoon-feeding here.

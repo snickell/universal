@@ -1,7 +1,5 @@
 <script setup>
 import throttle from 'throttleit'
-
-import { defaultInitialPromptName, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/shared/constants'
 import { initialPrompts } from '~/shared/prompts/index.js'
 
 const props = defineProps({
