@@ -158,6 +158,13 @@ async function sendMessage(msg) {
     onError,
   })
 }
+
+onMounted(async () => {
+  if (props.universalSessionID) return
+
+  // render initial frame, should be cached and therefore 'instant'
+  await sendMessage()
+})
 </script>
 
 <template>

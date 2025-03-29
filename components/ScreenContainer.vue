@@ -142,9 +142,6 @@ const updateScreenHTML = () => {
 let resizeObserver = null
 
 onMounted(async () => {
-  // render initial frame, should be cached and therefore 'instant'
-  await props.sendMessage()
-
   // Create a shadow DOM to contain the wild HTML/CSS returned by the LLM
   if (screenContainer.value) {
     shadowRoot.value = screenContainer.value.attachShadow({ mode: 'open' })
