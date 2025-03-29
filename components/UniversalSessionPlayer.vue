@@ -101,38 +101,41 @@ const mouseStyle = computed(() => ({
   '--mouse-x': `${currentMouseX.value}px`,
   '--mouse-y': `${currentMouseY.value}px`,
 }))
+
+function sendMessage(msg) {
+  alert("This is a replay, so you can't click or type.")
+}
 </script>
 
 <template>
 <div class="player">
-
-    <div class="header">
-      <div>
-        <span style="font-weight: bold; font-size: 130%">Instant Replay</span><br/>
-        <a href="#" @click.prevent="$router.back()">« Back to Gallery</a>
-      </div>
-      
-      <div style="flex-grow: 1"></div>
-      <div id="controls">
-        <button @click="currentFrameIndex--" :disabled="currentFrameIndex === 0">Previous Frame</button>
-        Frame {{ currentFrameIndex + 1 }} of {{ universalSession?.frames?.length }}
-        <button @click="gotoNextFrame" :disabled="universalSession?.frames && currentFrameIndex === universalSession.frames.length - 1"><b>Next Frame</b></button>
-      </div>
-    </div>
-    
-
   <div style="position: relative; padding: 20px;">
     <ScreenPreview
       :screenPreviewHTML="screenHTML"
       :scale=1
+      :sendMessage="sendMessage"
       ref="screenPreview"
     >
       <div class="mouse" :style="mouseStyle">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0070f3">
           <path d="M551-80 406-392 240-160v-720l560 440H516l144 309-109 51Z" stroke="white" stroke-width="40" stroke-linejoin="miter"/>
         </svg>
       </div>
     </ScreenPreview>
+  </div>
+
+  <div class="header">
+    <div>
+      <span style="font-weight: bold; font-size: 130%">Instant Replay</span><br/>
+      <a href="#" @click.prevent="$router.back()">« Back to Gallery</a>
+    </div>
+    
+    <div style="flex-grow: 1"></div>
+    <div id="controls">
+      <button @click="currentFrameIndex--" :disabled="currentFrameIndex === 0">Previous Frame</button>
+      Frame {{ currentFrameIndex + 1 }} of {{ universalSession?.frames?.length }}
+      <button @click="gotoNextFrame" :disabled="universalSession?.frames && currentFrameIndex === universalSession.frames.length - 1"><b>Next Frame</b></button>
+    </div>
   </div>
 </div>
 </template>

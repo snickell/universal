@@ -74,8 +74,14 @@ const scaleOfPreviews = 3
 
 <template>
   <div class="sessions-list" style='padding: 0px 40px;'>
-    <div style="display: flex;">
-      <h2 style="flex-grow: 1">Gallery</h2>
+    <div style="display: flex; align-items: flex-end; padding: 10px 0px;">
+      <div style="flex-grow: 1">
+        <span style="font-weight: bold; font-size: 125%">Instant Replay Gallery</span><br/>
+        <div style="flex-grow: 1">
+          <a href="/">Back to Universal</a>
+        </div>
+      </div>
+
       <!-- Pagination controls -->
       <div class="pagination">
         <button 

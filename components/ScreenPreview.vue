@@ -8,6 +8,11 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 2,
+  },
+  sendMessage: {
+    type: Function,
+    required: true,
+    default: () => {},
   }
 })
 
@@ -34,7 +39,7 @@ defineExpose({ screenEl, scale })
     <div class="shrink">
       <ScreenContainer
         :screenHTML="screenPreviewHTML"
-        :sendMessage="() => {}"
+        :sendMessage="sendMessage"
         ref="screenContainer"
       />
     </div>
