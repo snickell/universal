@@ -4,7 +4,7 @@ export const MOCK_GENERATE_TEXT = false
 
 export const SEND_RESIZE_MESSAGES = false
 
-export const initialPromptName = 'cupertino'
+export const defaultInitialPromptName = 'cupertino'
 
 export const USE_WEB_SOCKET = true
 export const DEBUG_WEBSOCKET = false

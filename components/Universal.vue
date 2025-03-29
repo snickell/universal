@@ -5,14 +5,19 @@ import { sendMessage as sendMessageHTTP, sendMessageWebSocket } from '~/shared/a
 import ScreenContainer from './ScreenContainer.vue'
 import ControlBar from './ControlBar.vue'
 import UniversalSessionPlayer from './UniversalSessionPlayer.vue'
-import { initialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/shared/constants'
+import { defaultInitialPromptName, USE_WEB_SOCKET, DEBUG_STREAMING_PREVIEW, UPDATE_PREVIEW_AT_MOST_EVERY_N_MS } from '~/shared/constants'
+import { initialPrompts } from '~/shared/prompts/index.js'
 
-// Add universalSessionID prop
 const props = defineProps({
   universalSessionID: {
     type: String,
     required: false,
     default: null
+  },
+  initialPrompt: {
+    type: String,
+    required: false,
+    default: defaultInitialPromptName
   }
 })
 
@@ -25,6 +30,11 @@ const lastScreenElRef = ref(null)
 const isControlPopupOpen = ref(true)
 
 const { loggedIn } = useUserSession()
+
+if (!Object.keys(initialPrompts).includes(props.initialPrompt)) {
+  console.warn(`Invalid initialPrompt: "${props.initialPrompt}". Falling back to default: "${defaultInitialPromptName}".`)
+  props.initialPrompt = defaultInitialPromptName
+}
 
 globalThis.debug ||= {}
 
@@ -149,7 +159,7 @@ async function sendMessage(msg) {
   const sendMessageToServer = USE_WEB_SOCKET ? sendMessageWebSocket : sendMessageHTTP
   sendMessageToServer({ 
     msg,
-    initialPromptName,
+    initialPromptName: props.initialPrompt,
     receiveFrame,
     receiveScreenHTMLDelta,
     onError,
