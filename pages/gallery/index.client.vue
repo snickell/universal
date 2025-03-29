@@ -1,9 +1,25 @@
 <script setup>
 definePageMeta({ ssr: false })
 
-// Pagination state
-const currentPage = ref(1)
+// Get route and router
+const route = useRoute()
+const router = useRouter()
+
+// Use query parameters for pagination
 const limit = ref(9)
+
+// Create a computed property for currentPage that reads/writes to the URL
+const currentPage = computed({
+  get: () => parseInt(route.query.page || '1', 10),
+  set: (value) => {
+    router.push({
+      query: {
+        ...route.query,
+        page: value.toString()
+      }
+    })
+  }
+})
 
 globalThis.debug ||= {}
 
