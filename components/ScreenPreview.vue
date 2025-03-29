@@ -11,7 +11,7 @@ const props = defineProps({
   },
   sendMessage: {
     type: Function,
-    required: true,
+    required: false,
     default: () => {},
   }
 })
