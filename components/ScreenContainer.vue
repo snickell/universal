@@ -119,20 +119,26 @@ async function sendDimensions() {
 const shadowRoot = ref(null)
 const screenEl = ref(null)
 
+/* This CSS is injected at the start of the shadow DOM, it lets us tweak things */
+const INSIDE_SHADOW_DOM_STYLE = `
+  <style>
+    /* #screen is defined in the prompt to be the top-level container */
+    #screen {
+      flex: 1;
+      font-family: Roboto, sans-serif;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+`
+
 const updateScreenHTML = () => {
   if (shadowRoot.value && props.screenHTML) {
-    // Prepend style to screenHTML using template string
+    // Set the contents of the shadow DOM to the HTML returned by the LLM
+    // along with injecting a standard <style> block
     shadowRoot.value.innerHTML = `
-      <style>
-        /* #screen is defined in the prompt to be the top-level container */
-        #screen {
-          flex: 1;
-          font-family: Roboto, sans-serif;
-          font-size: 14px;
-          display: flex;
-          flex-direction: column;
-        }
-      </style>
+      ${INSIDE_SHADOW_DOM_STYLE}
       ${props.screenHTML}
     `
     screenEl.value = shadowRoot.value.querySelector('#screen')
