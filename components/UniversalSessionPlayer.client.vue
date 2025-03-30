@@ -16,9 +16,21 @@ const screenHTML = computed(() => currentFrame.value?.screenHTML ?? '')
 
 // fetch universalSession and frames when universalSessionID changes:
 watch(() => props.universalSessionID, async (newUniversalSessionID) => {
-  const {data, error} = await useFetch(`/api/universal-session/${newUniversalSessionID}`)
-  // TODO: don't use useFetch? handle errors?
-  universalSession.value = data.value
+  try {
+    // We used to use `const {data, error} = await useFetch(`/api/universal-session/${newUniversalSessionID}`)`
+    // but it kept returning null data and no error, even when the network log showed data coming through.
+    // It would periodically break on reloads in dev tools.
+    //
+    // This page doesn't really benefit from SSR, its client side heavy no matter how you slice it.
+    // So we just made it UniversalSessionPlayer.client.vue, and now we can use fetch() directly.
+    const res = await fetch(`/api/universal-session/${newUniversalSessionID}`)
+    if (!res.ok) throw new Error(`Fetch error: ${res.status}`)
+    const json = await res.json()
+    universalSession.value = json
+    console.log("Fetched universal session:", json)
+  } catch (err) {
+    console.error("Error fetching universal session:", err)
+  }
 }, { immediate: true })
 
 const nextEvents = computed(() => {
