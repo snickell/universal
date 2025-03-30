@@ -199,3 +199,18 @@ defineExpose({ screenEl})
   background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
 }
 </style>
+
+<style scoped>
+.screen-container {
+  /* 
+  By default, clickable things inside the screen, like dock icons, will follow browser
+  UX patterns and therefore be the `cursor: pointer` (the "clicky hand"). This is fine UX-wise,
+  but OSes don't use this, and therefore it breaks the illusion.
+
+  Additionally, we don't support text input yet, so showing `cursor: text` (the "I-beam")
+  misleads people, and they waste demo time trying to input text and get frustrated. We
+  should revisit this setting once we support text input events.
+  */
+  cursor: default;
+}
+</style>
