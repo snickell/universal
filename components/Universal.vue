@@ -15,6 +15,15 @@ const props = defineProps({
   }
 })
 
+// props.universalSessionID is an instruction to "replay" an existing universal session
+// but we also need a way for internal components to access the current universalSessionID
+// which will be generated while creating the current universal session.
+const _universalSessionID = ref(props.universalSessionID)
+watch (() => props.universalSessionID, (newUniversalSessionID) => {
+  _universalSessionID.value = newUniversalSessionID
+})
+provide('universalSessionID', _universalSessionID)
+
 const screenHTMLRef = ref('')
 const screenPreviewHTMLRef = ref('')
 const nextFrameScreenHTMLRef = ref('')
@@ -118,9 +127,10 @@ async function sendMessage(msg) {
   console.log()
   console.log(`sendMessage('${truncatedMsg}''):`, msg)
 
-  function receiveFrame(frame) {
+  function receiveFrame(frame, {universalSesssionID}) {
     loading.value = false
     renderStartTime.value = 0
+    _universalSessionID.value = universalSesssionID
 
     const rawScreenHTML = frame.outputMessage.content
     globalThis.debug.rawScreenHTML = rawScreenHTML

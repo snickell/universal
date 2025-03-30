@@ -12,6 +12,9 @@ const props = defineProps({
   }
 })
 
+// This is provided by Universal.vue after it receives the first frame
+const universalSessionID = inject('universalSessionID')
+
 // This is provided by Universal.vue when it starts rendering a new frame
 const renderStartTime = inject('renderStartTime')
 
@@ -29,9 +32,13 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
     <div class="content">
       <div class="preview">
         <details open class="preview-expander" style="padding: 6px 24px 0px 24px;">
-          <summary>
+          <summary style="display: flex">
             <span v-if="loading">Please wait, the LLM is hallucinating the next frame of your desktop OS</span>
             <span v-else>The LLM has <i>finished hallucinating</i>... for now 🌈</span>
+            <div style="flex-grow: 1"></div>
+            <NuxtLink :to="`/gallery/${universalSessionID}`" target="_blank" rel="noopener">
+              <span style="font-size: 14px">Share this Session</span>
+            </NuxtLink>
           </summary>
           <div>
             <ScreenPreview
@@ -88,6 +95,9 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
           PLEASE NOTE: your use of this demo will be <b>visible to the world</b> in our anonymous
           <NuxtLink to="/universal-sessions">instant replay gallery</NuxtLink>.
           Think "I'm at a public art gallery" and please don't enter personal information.
+          <NuxtLink :to="`/gallery/${universalSessionID}`" target="_blank" rel="noopener">
+            See your current session in the gallery
+          </NuxtLink>
         </p>
       </div>
     </div>

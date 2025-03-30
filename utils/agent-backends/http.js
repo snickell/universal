@@ -23,7 +23,7 @@ export async function sendMessageHTTP({ msg, initialPromptName, receiveFrame, re
     setMessages(frame.messages)
     setUniversalSesssionID(frame.universalSesssionID)
 
-    await receiveFrame(frame)
+    await receiveFrame(frame, {universalSesssionID: body.frame.universalSesssionID})
   }
 }
 
