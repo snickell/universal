@@ -39,7 +39,7 @@ export async function sendMessageWebSocket({ msg, initialPromptName, receiveFram
         setMessages(body.frame.messages)
         setUniversalSesssionID(body.frame.universalSesssionID)
         const screenHTML = receiveFrame(body.frame, {universalSesssionID: body.frame.universalSesssionID})
-        updateScreenHTML({ frameID: body.frame.id, screenHTML, onError, universalSesssionID })
+        updateScreenHTML({ frameID: body.frame.id, screenHTML, onError })
       } else if (body.screenHTMLDelta) {
         receiveScreenHTMLDelta(body.screenHTMLDelta)
       } else {
