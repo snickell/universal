@@ -2,13 +2,29 @@
 import { ref } from 'vue'
 
 const props = defineProps({
+  // we invoke sendMessage when we have something to send to the LLM (on submit) 
   sendMessage: {
     type: Function,
     required: true
+  },
+  // show submit button?
+  showButton: {
+    type: Boolean,
+    default: true
+  },
+  // pulse whole component to indicate we're about to submit, used during replay
+  flash: {
+    type: Boolean,
+    default: false
+  },
+  // disable input but keep appearance similar
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
-const msgFromUser = ref('')
+const msgFromUser = defineModel({ default: '' })
 
 function onMsgFromUser() {
   const msg = msgFromUser.value
@@ -18,15 +34,16 @@ function onMsgFromUser() {
 </script>
 
 <template>
-  <div class="send-message">
+  <div class="send-message" :class="{ 'flash-animation': flash }">
     <input
       type="text"
       v-model="msgFromUser"
+      :disabled="disabled"
       @keypress="(e) => e.key === 'Enter' && onMsgFromUser()"
       placeholder="To render the next frame: click somewhere OR describe what you want here to both modify and control apps."
     />
     
-    <button @click="onMsgFromUser">
+    <button v-if="showButton" @click="onMsgFromUser">
       <span>Send Command</span>
     </button>
   </div>
@@ -57,6 +74,16 @@ input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* A very subtle disabled effect */
+input:disabled {
+  opacity: 0.95;
+  cursor: default;
+  background-color: #1a365d;
+  color: white;
+  /* Remove the typical "disabled" appearance */
+  -webkit-text-fill-color: white; /* Override iOS default */
+}
+
 button {
   white-space: nowrap;
   padding: 0 12px;
@@ -78,5 +105,19 @@ button > span {
 
 button:hover {
   background-color: #0060df;
+}
+
+.flash-animation {
+  animation: flash-component 0.6s;
+}
+
+@keyframes flash-component {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+    background-color: #0070f3;
+  }
 }
 </style>

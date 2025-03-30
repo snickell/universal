@@ -52,6 +52,10 @@ const nextEvents = computed(() => {
 const screenPreview = ref(null)
 async function gotoNextFrame() {
   console.log("gotoNextFrame(): nextEvents.value=", nextEvents.value)
+
+  // we don't clear it on submit so it can be read later by slower readers (e.g. non-native readers, etc)
+  hideSendMessageFromUser()
+
   // nextEvents will be something like:
   // [{"type":"click","target":{"id":"file-menu"},"at":"2025-03-15T09:07:05.007Z","button":0,"offsetX":0.1015625,"offsetY":13.5}]
   // [{"type":"prompt","content":"Hello, world!","at":"2025-03-15T09:07:05.007Z"}]
@@ -77,14 +81,9 @@ async function gotoNextFrame() {
         await animateMovingMouseTo(x, y)
         await animateClickingMouse()
       } else if (event.type === 'prompt') {
-        alert(`Then the user typed the prompt: "${event.prompt}"`)
-        // TODO: display this in a <SendMessage> component at the bottom of the screen
-        // fade in the component, then animate typing event.prompt at a realistic speed
-        // pause for a second, press enter (flash send button somehow?)
-        //
-        // use await to wait while this all plays out, like in the click event above
+        await animateSendMessageFromUser(event)
       } else {
-        console.warn(`UniversalSessionPlayer: not showing unsupported event.type=${even.type}, event:`, event)
+        console.warn(`UniversalSessionPlayer: not showing unsupported event.type=${event.type}, event:`, event)
       }
     }
   }
@@ -137,6 +136,51 @@ async function animateClickingMouse() {
 function sendMessage(msg) {
   alert("This is a replay, so you can't click or type.")
 }
+
+const sendMessageFromUserVisible = ref(false)
+const sendMessageFromUser = ref('')
+const flashSendMessageOnSubmit = ref(false)
+async function animateSendMessageFromUser(event) {
+  // Show the SendMessage component
+  sendMessageFromUser.value = ''
+  sendMessageFromUserVisible.value = true
+  
+  // Wait for transition to complete
+  await new Promise(resolve => setTimeout(resolve, 300))
+  
+  // Animate typing the prompt character by character
+  const prompt = event.prompt
+  for (let i = 0; i < prompt.length; i++) {
+    sendMessageFromUser.value = prompt.slice(0, i + 1) + '|'
+    // This is about 200WPM, which is about 50WPM lower than the median adult
+    // reading speed in the United States. This is probably too fast for non-native readers
+    // but its a hard tradeoff to make. This speed matches Breath of the Wild, I figure
+    // they probably know what they are doing:
+    const ms_per_character = 25 + Math.random() * 25
+    await new Promise(resolve => setTimeout(resolve, ms_per_character))
+  }
+  sendMessageFromUser.value = prompt
+  
+  // Pause before "pressing enter"
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  
+  // Flash the SendMessage component to show we're about to submit
+  flashSendMessageOnSubmit.value = true
+  await new Promise(resolve => setTimeout(resolve, 500))
+  flashSendMessageOnSubmit.value = false
+  
+  await new Promise(resolve => setTimeout(resolve, 500))
+
+  // NOTE: we do not call hideSendMessageFromUser() here because we want to give
+  // slower reader's time to catch up. We clear it on the next event/frame
+}
+
+function hideSendMessageFromUser() {
+  // Clear the input and hide the component
+  sendMessageFromUser.value = ''
+  sendMessageFromUserVisible.value = false
+
+}
 </script>
 
 <template>
@@ -162,7 +206,19 @@ function sendMessage(msg) {
       <a href="#" @click.prevent="$router.back()">« Back to Gallery</a>
     </div>
     
-    <div style="flex-grow: 1"></div>
+    <transition name="fade">
+      <SendMessage 
+        v-if="sendMessageFromUserVisible" 
+        class="send_message"
+        :sendMessage="sendMessage" 
+        :showButton="false"
+        :flash="flashSendMessageOnSubmit"
+        :disabled="true"
+        v-model="sendMessageFromUser" 
+      />
+    </transition>
+    <div v-if="!sendMessageFromUserVisible" style="flex-grow: 1"></div>
+    
     <div id="controls">
       <button @click="currentFrameIndex--" :disabled="currentFrameIndex === 0">Previous Frame</button>
       Frame {{ currentFrameIndex + 1 }} of {{ universalSession?.frames?.length }}
@@ -222,6 +278,21 @@ button:disabled {
 
 .flash-enter-active {
   animation: flash-button 1.5s;
+}
+
+.send_message {
+  flex-grow: 1;
+  margin: 0 2em;
+}
+
+.send_message.fade-enter-active,
+.send_message.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.send_message.fade-enter-from,
+.send_message.fade-leave-to {
+  opacity: 0;
 }
 
 @keyframes flash-button {
