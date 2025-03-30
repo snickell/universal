@@ -88,16 +88,39 @@ watch(() => isControlPopupOpen.value, (isOpen) => {
   }
 })
 
+let renderStartTime = ref(0)
+provide('renderStartTime', renderStartTime)
+
 async function sendMessage(msg) {
+  if (loading.value) {
+    // If a render is already in progress, don't allow the user to queue up another. This
+    // prevents "click storms" where a new user clicks 8 times, generates $$$ credit usage,
+    // and then bounces without waiting. 
+    isControlPopupOpen.value = true
+
+    // If the render has taken more than 3 min, we'll assume something has gone wrong,
+    // and let another render proceed.
+    const THREE_MINUTES = 3 * 60 * 1000
+    if (Date.now() - renderStartTime.value > THREE_MINUTES) {
+      console.warn('sendMessage() already in progress, but it has been > 3 min since we started rendering. Proceeding with new render. msg=', msg)
+    } else {
+      console.warn('sendMessage() already in progress, telling the user to wait, msg=', msg)
+      alert("The LLM is hard at work! Please wait until we finish rendering your next frame.\n\nThis can take a couple minutes.")      
+      return
+    }
+  }
+
+  renderStartTime.value = Date.now()
   loading.value = true
   screenPreviewHTMLRef.value = ''
-
+  
   const truncatedMsg = truncate(msg)
   console.log()
   console.log(`sendMessage('${truncatedMsg}''):`, msg)
 
   function receiveFrame(frame) {
     loading.value = false
+    renderStartTime.value = 0
 
     const rawScreenHTML = frame.outputMessage.content
     globalThis.debug.rawScreenHTML = rawScreenHTML
@@ -148,6 +171,7 @@ async function sendMessage(msg) {
     console.error('sendMessage() error:', error)
     firstError = false
     loading.value = false
+    renderStartTime.value = 0
   }
 
   sendMessageToBackend({ 
