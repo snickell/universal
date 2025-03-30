@@ -133,13 +133,28 @@ async function animateClickingMouse() {
   })
 }
 
+function flashMessage(msg) {
+  flashMessageText.value = msg
+  flashMessageVisible.value = true
+  setTimeout(() => flashMessageVisible.value = false, 5000)
+}
+
+const hasShownClickWarning = ref(false)
 function sendMessage(msg) {
-  alert("This is a replay, so you can't click or type.")
+  gotoNextFrame()
+  
+  // Warn the user clicks won't work except to advance frames
+  if (!hasShownClickWarning.value) {
+    flashMessage("This is a replay, so you can't interact. Clicking advances to the next frame")
+    hasShownClickWarning.value = true
+  }
 }
 
 const sendMessageFromUserVisible = ref(false)
 const sendMessageFromUser = ref('')
 const flashSendMessageOnSubmit = ref(false)
+const flashMessageVisible = ref(false)
+const flashMessageText = ref('')
 async function animateSendMessageFromUser(event) {
   // Show the SendMessage component
   sendMessageFromUser.value = ''
@@ -185,6 +200,11 @@ function hideSendMessageFromUser() {
 
 <template>
 <div class="player">
+  <transition name="flash-message">
+    <div v-if="flashMessageVisible" class="flash_message">
+      {{ flashMessageText }}
+    </div>
+  </transition>
   <div style="position: relative; padding: 20px;">
     <ScreenPreview
       :screenPreviewHTML="screenHTML"
@@ -328,5 +348,29 @@ button:disabled {
   font-size: 200%;
   aspect-ratio: 1;
   transition: top 0.5s ease-out, left 0.5s ease-out;
+}
+
+.flash_message {
+  background-color: #0070f3;
+  color: white;
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  z-index: 1000;
+}
+
+.flash-message-enter-active,
+.flash-message-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.flash-message-enter-from,
+.flash-message-leave-to {
+  transform: translate(-50%, -100%);
 }
 </style>
