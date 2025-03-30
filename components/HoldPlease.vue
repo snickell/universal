@@ -12,34 +12,16 @@ const props = defineProps({
   }
 })
 
-const elapsedSeconds = ref(0)
-const timerInterval = ref(null)
+// This is provided by Universal.vue when it starts rendering a new frame
+const renderStartTime = inject('renderStartTime')
 
-function startTimer() {
-  elapsedSeconds.value = 0
-  timerInterval.value = setInterval(() => {
-    elapsedSeconds.value++
-  }, 1000)
-}
-
-function stopTimer() {
-  if (timerInterval.value) {
-    clearInterval(timerInterval.value)
-    timerInterval.value = null
-  }
-}
-
-watch(() => props.loading, (isLoading) => {
-  if (isLoading) {
-    startTimer()
-  } else {
-    stopTimer()
-  }
-}, { immediate: true })
-
-onUnmounted(() => {
-  stopTimer()
+// Update elapsedSeconds every second based on renderStartTime
+const tick = ref(Date.now())
+onMounted(() => {
+  const timer = setInterval(() => tick.value = Date.now(), 1000)
+  onUnmounted(() => clearInterval(timer))
 })
+const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((tick.value - renderStartTime.value) / 1000))
 </script>
 
 <template>
