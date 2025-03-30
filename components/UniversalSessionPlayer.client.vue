@@ -34,17 +34,27 @@ watch(() => props.universalSessionID, async (newUniversalSessionID) => {
 }, { immediate: true })
 
 const nextEvents = computed(() => {
-  const nextFrameInput = nextFrame.value?.inputMessage
-  if (nextFrameInput?.type === 'events') {
-    return JSON.parse(nextFrameInput.content).msg
+  const nextFrameInputMessage = nextFrame.value?.inputMessage
+  if (nextFrameInputMessage?.type === 'events') {
+    return JSON.parse(nextFrameInputMessage.content).msg
+  } else if (nextFrameInputMessage?.type === 'prompt') {
+    return [{
+      type: 'prompt',
+      prompt: nextFrameInputMessage.content,
+      at: nextFrameInputMessage.createdAt,
+    }]
+  } else {
+    console.warn('UniversalSessionPlayer: unknown inputMessage.type:', nextFrameInputMessage)
+    return undefined
   }
 })
 
 const screenPreview = ref(null)
 async function gotoNextFrame() {
-  console.log("nextEvents.value=", nextEvents.value)
+  console.log("gotoNextFrame(): nextEvents.value=", nextEvents.value)
   // nextEvents will be something like:
   // [{"type":"click","target":{"id":"file-menu"},"at":"2025-03-15T09:07:05.007Z","button":0,"offsetX":0.1015625,"offsetY":13.5}]
+  // [{"type":"prompt","content":"Hello, world!","at":"2025-03-15T09:07:05.007Z"}]
   if (nextEvents.value) {
     for (const event of nextEvents.value) {
       if (event.type === 'click' || event.type === "dblclick") {
@@ -66,8 +76,15 @@ async function gotoNextFrame() {
         console.log("targetEl=", targetEl, "x=", x, "y=", y)
         await animateMovingMouseTo(x, y)
         await animateClickingMouse()
+      } else if (event.type === 'prompt') {
+        alert(`Then the user typed the prompt: "${event.prompt}"`)
+        // TODO: display this in a <SendMessage> component at the bottom of the screen
+        // fade in the component, then animate typing event.prompt at a realistic speed
+        // pause for a second, press enter (flash send button somehow?)
+        //
+        // use await to wait while this all plays out, like in the click event above
       } else {
-        console.warn('UniversalSessionPlayer: not showing unsupported event:', event)
+        console.warn(`UniversalSessionPlayer: not showing unsupported event.type=${even.type}, event:`, event)
       }
     }
   }
