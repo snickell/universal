@@ -26,19 +26,3 @@ export async function sendMessageHTTP({ msg, initialPromptName, receiveFrame, re
     await receiveFrame(frame, {universalSesssionID: body.frame.universalSesssionID})
   }
 }
-
-export async function updateScreenHTML({ frameID, screenHTML, onError }) {
-  const response = await fetch('/api/updateScreenHTML', {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ frameID, screenHTML })
-  })
-  
-  if (!response.ok) {
-    const err = new Error(`HTTP ${response.status}: ${response.statusText}`)
-    err.response = response
-    err.status = response.status
-    onError(err)
-    throw err
-  }
-}
