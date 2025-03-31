@@ -23,6 +23,13 @@
       <li>Control costs associated with our AI service</li>
     </ul>
 
+    <p>
+      We collect a recording of your in-app interactions with the LLM (including but not limited to, click locations within the LLM rendered 'screen', commands typed into the message bar, and graphical frames rendered in response to your interaction):
+      <ul>
+        <li>Provide a <a href="/gallery">public instant replay gallery</a> of interactions with LLM.</li>
+      </ul>
+    </p>
+
     <h2>How We Use Your Information</h2>
     <p>
       Your interactions with the Universal Program are recorded and viewable by the public (without your name or email attached).
