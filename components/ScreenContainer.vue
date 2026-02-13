@@ -100,6 +100,24 @@ function onClickOrDblClick(event) {
   }
 }
 
+// This function registers event handlers for the whole screen that are
+// then forwarded to the LLM as a message kinda like:
+//   "the user clicked at x=100 y=200 on the element with id='submit-button'"
+//
+// The LLM can then use that info to update the screen and respond to the click,
+// and generates an updated frame based on clicking on the screen in that place.
+function forwardUserEventsLikeClickEtcToLLM(screenContainerEl) {
+    // Handle single-click and double-click 
+    screenContainerEl.addEventListener('click', onClickOrDblClick)
+    screenContainerEl.addEventListener('dblclick', onClickOrDblClick)
+
+    // Handle right-click events
+    screenContainerEl.addEventListener('contextmenu', (event) => {
+      event.preventDefault()
+      queueEventToSendAsMessage({event: cloneEvent(event), sendImmediately: true})
+    })
+}
+
 let lastWidth = null
 let lastHeight = null
 // call sendMessage with dimensions to render HTML at 
@@ -152,9 +170,8 @@ onMounted(async () => {
   if (screenContainer.value) {
     shadowRoot.value = screenContainer.value.attachShadow({ mode: 'open' })
     
-    // Add event listeners directly to shadowRoot
-    shadowRoot.value.addEventListener('click', onClickOrDblClick)
-    shadowRoot.value.addEventListener('dblclick', onClickOrDblClick)
+    // Add event listeners directly to shadowRoot, these end up dispatching messages to the LLM
+    forwardUserEventsLikeClickEtcToLLM(shadowRoot.value)
 
     updateScreenHTML()
   }
