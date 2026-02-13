@@ -15,10 +15,46 @@ const props = defineProps({
 
 const screenContainer = ref(null)
 
+// This is a bad hack. We can't draw enough FPS to handle character-by-character keyboard
+// input events. Therefore, when we send ANOTHER event, we scan the screen for any editable
+// text elements, and send each of them as a queued event prior to the event that actually
+// triggers a redraw / message send.
+function getAllEditableText(parentEl) {
+  const EDITABLE_TEXT_SELECTOR = `
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="search"],
+    input[type="url"],
+    input[type="tel"],
+    [contenteditable],
+    [contenteditable="true"]
+  `
+
+  return [...parentEl.querySelectorAll(EDITABLE_TEXT_SELECTOR)]
+    .map(el => ({
+      id: el.id || null,
+      value:
+        el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
+          ? el.value
+          : el.textContent
+    }))
+}
+
+function getSyntheticInputEventsFromEditableTextElements() {
+  const editableTextElementState = getAllEditableText(screenEl.value)
+  return editableTextElementState.map(({ id, value }) => ({
+    type: 'input',
+    target: { id, value },
+    at: new Date().toISOString(),
+  }))
+}
+
 const isATextInputEl = el =>
   (el.tagName === 'TEXTAREA')
   || (el.tagName === 'INPUT' && ['text', 'password', 'email', 'search', 'url', 'tel'].includes(el.type))
-  || el.contentIsEditable
+  || el.isContentEditable
 
 let eventQueue = []
 function queueEventToSendAsMessage({event, sendImmediately = false}) {
@@ -33,6 +69,12 @@ function queueEventToSendAsMessage({event, sendImmediately = false}) {
     // to wait for a screen redraw when you click in one, you want to enter text and submit 
     // it later
     if (event.type == 'click' && isATextInputEl(el)) return
+
+    // since we block text / input events from firing in real-time, we need to send the
+    // current state of all editable text elements as synthetic events
+    eventQueue.push(
+      ...getSyntheticInputEventsFromEditableTextElements()
+    )
 
     const universalEvent = {
       type: event.type,
