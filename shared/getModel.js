@@ -36,7 +36,16 @@ export function getModel({openRouterAPIKey, useCheapModel}) {
 
   // Claude Sonnet 3.7 is, in Mar of 2025 far and away the best/only model for generating a usable result
   // the problem is that its pretty slow at ~50 tokens/s, and expensive at $15 per million output tokens
-  const NORMAL_MODEL = openrouter('anthropic/claude-3.7-sonnet')
+  // const NORMAL_MODEL = openrouter('anthropic/claude-3.7-sonnet')
+  
+  // LAZY UPDATE Feb 2026: update to latest claude sonnet (4.5)
+  const NORMAL_MODEL = openrouter('anthropic/claude-sonnet-4.5')
+  
+  // Alternative #1 for Feb 2026, seems like openai finally is good enough at grafix:
+  // const NORMAL_MODEL = openrouter('openai/gpt-5.2-codex')
+  
+  // Alternative #2 for Feb 2026, too dumb, but Cerebras sure is fast, totally different feel
+  //const NORMAL_MODEL = openrouter('qwen/qwen3-32b', { extraBody: { provider: { order: ['Cerebras'], 'allow_fallbacks': false} } })
 
   const model = useCheapModel ? CHEAP_MODEL : NORMAL_MODEL
   return model
