@@ -33,6 +33,7 @@ Details that should never change no matter what the user says:
   - mildly prefer CSS grid and flexbox over absolute positioning for layout
     - absolute is ok when its the simpler approach
     - PRIORITIZE good positioning and layout over following these rules, correct on screen is the priority
+  - if an element is intended to take input text via keyboard, please make sure it is an editable text element (e.g. <input>, <textarea>, or has contenteditable="true" set on the div, etc)
 5. CACHING ELEMENTS THAT WONT CHANGE RELATIVE TO THE LAST FRAMES:
   - just add html attribute data-use-cached to the element, then you don't have to repeat the children/attributes of that element
   - waiting for your response as an LLM will be slow, as a result, we have extended HTML with a caching feature
