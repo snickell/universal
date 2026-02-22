@@ -40,8 +40,8 @@ export function getModel({openRouterAPIKey, useCheapModel}: {openRouterAPIKey?: 
   // const NORMAL_MODEL = openrouter('anthropic/claude-3.7-sonnet')
 
   // LAZY UPDATE Feb 2026: update to latest claude sonnet (4.5)
-  // const NORMAL_MODEL = openrouter('anthropic/claude-sonnet-4.5')
-  const NORMAL_MODEL = openrouter('z-ai/glm-4.7')
+  const NORMAL_MODEL = openrouter('anthropic/claude-sonnet-4.5')
+  // const NORMAL_MODEL = openrouter('z-ai/glm-4.7')
 
   // Alternative #1 for Feb 2026, seems like openai finally is good enough at grafix:
   // const NORMAL_MODEL = openrouter('openai/gpt-5.2-codex')
