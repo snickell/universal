@@ -1,12 +1,12 @@
-import { type LanguageModelV1 } from '@ai-sdk/provider'
+import { type LanguageModelV3 } from '@ai-sdk/provider'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 
-export function getModel({openRouterAPIKey, useCheapModel}: {openRouterAPIKey?: string, useCheapModel?: boolean}): LanguageModelV1 {
-  if (!openRouterAPIKey) throw new Error('OpenRouter API key is required')
+export function getModel({openRouterAPIKey, useCheapModel}: {openRouterAPIKey?: string, useCheapModel?: boolean}): LanguageModelV3 {
+  if (!openRouterAPIKey) throw new Error('OpenRouter API key is required when useCheapModel=true')
   const openrouter = createOpenRouter({apiKey: openRouterAPIKey})
 
   let CHEAP_MODEL_NAME=''
-  let CHEAP_MODEL!: LanguageModelV1
+  let CHEAP_MODEL!: LanguageModelV3
 
   // MODEL REVIEWS USING SAMBA NOVA:
   // CHEAP_MODEL = openrouter('openai/chatgpt-4o-latest') // REVIEW: NOT CHEAP, not faster than sonnet, generates sorta almost usable applications, 4/10
@@ -19,7 +19,7 @@ export function getModel({openRouterAPIKey, useCheapModel}: {openRouterAPIKey?: 
   // CHEAP_MODEL_NAME = 'deepseek/deepseek-r1-distill-llama-70b' // REVIEW: very basic calendar table, used window but didn't understand to use absolute positioning with it, so full width, 1/10
 
   // If we aren't using Claude, we want SPEED, keep checking out dedicated silicon providers
-  // like Groq, SambaNova, and Cerebras, these can be 10x faster than sonnet 3.7 is today,
+  // like Groq and SambaNova, these can be 10x faster than sonnet 3.7 is today,
   // but so far none of the models are really any good at making a usable application:
   // - https://openrouter.ai/provider/sambanova
   // - https://openrouter.ai/provider/groq

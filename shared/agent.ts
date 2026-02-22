@@ -1,6 +1,6 @@
 // agent code that can run either server-side or client-side
 
-import { streamText, type CoreMessage } from 'ai'
+import { streamText, type ModelMessage } from 'ai'
 import { initialPrompts } from '~/shared/prompts'
 import { getModel } from '~/shared/getModel'
 import { Frame, MessageTypes } from '~/shared/statefulTypes'
@@ -31,7 +31,7 @@ export function createAgent({openRouterAPIKey}) {
 
   async function sendMessage(
     { msg, universalSesssionID, messages, initialPromptName, sendFrame, sendScreenHTMLDelta }:
-    { msg?: string; universalSesssionID?: string, messages?: CoreMessage[], initialPromptName?: InitialPromptName, sendFrame: SendFrame; sendScreenHTMLDelta: SendScreenHTMLDelta },
+    { msg?: string; universalSesssionID?: string, messages?: ModelMessage[], initialPromptName?: InitialPromptName, sendFrame: SendFrame; sendScreenHTMLDelta: SendScreenHTMLDelta },
   ): Promise<Frame> {
     const isFirstMessage = !messages
     let initialPrompt

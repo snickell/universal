@@ -19,23 +19,23 @@
     "db:export": "bash -c 'db=${1:-universal} && npx wrangler d1 export --remote $db --output=$db-dump.sql && sqlite3 $db-prod.sqlite < $db-dump.sql && rm $db-dump.sql && echo Created $db-prod.sqlite 🤙' bash"
   },
   "dependencies": {
-    "@libsql/client": "^0.14.0",
-    "@nuxthub/core": "^0.8.17",
-    "@openrouter/ai-sdk-provider": "^0.4.1",
-    "ai": "^4.1.46",
-    "debounce": "^2.2.0",
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.40.0",
-    "nuxt": "^3.16.1",
-    "nuxt-auth-utils": "^0.5.16",
+    "@libsql/client": "^0.17.0",
+    "@nuxthub/core": "^0.10.6",
+    "@openrouter/ai-sdk-provider": "^2.2.3",
+    "ai": "^6.0.97",
+    "debounce": "^3.0.0",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1",
+    "nuxt": "^4.3.1",
+    "nuxt-auth-utils": "^0.5.29",
     "throttleit": "^2.1.0",
-    "ulid": "^2.3.0",
+    "ulid": "^3.0.2",
     "ulid-workers": "^2.1.0",
-    "vue": "latest",
-    "vue-router": "latest"
+    "vue": "^3.5.28",
+    "vue-router": "^5.0.3"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.30.5",
-    "wrangler": "^4.0.0"
+    "drizzle-kit": "^0.31.9",
+    "wrangler": "^4.67.0"
   }
 }

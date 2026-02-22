@@ -1,4 +1,4 @@
-import { type CoreMessage, type CoreSystemMessage, type CoreUserMessage } from 'ai'
+import { type ModelMessage, type SystemModelMessage, type UserModelMessage } from 'ai'
 import { ulid } from '~/shared/ulid'
 
 type ID = string
@@ -45,11 +45,11 @@ export class Message {
   }
 }
 
-export class InputMessage extends Message implements CoreUserMessage {
+export class InputMessage extends Message implements UserModelMessage {
   role: 'user' = 'user'
 }
 
-export class OutputMessage extends Message implements CoreSystemMessage {
+export class OutputMessage extends Message implements SystemModelMessage {
   role: 'system' = 'system'
 }
 
@@ -59,7 +59,7 @@ export class Frame {
   universalSesssionID: ID = null
   prevFrameID: ID = null
 
-  messages: CoreMessage[] = []
+  messages: ModelMessage[] = []
   screenHTML: string = ""
   modelID: string = ""
 
