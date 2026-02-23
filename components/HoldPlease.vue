@@ -48,7 +48,7 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
                 <div class="middle-of-screen">
                   <button
                     @click="$emit('close-popup')"
-                    style="font-size: 150%; background-color: #d6e6fa; white-space: nowrap; cursor: pointer;"
+                    style="font-size: 150%; background-color: #ffffff; white-space: nowrap; cursor: pointer;"
                   >
                     frame done - go see it!
                   </button>
@@ -76,10 +76,10 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
 <style scoped>
 .preview {
   width: 100%;
-  background-color: #115db0;
+  background-color: #ff0000;
   color: white;
-  outline: 3px solid #115db0;
-  border: 1px solid #0f2847;
+  outline: 3px solid #ff0000;
+  border: 1px solid #000000;
   border-left: 0;
   border-right: 0;
   font-size: 1.1rem;

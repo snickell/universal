@@ -21,7 +21,7 @@ import { SPONSOR, SPONSOR_NAME, SPONSOR_URL } from '~/shared/utils/constants.js'
 }
 
 .sponsor {
-  background-color: #0070f3;
+  background-color: #ff0000;
   color: white;
   padding: 5px 20px;
   display: flex;

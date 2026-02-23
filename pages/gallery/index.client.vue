@@ -167,7 +167,7 @@ h1 {
 .no-sessions {
   padding: 20px;
   text-align: center;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
   border-radius: 4px;
 }
 
@@ -179,7 +179,7 @@ h1 {
 }
 
 .session-card {
-  border: 1px solid #ddd;
+  border: 1px solid #ffffff;
   border-radius: 4px;
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -199,7 +199,7 @@ h1 {
 .preview-container {
   
   overflow: hidden;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 }
 
 .no-preview {
@@ -207,7 +207,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
+  color: #000000;
 }
 
 .session-info {
@@ -217,7 +217,7 @@ h1 {
 
 .session-date {
   font-size: 14px;
-  color: #666;
+  color: #000000;
   flex-grow: 1;
 }
 
@@ -229,15 +229,15 @@ h1 {
 
 .pagination-button {
   padding: 8px 16px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .pagination-button:hover:not(:disabled) {
-  background-color: #e0e0e0;
+  background-color: #ffffff;
 }
 
 .pagination-button:disabled {

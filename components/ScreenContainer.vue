@@ -261,7 +261,7 @@ defineExpose({ screenEl})
 }
 
 .bg {
-  background: linear-gradient(326deg, #300000 0%, #8b0e5e 74%);
+  background: #4AADCE;
 }
 </style>
 

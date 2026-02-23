@@ -63,9 +63,9 @@ input {
   height: 100%;
   border: none;
   outline: none;
-  border-left: 1px solid #0f2847;
-  border-right: 1px solid #0f2847;
-  background-color: #1a365d;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #000000;
+  background-color: #000000;
   color: white;
   caret-color: white;
 }
@@ -78,7 +78,7 @@ input::placeholder {
 input:disabled {
   opacity: 0.95;
   cursor: default;
-  background-color: #1a365d;
+  background-color: #000000;
   color: white;
   /* Remove the typical "disabled" appearance */
   -webkit-text-fill-color: white; /* Override iOS default */
@@ -91,7 +91,7 @@ button {
   display: flex;
   align-items: center;
   font-size: 1.1rem;
-  background-color: #0070f3;
+  background-color: #ff0000;
   color: white;
   cursor: default;
   font-family: "Cedarville Cursive", cursive;
@@ -104,7 +104,7 @@ button > span {
 }
 
 button:hover {
-  background-color: #0060df;
+  background-color: #ff0000;
 }
 
 .flash-animation {
@@ -117,7 +117,7 @@ button:hover {
   }
   50% {
     opacity: 0.5;
-    background-color: #0070f3;
+    background-color: #ff0000;
   }
 }
 </style>

@@ -143,23 +143,23 @@ async function onLogout() {
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  background-color: #0f2847;
-  color: #d6e6fa;
+  background-color: #000000;
+  color: #ffffff;
   overflow: hidden;
   z-index: 10002;
 }
 
 :deep button {
-  background-color: #d6e6fa;
+  background-color: #ffffff;
   padding: 0.4em 1.2em;
 }
 
 .popup a {
-  color: #0070f3;
+  color: #ff0000;
 }
 
 .popup a:visited {
-  color: #0070f3;
+  color: #ff0000;
 }
 
 .popup-enter-active,
@@ -190,7 +190,7 @@ button.show-popup-button,
   padding: 0 12px;
   display: flex;
   align-items: center;
-  background-color: #0070f3;
+  background-color: #ff0000;
   color: white;
   font-family: "Cedarville Cursive", cursive;
   border: none;
@@ -208,7 +208,7 @@ button.show-popup-button,
 }
 
 button.show-popup-button:hover {
-  background-color: #0060df;
+  background-color: #ff0000;
 }
 
 /* The cursive font looks nice with a slightly lower baseline */

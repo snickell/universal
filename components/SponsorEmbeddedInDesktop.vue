@@ -14,7 +14,7 @@ import { SPONSOR, SPONSOR_NAME, SPONSOR_URL } from '~/shared/utils/constants.js'
 <style scoped>
 .sponsor {
   font-family: sans-serif;
-  background-color: #0070f3;
+  background-color: #ff0000;
   color: white;
   padding: 35px 10px 5px 25px;
 

@@ -4,7 +4,7 @@ const universalSessionID = useRoute().params.id
 </script>
 
 <template>
-  <div style="background: linear-gradient(to bottom, #999, #444);">
+  <div style="background: #4AADCE;">
     <Universal :universalSessionID="universalSessionID" />
   </div>
 </template>

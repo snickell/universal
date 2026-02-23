@@ -6,7 +6,7 @@ export default defineEventHandler((event) => {
       <script src="https://cdn.tailwindcss.com"></script>
       <style>
         body {
-          background-color: #1a1a1a
+          background-color: #000000
         }
       </style>
       <script type="module">
@@ -124,14 +124,14 @@ export default defineEventHandler((event) => {
         <div id="messages" class="flex-grow flex flex-col justify-end px-4 py-8">
           <div class="flex items-center mb-4" v-for="message in store.messages">
             <div class="flex flex-col">
-              <p class="text-gray-500 mb-1 text-xs ml-10">{{ message.user }}</p>
+              <p class="text-white mb-1 text-xs ml-10">{{ message.user }}</p>
               <div class="flex items-center">
                 <img
                   :src="'https://www.gravatar.com/avatar/' + encodeURIComponent(message.user + rand) + '?s=512&d=monsterid'"
                   alt="Avatar"
                   class="w-8 h-8 rounded-full"
                 />
-                <div class="ml-2 bg-gray-800 rounded-lg p-2">
+                <div class="ml-2 bg-black rounded-lg p-2">
                   <p
                     v-if="message.formattedText"
                     class="overflow-x-scroll"
@@ -140,45 +140,45 @@ export default defineEventHandler((event) => {
                   <p v-else class="text-white">{{ message.text }}</p>
                 </div>
               </div>
-              <p class="text-gray-500 mt-1 text-xs ml-10">{{ message.date }}</p>
+              <p class="text-white mt-1 text-xs ml-10">{{ message.date }}</p>
             </div>
           </div>
         </div>
 
         <!-- Chatbox -->
         <div
-          class="bg-gray-800 px-4 py-2 flex items-center justify-between fixed bottom-0 w-full"
+          class="bg-black px-4 py-2 flex items-center justify-between fixed bottom-0 w-full"
         >
           <div class="w-full min-w-6">
             <input
               type="text"
               placeholder="Type your message..."
-              class="w-full rounded-l-lg px-4 py-2 bg-gray-700 text-white focus:outline-none focus:ring focus:border-blue-300"
+              class="w-full rounded-l-lg px-4 py-2 bg-black text-white focus:outline-none focus:ring focus:ring-[#ff0000] focus:border-[#ff0000]"
               @keydown.enter="send"
               v-model="store.message"
             />
           </div>
           <div class="flex">
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4"
+              class="bg-[#ff0000] hover:bg-[#ff0000] text-white py-2 px-4"
               @click="send"
             >
               Send
             </button>
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4"
+              class="bg-[#ff0000] hover:bg-[#ff0000] text-white py-2 px-4"
               @click="ping"
             >
               Ping
             </button>
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4"
+              class="bg-[#ff0000] hover:bg-[#ff0000] text-white py-2 px-4"
               @click="connect"
             >
               Reconnect
             </button>
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-r-lg"
+              class="bg-[#ff0000] hover:bg-[#ff0000] text-white py-2 px-4 rounded-r-lg"
               @click="clear"
             >
               Clear

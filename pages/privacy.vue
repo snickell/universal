@@ -74,10 +74,10 @@ ul {
 }
 
 a {
-  color: #3394f8;
+  color: #ff0000;
 }
 
 a:visited {
-  color: #0070f3;
+  color: #ff0000;
 }
 </style>

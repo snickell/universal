@@ -213,7 +213,7 @@ function hideSendMessageFromUser() {
       ref="screenPreview"
     >
       <div class="mouse" :style="mouseStyle">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0070f3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ff0000">
           <path d="M551-80 406-392 240-160v-720l560 440H516l144 309-109 51Z" stroke="white" stroke-width="40" stroke-linejoin="miter"/>
         </svg>
       </div>
@@ -258,7 +258,7 @@ function hideSendMessageFromUser() {
 .header {
   display: flex;
   padding: 10px;
-  background-color: #0070f3;
+  background-color: #ff0000;
   color: white;
   align-items: center;
 }
@@ -280,15 +280,15 @@ h2 {
 
 button {
   padding: 8px 16px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 button:hover:not(:disabled) {
-  background-color: #e0e0e0;
+  background-color: #ffffff;
 }
 
 button:disabled {
@@ -317,22 +317,22 @@ button:disabled {
 
 @keyframes flash-button {
   0%, 38% {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     color: black;
   }
   50% {
-    background-color: #0070f3;
+    background-color: #ff0000;
     color: white;
   }
   62% {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
   }
   75% {
-    background-color: #0070f3;
+    background-color: #ff0000;
     color: white;
   }
   88%, 100% {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
   }
 }
 
@@ -351,7 +351,7 @@ button:disabled {
 }
 
 .flash_message {
-  background-color: #0070f3;
+  background-color: #ff0000;
   color: white;
   padding: 10px 20px;
   position: fixed;
