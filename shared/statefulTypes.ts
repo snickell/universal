@@ -71,6 +71,8 @@ export class Frame {
   renderStartTime: Date = new Date()
   renderEndTime: Date = null
   renderTimeSecs: number = 0
+  renderTokens: number = null
+  renderTokensPerSecond: number = null
 
   constructor(init?: Partial<Frame>) {
     Object.assign(this, init)

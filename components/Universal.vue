@@ -134,7 +134,7 @@ async function sendMessage(msg) {
 
     const rawScreenHTML = frame.outputMessage.content
     globalThis.debug.rawScreenHTML = rawScreenHTML
-    console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(rawScreenHTML)}' (see: globalThis.debug.rawScreenHTML)'`)
+    console.log(`agentSendMessage('${truncatedMsg}'') returned '${truncate(rawScreenHTML)}' (see: globalThis.debug.rawScreenHTML)', frameID=${frame.id}, renderTokens=${frame.renderTokens}, renderTokensPerSecond=${frame.renderTokensPerSecond?.toFixed(2)}`)
 
     const screenEl = materializeScreenEl(rawScreenHTML, lastScreenElRef.value, true)
 

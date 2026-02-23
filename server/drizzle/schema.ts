@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, check, SQLiteColumn, index } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, integer, real, check, SQLiteColumn, index } from "drizzle-orm/sqlite-core"
 import { sql, relations } from "drizzle-orm"
 import { MessageTypes } from "~/shared/statefulTypes"
 
@@ -53,6 +53,8 @@ export const frames = sqliteTable("frames", {
   renderStartTime: integer({ mode: "timestamp_ms" }).notNull(),
   renderEndTime: integer({ mode: "timestamp_ms" }).notNull(),
   renderTimeSecs: integer().notNull(),
+  renderTokens: integer(),
+  renderTokensPerSecond: real(),
 
   inputMessageID: text().notNull().references(() => messages.id),
   outputMessageID: text().notNull().references(() => messages.id),

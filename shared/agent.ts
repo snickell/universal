@@ -59,13 +59,19 @@ export function createAgent({openRouterAPIKey, cerebrasAPIKey}) {
       frame.setOutputMessage(rawScreenHTML, {type: MessageTypes.RawScreenHTML})
     } else {
       console.log(`sendMessage(): rendering frame ${frame.id}, msg => ${truncate(msg)}`)
-      const { textStream } = await streamText({ model, messages: frame.messages })
+      const { textStream, totalUsage } = await streamText({ model, messages: frame.messages })
       const rawScreenHTML = await streamScreenHTML(frame, textStream, sendScreenHTMLDelta)
       frame.setOutputMessage(rawScreenHTML, {type: MessageTypes.RawScreenHTML})
+
+      frame.renderTokens = (await totalUsage).outputTokens
     }
 
     const renderDuration = frame.stopRenderClock()
-    console.log(`sendMessage(): frame complete, took ${renderDuration.toFixed(1)} seconds, returning a ${(frame.outputMessage.content.length/1024).toFixed(3)}kb frame, msg => ${truncate(msg)}`)
+
+    if (typeof frame.renderTokens === 'number') {
+      frame.renderTokensPerSecond = frame.renderTokens / renderDuration
+      console.log(`sendMessage(): output throughput ${frame.renderTokensPerSecond.toFixed(2)} tokens/s (${frame.renderTokens} output tokens in ${renderDuration.toFixed(1)}s)`,)
+    }
 
     sendFrame(frame)
 
