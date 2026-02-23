@@ -119,6 +119,7 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  border-right: 1px solid red;
 }
 
 
