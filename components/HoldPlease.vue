@@ -37,7 +37,7 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
             :scale="4"
           >
             <div v-if="loading" class="middle-of-screen">
-              <span>Please wait, the LLM is hallucinating the next frame of your desktop OS</span>
+              <span>Just a sec, the LLM is rendering the next frame</span>
 
               <div class="spinner-container">
                 <span class="material-symbols-outlined spinner">progress_activity</span>
