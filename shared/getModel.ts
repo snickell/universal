@@ -51,7 +51,7 @@ export function getModel({openRouterAPIKey, cerebrasAPIKey, useCheapModel}: {ope
   // NORMAL_MODEL = openrouter('qwen/qwen3-32b', { extraBody: { provider: { order: ['Cerebras'], 'allow_fallbacks': false} } })
 
   // TEST HACK Feb 2026: direct Cerebras for z-ai without OpenRouter in normal mode
-  // NORMAL_MODEL = cerebras('zai-glm-4.7')
+  NORMAL_MODEL = cerebras('zai-glm-4.7')
 
   const model = useCheapModel ? CHEAP_MODEL : NORMAL_MODEL
   return model
