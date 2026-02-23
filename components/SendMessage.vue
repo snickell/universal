@@ -53,7 +53,7 @@ function onMsgFromUser() {
       v-model="msgFromUser"
       :disabled="disabled"
       @keypress="(e) => e.key === 'Enter' && onMsgFromUser()"
-      placeholder="To render the next frame: click somewhere OR describe what you want here to both modify and control apps."
+      placeholder="Click something OR describe what you want here."
     />
     
     <button v-if="showButton" @click="onMsgFromUser">
