@@ -12,9 +12,9 @@ const { openInPopup } = useUserSession()
       </p>
 
       <p>
-        PLEASE NOTE: I will not reveal your email, but your interaction with the demo will be anonymously 
-        available to the world in the <NuxtLink to="/gallery">instant replay gallery</NuxtLink>, so don't enter
-        any personal or sensitive information. This is a public space.
+        PLEASE NOTE: I <b>will not reveal your email</b>, but your interaction with the demo
+        can be viewed by anyone in the <NuxtLink to="/gallery">instant replay gallery</NuxtLink>.
+        Treat this demo as a public art project and have fun.
       </p>
       <div style="height: 1em"/>
       <Sponsor />
