@@ -7,25 +7,19 @@ const { openInPopup } = useUserSession()
     <div>
       <h1>Google auth required to use expensive LLMs</h1>
       <p>
-        This demo is an open source art project (<a href="https://github.com/snickell/universal">github</a>)
-        and uses Claude Sonnet 3.7 in an unusally expensive way. Each time you click Claude renders a DOM 'frame'
-        for a whole OS desktop, and burns $0.05 of tokens in the process.
-
-        I require you to auth with google as a simple way of limiting the number of frames any one individual can generate.
+        I will not email you, disclose your email, sell your email, or whatever. This is for cost-control purposes only: every
+        time you click, it costs me about $0.05.
       </p>
+
       <p>
-        I will not email you, disclose your email, sell your email, or whatever. This is for cost-control purposes only.
+        PLEASE NOTE: I will not reveal your email, but your interaction with the demo will be anonymously 
+        available to the world in the <NuxtLink to="/gallery">instant replay gallery</NuxtLink>, so don't enter
+        any personal or sensitive information. This is a public space.
       </p>
       <div style="height: 1em"/>
       <Sponsor />
       <div style="display: flex; gap: 20px; margin-top: 2em; align-items: flex-end;">
         <GoogleSigninButton />
-
-        <div>
-          PLEASE NOTE: your use of this demo will be <b>visible to the world</b> in our anonymous
-          <NuxtLink to="/gallery">instant replay gallery</NuxtLink>.
-          Think "public art gallery": don't enter personal information.
-        </div>
       </div>
       <div style="display: none">
         <h1>TODO</h1>
