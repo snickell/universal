@@ -1,7 +1,13 @@
+<script setup>
+import { SPONSOR, SPONSOR_NAME, SPONSOR_URL } from '~/shared/utils/constants.js'
+</script>
+
 <template>
-  <div class="sponsor">
-    Big ❤️ @<a href="https://openrouter.ai">OpenRouterAI</a>
-    <p><a href="https://openrouter.ai">OpenRouter</a> originally made this project technically viable, and now they are making it financially viable too 🤩.</p>
+  <div
+    v-if="SPONSOR"
+    class="sponsor"
+  >
+    Sponsored by <a :href="SPONSOR_URL">{{ SPONSOR_NAME }}</a>
   </div>
 </template>
 

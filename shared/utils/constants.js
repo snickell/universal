@@ -12,3 +12,7 @@ export const DEBUG_WEBSOCKET = false
 export const DEBUG_STREAMING_PREVIEW = false
 
 export const UPDATE_PREVIEW_AT_MOST_EVERY_N_MS = 1000
+
+export const SPONSOR = false
+export const SPONSOR_NAME = 'OpenRouter'
+export const SPONSOR_URL = 'https://openrouter.ai/'
