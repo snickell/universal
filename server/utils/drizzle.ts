@@ -3,6 +3,7 @@ export { ulid } from '~/shared/ulid'
 
 import { drizzle as drizzleD1, DrizzleD1Database } from 'drizzle-orm/d1'
 import { drizzle as drizzleLibSQL, LibSQLDatabase } from 'drizzle-orm/libsql'
+import { DefaultLogger, type Logger } from 'drizzle-orm/logger'
 
 import { H3Event, EventHandlerRequest } from 'h3'
 
@@ -19,6 +20,17 @@ export * as sql from 'drizzle-orm/sql'
 // to be confusing VSCode, and making a mess of using TS
 type DrizzleDB = LibSQLDatabase<typeof schema> // | DrizzleD1Database<typeof schema>
 
+const TRUNCATE_DRIZZLE_QUERY_LOGS_TO_N_CHARS = 300
+
+const truncatingLogger = (maxChars: number) =>
+  new DefaultLogger({
+    writer: {
+      write(message: string) {
+        console.log(message.length <= maxChars ? message : `${message.slice(0, maxChars)}...`)
+      }
+    }
+  })
+
 export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
   if (event?.context?.cloudflare?.env?.DB) {
     // we're in a cloudflare worker
@@ -28,7 +40,7 @@ export function useDrizzle(event?: H3Event<EventHandlerRequest>): DrizzleDB {
     return drizzleD1(getDurableObject().env.DB, {schema})
   } else {
     // we're running locally in dev
-    return drizzleLibSQL(process.env.DB_FILE_NAME!, {schema, logger: true})
+    return drizzleLibSQL(process.env.DB_FILE_NAME!, {schema, logger: truncatingLogger(TRUNCATE_DRIZZLE_QUERY_LOGS_TO_N_CHARS)})
   }
 }
 
