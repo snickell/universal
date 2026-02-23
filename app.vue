@@ -2,9 +2,7 @@
   <Html>
     <Head>
       <Title>CHAOS</Title>
-      <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg?v=2">
-      <link rel="shortcut icon" href="/favicon.ico?v=2">
-      <link rel="manifest" href="/site.webmanifest">
+      <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
     </Head>
     <Body>
       <div>
