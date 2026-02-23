@@ -19,6 +19,7 @@
     "db:export": "bash -c 'db=${1:-universal} && npx wrangler d1 export --remote $db --output=$db-dump.sql && sqlite3 $db-prod.sqlite < $db-dump.sql && rm $db-dump.sql && echo Created $db-prod.sqlite 🤙' bash"
   },
   "dependencies": {
+    "@ai-sdk/cerebras": "^2.0.34",
     "@libsql/client": "^0.17.0",
     "@nuxthub/core": "^0.10.6",
     "@openrouter/ai-sdk-provider": "^2.2.3",

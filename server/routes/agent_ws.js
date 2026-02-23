@@ -11,9 +11,13 @@ let _agent = null
 function getAgent() {
   if (!_agent) {
     const UNIVERSAL_OPENROUTER_API_KEY = process.env.UNIVERSAL_OPENROUTER_API_KEY || getDurableObjectEnv().UNIVERSAL_OPENROUTER_API_KEY
+    const UNIVERSAL_CEREBRAS_API_KEY = process.env.UNIVERSAL_CEREBRAS_API_KEY || getDurableObjectEnv().UNIVERSAL_CEREBRAS_API_KEY
     if (!UNIVERSAL_OPENROUTER_API_KEY) throw new Error("Cannot getAgent(): UNIVERSAL_OPENROUTER_API_KEY is not set in process.env or the DurableObject's env")
 
-    _agent = createAgent({ openRouterAPIKey: UNIVERSAL_OPENROUTER_API_KEY })
+    _agent = createAgent({
+      openRouterAPIKey: UNIVERSAL_OPENROUTER_API_KEY,
+      cerebrasAPIKey: UNIVERSAL_CEREBRAS_API_KEY,
+    })
   }
   return _agent
 }

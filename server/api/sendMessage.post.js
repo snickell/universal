@@ -23,6 +23,7 @@ async function sendFrame(frame) {
 
 const agent = createAgent({
   openRouterAPIKey: process.env.UNIVERSAL_OPENROUTER_API_KEY,
+  cerebrasAPIKey: process.env.UNIVERSAL_CEREBRAS_API_KEY,
 })
 
 export default defineEventHandler(async (event) => {

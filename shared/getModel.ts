@@ -1,9 +1,11 @@
 import { type LanguageModelV3 } from '@ai-sdk/provider'
+import { createCerebras } from '@ai-sdk/cerebras'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 
-export function getModel({openRouterAPIKey, useCheapModel}: {openRouterAPIKey?: string, useCheapModel?: boolean}): LanguageModelV3 {
+export function getModel({openRouterAPIKey, cerebrasAPIKey, useCheapModel}: {openRouterAPIKey?: string, cerebrasAPIKey?: string, useCheapModel?: boolean}): LanguageModelV3 {
   if (!openRouterAPIKey) throw new Error('OpenRouter API key is required when useCheapModel=true')
   const openrouter = createOpenRouter({apiKey: openRouterAPIKey})
+  const cerebras = createCerebras({apiKey: cerebrasAPIKey})
 
   let CHEAP_MODEL_NAME=''
   let CHEAP_MODEL!: LanguageModelV3
@@ -39,15 +41,17 @@ export function getModel({openRouterAPIKey, useCheapModel}: {openRouterAPIKey?: 
   // the problem is that its pretty slow at ~50 tokens/s, and expensive at $15 per million output tokens
   // const NORMAL_MODEL = openrouter('anthropic/claude-3.7-sonnet')
 
-  // LAZY UPDATE Feb 2026: update to latest claude sonnet (4.5)
-  const NORMAL_MODEL = openrouter('anthropic/claude-sonnet-4.5')
-  // const NORMAL_MODEL = openrouter('z-ai/glm-4.7')
+  // LAZY UPDATE Feb 2026: update default to latest claude sonnet (4.5)
+  let NORMAL_MODEL: LanguageModelV3 = openrouter('anthropic/claude-sonnet-4.5')
 
   // Alternative #1 for Feb 2026, seems like openai finally is good enough at grafix:
-  // const NORMAL_MODEL = openrouter('openai/gpt-5.2-codex')
+  // NORMAL_MODEL = openrouter('openai/gpt-5.2-codex')
 
   // Alternative #2 for Feb 2026, too dumb, but Cerebras sure is fast, totally different feel
-  //const NORMAL_MODEL = openrouter('qwen/qwen3-32b', { extraBody: { provider: { order: ['Cerebras'], 'allow_fallbacks': false} } })
+  // NORMAL_MODEL = openrouter('qwen/qwen3-32b', { extraBody: { provider: { order: ['Cerebras'], 'allow_fallbacks': false} } })
+
+  // TEST HACK Feb 2026: direct Cerebras for z-ai without OpenRouter in normal mode
+  // NORMAL_MODEL = cerebras('zai-glm-4.7')
 
   const model = useCheapModel ? CHEAP_MODEL : NORMAL_MODEL
   return model

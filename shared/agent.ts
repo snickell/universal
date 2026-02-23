@@ -25,8 +25,8 @@ type SendFrame = (frame: Frame) => Promise<void>
 type SendScreenHTMLDelta = (frame: Frame, textDelta: string) => Promise<void>
 export type InitialPromptName = keyof typeof initialPrompts
 
-export function createAgent({openRouterAPIKey}) {
-  const model = getModel({openRouterAPIKey, useCheapModel: USE_CHEAP_MODEL})
+export function createAgent({openRouterAPIKey, cerebrasAPIKey}) {
+  const model = getModel({openRouterAPIKey, cerebrasAPIKey, useCheapModel: USE_CHEAP_MODEL})
   console.log('createAgent(): model=', model.modelId)
 
   async function sendMessage(
