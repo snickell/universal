@@ -1,12 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-03-28',
   devtools: { enabled: true },
   typescript: { strict: false },
 
   future: {
     // opt-in to nuxt 4 features today, hopefully making the future upgrade easier
     compatibilityVersion: 4,
+  },
+
+  app: {
+    head: {
+      title: 'CHAOS',
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', sizes: 'any', href: '/favicon.svg' },
+      ],
+    },
   },
 
   nitro: {

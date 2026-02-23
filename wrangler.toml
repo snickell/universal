@@ -3,7 +3,7 @@ compatibility_date = "2025-03-16"
 main = "./.output/server/index.mjs"
 assets = { directory = "./.output/public/", binding = "ASSETS" }
 routes = [
-  { pattern = "universal.oroborus.org", custom_domain = true }
+  { pattern = "chaos.oroborus.org", custom_domain = true }
 ]
 compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 # use the dashboard as source of truth for secrets & vars:
