@@ -7,8 +7,8 @@ const { openInPopup } = useUserSession()
     <div>
       <h1>Google auth required to use expensive LLMs</h1>
       <p>
-        I will not email you, disclose your email, sell your email, or whatever. This is for cost-control purposes only: every
-        time you click, it costs me about $0.05.
+        I will not email you, disclose your email, or sell your email. Requiring login
+        helps me keep my LLM costs down.
       </p>
 
       <p>
