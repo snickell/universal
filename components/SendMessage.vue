@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   // we invoke sendMessage when we have something to send to the LLM (on submit) 
@@ -25,6 +25,18 @@ const props = defineProps({
 })
 
 const msgFromUser = defineModel({ default: '' })
+const inputRef = ref(null)
+
+onMounted(() => {
+  if (!props.disabled) inputRef.value?.focus()
+})
+
+watch(
+  () => props.disabled,
+  (disabled) => {
+    if (!disabled) inputRef.value?.focus()
+  }
+)
 
 function onMsgFromUser() {
   const msg = msgFromUser.value
@@ -36,6 +48,7 @@ function onMsgFromUser() {
 <template>
   <div class="send-message" :class="{ 'flash-animation': flash }">
     <input
+      ref="inputRef"
       type="text"
       v-model="msgFromUser"
       :disabled="disabled"
