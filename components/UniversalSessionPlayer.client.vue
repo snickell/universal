@@ -8,7 +8,7 @@ const props = defineProps({
   },
 })
 
-const universalSession = ref(null) // set by GET of /api/universal-sessions/${universalSessionID} whenever it changes, see end for example return value
+const universalSession = ref(null) // set by GET of /api/universal-session/${universalSessionID} whenever it changes, see end for example return value
 const currentFrameIndex = ref(0) // which of universalSession.frames[] are we displaying?
 const nextFrame = computed(() => universalSession.value?.frames?.[currentFrameIndex.value + 1] ?? null)
 const currentFrame = computed(() => universalSession.value?.frames?.[currentFrameIndex.value] ?? null)

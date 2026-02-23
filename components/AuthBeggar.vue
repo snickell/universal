@@ -23,7 +23,7 @@ const { openInPopup } = useUserSession()
 
         <div>
           PLEASE NOTE: your use of this demo will be <b>visible to the world</b> in our anonymous
-          <NuxtLink to="/universal-sessions">instant replay gallery</NuxtLink>.
+          <NuxtLink to="/gallery">instant replay gallery</NuxtLink>.
           Think "public art gallery": don't enter personal information.
         </div>
       </div>

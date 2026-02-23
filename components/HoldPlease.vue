@@ -93,7 +93,7 @@ const elapsedSeconds = computed(() => !renderStartTime.value ? 0 : Math.floor((t
         </p>
         <p>
           PLEASE NOTE: your use of this demo will be <b>visible to the world</b> in our anonymous
-          <NuxtLink to="/universal-sessions">instant replay gallery</NuxtLink>.
+          <NuxtLink to="/gallery">instant replay gallery</NuxtLink>.
           Think "I'm at a public art gallery" and please don't enter personal information.
           <NuxtLink :to="`/gallery/${universalSessionID}`" target="_blank" rel="noopener">
             See your current session in the gallery
