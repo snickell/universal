@@ -1,9 +1,10 @@
 <script setup>
 import { ref, watch } from 'vue'
-import AuthStatus from './AuthStatus.vue'
 import AuthBeggar from './AuthBeggar.vue'
 import HoldPlease from './HoldPlease.vue'
 import HoldPleaseMusic from './HoldPleaseMusic.vue'
+
+const { loggedIn, user, session, clear } = useUserSession()
 
 const props = defineProps({
   loading: {
@@ -19,6 +20,9 @@ const props = defineProps({
     required: true
   }
 })
+
+// This is provided by Universal.vue after it receives the first frame
+const universalSessionID = inject('universalSessionID')
 
 const showPopup = defineModel('showPopup')
 const showPopupButtonWidth = ref(null)
@@ -47,25 +51,49 @@ watch(() => props.needAuth, (needAuth) => {
 watch(() => props.loading, (isLoading, wasLoading) => {
   if (isLoading) {
     showPopup.value = true
+  } else if (wasLoading) {
+    hidePopup();
   }
 }, { immediate: true })
+
+
+async function onLogout() {
+  await clear()
+  await navigateTo('/')
+}
 </script>
 
 <template>
   <div class="control-popup">
-    <HoldPleaseMusic :loading="loading" :mute="mute" />
+    <HoldPleaseMusic :loading="loading" :mute="mute" v-if="false"/>
 
-    <transition name="fullscreen-blur-mask">
-      <div v-if="showPopup" class="fullscreen-blur-mask" @click="hidePopup()"></div>
-    </transition>
+    <div v-if="loading" class="hourglass-mask" @click="hidePopup()"></div>
     
-    <transition name="popup" duration="800">
+    <transition name="popup" duration="400">
       <div v-if="showPopup" class="popup">
         <div class="titlebar" :style="{ '--show-popup-button-width': showPopupButtonWidth + 'px' }">
-          <span class="cursive-text-lower-baseline">The Universal Program</span>
+          <span class="cursive-text-lower-baseline">CHAOS</span>
           
           <div class="titlebar-buttons">
-            <button class="icon-button" @click="mute = !mute" title="Mute terrible hold music">
+            <button class="icon-button" @click="onLogout" title="Logout" v-if="!needAuth">
+              <span class="material-symbols-outlined">
+                logout
+              </span>
+            </button>
+
+            <NuxtLink
+              class="icon-button"
+              :to="`/gallery/${universalSessionID}`"
+              target="_blank"
+              rel="noopener"
+              title="Share this Session"
+            >
+              <span class="material-symbols-outlined">
+                share
+              </span>
+            </NuxtLink>
+
+            <button class="icon-button" @click="mute = !mute" title="Mute terrible hold music" v-if="false">
               <span class="material-symbols-outlined">
                 {{ mute ? 'volume_off' : 'volume_up' }}
               </span>
@@ -84,17 +112,13 @@ watch(() => props.loading, (isLoading, wasLoading) => {
               :loading="loading"
               :screenPreviewHTML="screenPreviewHTML"
             />
-
-            <div class="auth-section" style="padding: 24px; padding-top: 24px;">
-              <AuthStatus />
-            </div>
           </template>
         </div>
       </div>
     </transition>
     
     <button class="show-popup-button" ref="showPopupButtonRef" @click="showPopup = true">
-      <span class="cursive-text-lower-baseline">The Universal Program</span>
+      <span class="cursive-text-lower-baseline">CHAOS</span>
       <span v-if="loading" class="spinner"></span>
       <div v-else class="nospinner-spacer"></div>
       <span class="spacer"></span>
@@ -140,36 +164,20 @@ watch(() => props.loading, (isLoading, wasLoading) => {
 
 .popup-enter-active,
 .popup-leave-active {
-  transition: 5s ease;
+  transition: 2.5s ease;
 }
 
-.fullscreen-blur-mask {
+.hourglass-mask {
   position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.01);
+  cursor: wait;
   z-index: 10001;
 }
 
-.fullscreen-blur-mask-enter-active {
-  animation: fadeInFullscreenBlurMask 0.8s forwards;
-}
-.fullscreen-blur-mask-leave-active {
-  animation: fadeOutFullscreenBlurMask 0.8s forwards;
-}
-
-@keyframes fadeInFullscreenBlurMask {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeOutFullscreenBlurMask {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
 
 /* There's two copies of almost the same element, one is a button that shows the popup,
   the other is the titlebar of the popup. The former morphs into the latter, so they share most style
@@ -189,8 +197,8 @@ button.show-popup-button,
 }
 
 .titlebar {
-  transition: all 0.4s ease;
-  width: 800px;
+  transition: all 0.2s ease;
+  width: 400px;
   max-width: calc(100vw - 24px);
 }
 
@@ -219,7 +227,14 @@ button.show-popup-button .material-symbols-outlined {
   gap: 8px;
 
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.15s ease;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: white;
+}
+
+.popup .titlebar .titlebar-buttons a {
+  color: white;
 }
 
 .popup-enter-from .titlebar .titlebar-buttons,
@@ -231,6 +246,7 @@ button.show-popup-button .material-symbols-outlined {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 50%;
+  text-decoration: none;
   color: white;
   cursor: pointer;
   display: flex;
@@ -248,7 +264,7 @@ button.show-popup-button .material-symbols-outlined {
   overflow: auto;
   max-height: 100vh;
   
-  transition: all 0.4s ease;
+  transition: all 0.2s ease;
 }
 
 .popup-enter-from .content-area,
@@ -261,7 +277,7 @@ button.show-popup-button .material-symbols-outlined {
 .popup-enter-active .content-area,
 .popup-leave-active .titlebar,
 .popup-leave-active .titlebar .titlebar-buttons {
-  transition-delay: 0.4s;
+  transition-delay: 0.2s;
 }
 
 button.show-popup-button .spacer {
