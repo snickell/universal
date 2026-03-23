@@ -1,0 +1,90 @@
+/**
+ * Example: Custom Send Backend Plugin
+ * ====================================
+ * Copy this file to plugins/my-send-backend.client.js (removing the ".example"
+ * suffix) and edit it to implement your own send backend.
+ *
+ * A "send backend" is the transport layer that carries a user prompt from the
+ * browser to the AI agent and streams the response back.  Two built-in backends
+ * ship with The Universal Program:
+ *
+ *   'websocket'  – streams screen-HTML deltas in real-time over a WebSocket
+ *                  (default when USE_WEB_SOCKET = true in shared/utils/constants.js)
+ *   'http'       – sends one HTTP POST and receives the completed frame as JSON
+ *
+ * You can register additional backends without forking the repo by creating a
+ * Nuxt client plugin (filename ending in .client.js) that calls
+ * registerSendBackend() and setActiveSendBackend().
+ *
+ * Backend function signature
+ * --------------------------
+ *   async function myBackend({
+ *     msg,                   // string | undefined – the user's text prompt
+ *     initialPromptName,     // string – key into shared/prompts/index.js
+ *     receiveFrame,          // (frame, { universalSesssionID }) => string
+ *     receiveScreenHTMLDelta,// ({ frameID, screenHTMLDelta }) => void
+ *     onError,               // (error) => void
+ *   })
+ *
+ * receiveFrame() must be called exactly once when the full frame is available.
+ * receiveScreenHTMLDelta() can be called zero or more times before receiveFrame()
+ * to stream partial HTML to the preview pane.
+ */
+
+import { registerSendBackend, setActiveSendBackend } from '~/utils/agentFrontend.js'
+
+// ---------------------------------------------------------------------------
+// 1. Implement your backend function
+// ---------------------------------------------------------------------------
+
+async function myCustomSendBackend({
+  msg,
+  initialPromptName,
+  receiveFrame,
+  receiveScreenHTMLDelta,
+  onError,
+}) {
+  // Example: a minimal proxy that delegates to the existing HTTP endpoint.
+  // Replace this body with your own transport logic.
+  try {
+    const { getUniversalSesssionID, setUniversalSesssionID, getMessages, setMessages } =
+      await import('~/utils/agent-backends/shared.js')
+
+    const response = await fetch('/api/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        msg,
+        universalSesssionID: getUniversalSesssionID(),
+        messages: getMessages(),
+        initialPromptName,
+      }),
+    })
+
+    if (!response.ok) {
+      const err = new Error(`HTTP ${response.status}: ${response.statusText}`)
+      err.response = response
+      err.status = response.status
+      onError(err)
+      return
+    }
+
+    const frame = await response.json()
+    setMessages(frame.messages)
+    setUniversalSesssionID(frame.universalSesssionID)
+    receiveFrame(frame, { universalSesssionID: frame.universalSesssionID })
+  } catch (err) {
+    onError(err)
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 2. Register your backend and make it active
+// ---------------------------------------------------------------------------
+
+export default defineNuxtPlugin(() => {
+  registerSendBackend('my-custom', myCustomSendBackend)
+
+  // Uncomment the line below to make your backend the active one:
+  // setActiveSendBackend('my-custom')
+})
